@@ -108,20 +108,27 @@ b {
 .mvw-fullwidth {
     width: 100%;
 }
-#msgbox {
-    margin-top: 1em;
-    padding: 3px;
-    background-color: lightsalmon;
+
+/* Floating message box styles */
+.floating-msgbox {
+    position: fixed;
+    top: 20px;           /* Distance from top */
+    right: 10px;         /* Distance from right */
+    z-index: 9999;       /* Ensure it stays on top */
+    background-color: #fde7e9;
+    border: 1px solid #fde7e9;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    padding: 12px 12px;
+    border-radius: 8px;
+    min-width: 200px;
+    max-width: 220px;
+    font-size: 1rem;
+    color: #333;
 }
-#msgbox-header {
-    padding: 3px;
-    font-weight: bold;
-}
-#msgbox-body {
-    padding: 3px;
-}
-#msgbox-content {
-    width: 95%;
+
+.msgbox-footer {
+    text-align: right;
+    margin-top: 12px;
 }
 
 /* Fluent Accordion Styles */

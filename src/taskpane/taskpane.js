@@ -340,11 +340,10 @@ async function tryCatch(callback) {
     // Log the error to the console
     console.error(error);
     // Display the error in a message box
-    const msgboxHeader = document.getElementById("msgbox-header");
     const msgbox = document.getElementById("msgbox");
     const msgboxContent = document.getElementById("msgbox-content");
     msgbox.style.display = "block";
-    msgboxContent.value = error;
+    msgboxContent.innerHTML = error.message;
   }
 }
 
