@@ -1,0 +1,23 @@
+= Method Evaluation Tools Excel Add-in
+:imagesdir: ./images
+:stylesdir: ./style
+:toc: left
+
+This Excel Add-in provides a suite of tools for evaluating and comparing the 
+performance of different laboratory methods. It includes functionalities for 
+calculating various performance metrics, visualizing results, and conducting 
+statistical tests to assess the significance of differences between methods.
+
+This tools has been designed for use by laboratory professionals in association
+with the accompanying https://metools.chesher.id.au/assets/mvw.xlsx[method verification workbook]. The current version provides various methods for linear
+regression analysis, including Deming regression, Weighted Deming regression,
+and Passing-Bablok regression along with their associated confidence intervals,
+which are not easy to implement using the builtin functions in Excel.
+
+== Installation
+
+At the current time, the add-in is only available in development mode. To install
+the add-in, follow these steps:
+1. Download the repository from
+
+== Usage

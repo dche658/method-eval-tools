@@ -1,0 +1,279 @@
+<!-- See License in the project root for license information. -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Method Evaluation Tools Add-in</title>
+
+    <!-- Office JavaScript API -->
+    <script
+      type="text/javascript"
+      src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"
+    ></script>
+
+    <!-- include jStat -->
+    <script type="text/javascript" src="/assets/js/jstat-1.9.6.min.js"></script>
+
+    <!-- include regression library -->
+    <!-- <script type="text/javascript" src="/assets/js/regression.js"></script> -->
+
+    <script type="module" src="https://unpkg.com/@fluentui/web-components">
+
+        import {
+          provideFluentDesignSystem,
+          fluentTextField,
+          fluentSelect,
+          fluentOption,
+          fluentButton,
+          fluentTextArea,
+          fluentAccordion,
+          fluentAccordionItem,
+          fluentCheckbox,
+      } from "@fluentui/web-components";
+
+      provideFluentDesignSystem()
+          .register(
+              fluentTextField(),
+              fluentSelect(),
+              fluentOption(),
+              fluentButton(),
+              fluentTextArea(),
+              fluentAccordion(),
+              fluentAccordionItem(),
+              fluentCheckbox()
+          );
+    </script>
+
+    <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui#/. -->
+    <link
+      rel="stylesheet"
+      href="https://res-1.cdn.office.net/files/fabric-cdn-prod_20230815.002/office-ui-fabric-core/11.1.0/css/fabric.min.css"
+    />
+
+    <!-- Template styles -->
+    <link href="taskpane.css" rel="stylesheet" type="text/css" />
+  </head>
+
+  <body class="ms-font-m ms-welcome ms-Fabric ms-bgColor-neutralLighter">
+    <header class="ms-welcome__header ms-bgColor-neutralQuaternary">
+      <h1 class="ms-font-xl">Method Evaluation Tools</h1>
+    </header>
+    <section id="sideload-msg" class="ms-welcome__main">
+      <h2 class="ms-font-xl">
+        Please
+        <a
+          rel="noopener noreferrer"
+          target="_blank"
+          href="https://learn.microsoft.com/office/dev/add-ins/testing/test-debug-office-add-ins#sideload-an-office-add-in-for-testing"
+          >sideload</a
+        >
+        your add-in to see app body.
+      </h2>
+    </section>
+    <main id="app-body" class="ms-welcome__main mvw-hidden">
+      <fluent-accordion expandmode="single">
+        <fluent-accordion-item>
+          <span slot="heading">About</span>
+          <div class="panel ms-font-m">
+            This add-in provides a tool for performing regression analysis on data in Excel. It
+            supports various regression methods and confidence interval calculations.
+            <div class="mt-3">
+              <fluent-button id="load-defaults-btn" class="ms-fontColor-themePrimary"
+                >Load Defaults</fluent-button
+              >
+            </div>
+          </div>
+        </fluent-accordion-item>
+        <fluent-accordion-item>
+          <span slot="heading">Performance Specifications</span>
+          <div class="panel ms-font-m">
+            <p>
+              Performance specifications must be provided. These can be entered manually or selected
+              from a range of cells in the Excel worksheet.
+            </p>
+            <div class="container">
+              <div class="mt-3">
+                <fluent-checkbox id="import-aps" checked>Import from Excel</fluent-checkbox>
+              </div>
+              <div class="mt-3">
+                <fluent-text-field id="aps-abs">
+                  <div class="range-label">
+                    <span>APS Absolute</span>
+                    <i
+                      id="select-abs-aps-address"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div class="mt-3">
+                <fluent-text-field id="aps-rel">
+                  <div class="range-label">
+                    <span>APS Relative</span>
+                    <i
+                      id="select-rel-aps-address"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+            </div>
+          </div>
+        </fluent-accordion-item>
+        <fluent-accordion-item expanded>
+          <span slot="heading">Regression Tool</span>
+          <div class="panel ms-font-m">
+            <div class="container">
+              <div>
+                <fluent-text-field id="x-range">
+                  <div class="range-label">
+                    <span>X Range</span>
+                    <i
+                      id="select-x-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div>
+                <fluent-text-field id="y-range">
+                  <div class="range-label">
+                    <span>Y Range</span>
+                    <i
+                      id="select-y-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div>
+                <fluent-text-field id="output-range">
+                  <div class="range-label">
+                    <span>Output Range</span>
+                    <i
+                      id="select-output-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div class="mt-3">
+                <span class="ms-font-m">Regression Method</span>
+                <fluent-select id="regression-method">
+                  <fluent-option value="paba">Passing-Bablok</fluent-option>
+                  <fluent-option value="deming">Deming</fluent-option>
+                  <fluent-option value="wdeming">Weighted Deming</fluent-option>
+                </fluent-select>
+              </div>
+              <div class="mt-3">
+                <span class="ms-font-m">Confidence Interval Method</span>
+                <fluent-select id="confidence-interval-method">
+                  <fluent-option value="default">Default</fluent-option>
+                  <fluent-option value="bootstrap">Bootstrap</fluent-option>
+                </fluent-select>
+              </div>
+              <div class="mt-3">
+                <fluent-checkbox id="use-calculated-error-ratio">
+                  Use Calculated Error Ratio
+                </fluent-checkbox>
+                <fluent-text-field id="error-ratio" value="1.0">
+                  <div class="range-label">
+                    <span>Error Ratio</span>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div class="mt-3">
+                <span class="ms-font-m">Output Options</span>
+                <div>
+                  <fluent-checkbox id="output-labels">Label output</fluent-checkbox>
+                </div>
+                <div>
+                  <fluent-text-field id="bland-altman-range">
+                    <div class="range-label">
+                      <span>Bland-Altman Range</span>
+                      <i
+                        id="select-bland-altman-range"
+                        class="ms-Icon ms-font-xl ms-Icon--OEM"
+                        title="Click to enter the address of the selected cells."
+                      ></i>
+                    </div>
+                  </fluent-text-field>
+                </div>
+                <div class="mt-3">
+                  <span class="ms-font-m">Difference Type</span>
+                  <fluent-select id="difference-type">
+                    <fluent-option value="rel">Relative</fluent-option>
+                    <fluent-option value="abs">Absolute</fluent-option>
+                  </fluent-select>
+                </div>
+                <div>
+                  <fluent-text-field id="scatter-plot-range">
+                    <div class="range-label">
+                      <span>Scatter Plot Range</span>
+                      <i
+                        id="select-scatter-plot-range"
+                        class="ms-Icon ms-font-xl ms-Icon--OEM"
+                        title="Click to enter the address of the selected cells."
+                      ></i>
+                    </div>
+                  </fluent-text-field>
+                </div>
+                <div>
+                  <fluent-text-field id="chart-data-range" value="AA1">
+                    <div class="range-label">
+                      <span>Chart Data Output</span>
+                      <i
+                        id="select-chart-data-range"
+                        class="ms-Icon ms-font-xl ms-Icon--OEM"
+                        title="Click to enter the address of the selected cells."
+                      ></i>
+                    </div>
+                  </fluent-text-field>
+                </div>
+              </div>
+              <div class="mt-3">
+                <fluent-button id="run-regression" class="ms-fontColor-themePrimary"
+                  >Run</fluent-button
+                >
+              </div>
+            </div>
+          </div>
+        </fluent-accordion-item>
+      </fluent-accordion>
+      <!-- Message Box for displaying errors -->
+      <div id="msgbox" class="mvw-hidden mvw-fullwidth">
+        <div id="msgbox-header" class="mvw-fullwidth">Error Message</div>
+        <div id="msgbox-body" class="mvw-fullwidth">
+          <fluent-text-area id="msgbox-content"></fluent-text-area>
+        </div>
+        <div>
+          <fluent-button id="alert-ok-btn" class="ms-fontColor-themePrimary">OK</fluent-button>
+        </div>
+      </div>
+    </main>
+    <!-- 
+        The script below makes the following div display if the
+        webview is Trident, and hides the regular div. 
+    -->
+    <div id="tridentmessage" class="mvw-hidden">
+      This add-in will not run in your version of Office. Please upgrade either to perpetual Office
+      2021 (or later) or to a Microsoft 365 account.
+    </div>
+    <script>
+      if (navigator.userAgent.indexOf("Trident") !== -1) {
+        var tridentMessage = document.getElementById("tridentmessage");
+        var normalUI = document.getElementById("main");
+        tridentMessage.style.display = "block";
+        normalUI.style.display = "none";
+      }
+    </script>
+  </body>
+</html>
