@@ -9,8 +9,8 @@
   <DefaultLocale>en-AU</DefaultLocale>
   <DisplayName DefaultValue="Method Evaluation Tools" />
   <Description DefaultValue="Some useful tools for analytical method evaluation." />
-  <IconUrl DefaultValue="https://metools.chesher.id.au/assets/icon-32.png" />
-  <HighResolutionIconUrl DefaultValue="https://metools.chesher.id.au/assets/icon-64.png" />
+  <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png" />
+  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-64.png" />
   <SupportUrl DefaultValue="https://metools.chesher.id.au/help" />
   <AppDomains>
     <AppDomain>https://metools.chesher.id.au/</AppDomain>
