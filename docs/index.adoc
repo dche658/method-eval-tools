@@ -38,6 +38,7 @@ nvm use 24.6.0
 and run:
 
 ----
+npm install
 npm run start
 ----
 
