@@ -1,4 +1,9 @@
-//import { average, stdev } from "./regression.js";
+/*
+* ExcelBlandAltmanChart and ExcelRegressionChart classes for creating charts in Excel using Office.js
+* Requires jStat library for statistical calculations
+*/
+
+import jStat from "./jstat-1.9.6.min.js";
 
 class ExcelBlandAltmanChart {
   constructor(x, y, diffType, apsAbs, apsRel, chartDataRange, outputRange = "") {
@@ -29,8 +34,8 @@ class ExcelBlandAltmanChart {
       diffs[i] =
         this.diffType === "rel" ? (this.y[i] - this.x[i]) / means[i] : this.y[i] - this.x[i];
     }
-    const meanDiff = average(diffs);
-    const sdDiff = stdev(diffs);
+    const meanDiff = jStat.mean(diffs);
+    const sdDiff = jStat.stdev(diffs,true); // Sample standard deviation
     const minX = Math.min(...means);
     const maxX = Math.max(...means);
 

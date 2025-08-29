@@ -13,7 +13,7 @@
  */
 
 //import { average } from "./regression.js";
-//import jStat from "./jstat-1.9.6.min.js";
+import jStat from "./jstat-1.9.6.min.js";
 
 /* Class to perform one factor anova
  * Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
@@ -50,7 +50,7 @@ export class OneFactorAnova {
     const sumGroupSizesSquared = groupSizes.reduce((a, b) => a + Math.pow(b, 2), 0);
 
     const sumAllValues = this.values.reduce((a, b) => a + b, 0);
-    const grandMean = average(values);
+    const grandMean = jStat.mean(values);
     const sumSquaredAllValues = this.values.reduce((a, b) => a + Math.pow(b, 2), 0);
     const correctedMean = Math.pow(sumAllValues, 2) / this.values.length;
     const ssTotal = sumSquaredAllValues - correctedMean;
@@ -198,7 +198,7 @@ export class TwoFactorAnova {
         this.numReps = Math.max(this.numReps, factorB[key2].length);
       }
     }
-    this.grandMean = average(values);
+    this.grandMean = jStat.mean(values);
   }
 
   /* Total Sum of Squares (SST):
@@ -223,7 +223,7 @@ export class TwoFactorAnova {
     for (let key in this.dictB) {
       let group = this.dictB[key]; //get factor A group: an object
 
-      ssb += group.length * Math.pow(average(Object.values(group)) - this.grandMean, 2);
+      ssb += group.length * Math.pow(jStat.mean(Object.values(group)) - this.grandMean, 2);
     }
     return ssb;
   }
@@ -237,7 +237,7 @@ export class TwoFactorAnova {
     let ssa = 0;
     for (let key in this.dict) {
       let group = this.dict[key]; //get factor A group
-      let groupMean = average(Object.values(group).flat());
+      let groupMean = jStat.mean(Object.values(group).flat());
       let groupN = Object.values(group).flat().length;
       ssa += groupN * Math.pow(groupMean - this.grandMean, 2);
     }
@@ -261,7 +261,7 @@ export class TwoFactorAnova {
       for (let key2 in group) {
         let groupB = group[key2]; //get factor B group
         for (let i = 0; i < groupB.length; i++) {
-          sse += Math.pow(groupB[i] - average(Object.values(groupB).flat()), 2);
+          sse += Math.pow(groupB[i] - jStat.mean(Object.values(groupB).flat()), 2);
         }
       }
     }
