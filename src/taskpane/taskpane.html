@@ -15,10 +15,8 @@
     ></script>
 
     <!-- include jStat -->
-    <script type="text/javascript" src="/assets/js/jstat-1.9.6.min.js"></script>
-
-    <!-- include regression library -->
-    <!-- <script type="text/javascript" src="/assets/js/regression.js"></script> -->
+    <script type="text/javascript" src="/src/js/jstat-1.9.6.min.js"></script>
+    <script type="text/javascript" src="/src/js/shared.js"></script>
 
     <script type="module" src="https://unpkg.com/@fluentui/web-components">
 
@@ -58,9 +56,9 @@
   </head>
 
   <body class="ms-font-m ms-welcome ms-Fabric ms-bgColor-neutralLighter">
-    <header class="ms-welcome__header ms-bgColor-neutralQuaternary">
+    <!-- <header class="ms-welcome__header ms-bgColor-neutralQuaternary">
       <h1 class="ms-font-xl">Method Evaluation Tools</h1>
-    </header>
+    </header> -->
     <section id="sideload-msg" class="ms-welcome__main">
       <h2 class="ms-font-xl">
         Please
@@ -74,19 +72,7 @@
       </h2>
     </section>
     <main id="app-body" class="ms-welcome__main mvw-hidden">
-      <fluent-accordion expandmode="single">
-        <fluent-accordion-item>
-          <span slot="heading">About</span>
-          <div class="panel ms-font-m">
-            This add-in provides a tool for performing regression analysis on data in Excel. It
-            supports various regression methods and confidence interval calculations.
-            <div class="mt-3">
-              <fluent-button id="load-defaults-btn" class="ms-fontColor-themePrimary"
-                >Populate from MVW</fluent-button
-              >
-            </div>
-          </div>
-        </fluent-accordion-item>
+      <fluent-accordion expand-mode="single">
         <fluent-accordion-item>
           <span slot="heading">Performance Specifications</span>
           <div class="panel ms-font-m">
@@ -250,6 +236,45 @@
                   >Run</fluent-button
                 >
               </div>
+            </div>
+          </div>
+        </fluent-accordion-item>
+        <fluent-accordion-item>
+          <span slot="heading">Precision</span>
+          <div class="panel ms-font-m">
+            <div class="container">
+              <div>
+                Yet to be implemented.
+              </div>
+            </div>
+          </div>
+        </fluent-accordion-item>
+        <fluent-accordion-item>
+          <span slot="heading">About</span>
+          <div class="panel ms-font-m">
+            <p>
+              The purpose of this add-in is to provide some statistical procedures that
+              are necessary for assessment of clinical laboratory methods but are not 
+              easy to implement using builtin Excel spreadsheet functions. Currently, it
+              supports various regression methods and confidence interval calculations.
+              </p>
+            <p>
+              This add-in was developed by Dr. Doug Chesher, a retired chemical pathologist
+              now based in Queensland, Australia. The source code is available on GitHub at 
+              <a href="https://github.com/dche658/method-eval-tools">
+                https://github.com/dche658/method-eval-tools
+              </a>.
+            </p>
+            
+            <div class="mt-3">
+              <p>
+                The add in was developed for use with the Method Verification Workbook.
+                The default cell ranges used by the workbook can be populated by clicking
+                the button below.
+              </p>
+              <fluent-button id="load-defaults-btn" class="ms-fontColor-themePrimary"
+                >Populate for MVW</fluent-button
+              >
             </div>
           </div>
         </fluent-accordion-item>

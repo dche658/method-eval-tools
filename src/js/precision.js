@@ -12,8 +12,8 @@
  * limit.
  */
 
-import { average } from "./regression.js";
-import jStat from "./jstat-1.9.6.min.js";
+//import { average } from "./regression.js";
+//import jStat from "./jstat-1.9.6.min.js";
 
 /* Class to perform one factor anova
  * Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering

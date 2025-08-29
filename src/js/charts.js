@@ -1,4 +1,4 @@
-import { average, stdev } from "./regression.js";
+//import { average, stdev } from "./regression.js";
 
 class ExcelBlandAltmanChart {
   constructor(x, y, diffType, apsAbs, apsRel, chartDataRange, outputRange = "") {

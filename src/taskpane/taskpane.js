@@ -1,5 +1,4 @@
 /*
- * Copyright (c) Microsoft Corporation. All rights reserved. Licensed under the MIT license.
  * See LICENSE in the project root for license information.
  */
 
@@ -10,8 +9,8 @@ import {
   DemingRegression,
   WeightedDemingRegression,
   DEFAULT_ERROR_RATIO,
-} from "../../assets/js/regression";
-import { ExcelBlandAltmanChart, ExcelRegressionChart } from "../../assets/js/charts";
+} from "/src/js/regression.js";
+import { ExcelBlandAltmanChart, ExcelRegressionChart } from "/src/js/charts.js";
 
 /* global console, document, Excel, Office */
 
