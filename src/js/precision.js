@@ -39,7 +39,7 @@ export class OneFactorAnova {
 
   calculate() {
     const numGroups = Object.keys(this.dict).length;
-    const totalObservations = values.length;
+    const totalObservations = this.values.length;
     const groupSizes = [];
     const groupSums = [];
     for (let key in this.dict) {
@@ -50,7 +50,7 @@ export class OneFactorAnova {
     const sumGroupSizesSquared = groupSizes.reduce((a, b) => a + Math.pow(b, 2), 0);
 
     const sumAllValues = this.values.reduce((a, b) => a + b, 0);
-    const grandMean = jStat.mean(values);
+    const grandMean = jStat.mean(this.values);
     const sumSquaredAllValues = this.values.reduce((a, b) => a + Math.pow(b, 2), 0);
     const correctedMean = Math.pow(sumAllValues, 2) / this.values.length;
     const ssTotal = sumSquaredAllValues - correctedMean;
@@ -77,7 +77,7 @@ export class OneFactorAnova {
       f: f,
       n: totalObservations,
       p: numGroups,
-      ssGroupN: sumGroupSizesSquared,
+      sn2: sumGroupSizesSquared,
     };
   }
 } //End OneFactorAnova
@@ -99,13 +99,14 @@ export class OneFactorVarianceAnalysis {
     const vE = anova.mse;
     const sE = Math.sqrt(vE);
     const cvE = sE / anova.mean;
-    const vB = Math.max(0, (anova.mst - anova.mse) / anova.p);
+    const n0 = (anova.n - (anova.sn2 / anova.n))/(anova.p - 1);
+    const vB = Math.max(0, (anova.mst - anova.mse) / n0);
     const sB = Math.sqrt(vB);
     const cvB = sB / anova.mean;
     const s_WL = Math.sqrt(vE + vB);
     const cv_WL = s_WL / anova.mean;
-    const alpha1 = 1 / anova.p;
-    const alpha2 = (anova.p - 1) / anova.p;
+    const alpha1 = 1 / n0;// 1 / anova.p;
+    const alpha2 = 1 - alpha1 //(n0-1)/n0;
     const numerator = Math.pow(alpha1 * anova.mst + alpha2 * anova.mse, 2);
     const denominator1 = Math.pow(alpha1 * anova.mst, 2) / anova.dfT;
     const denominator2 = Math.pow(alpha2 * anova.mse, 2) / anova.dfE;
@@ -118,20 +119,22 @@ export class OneFactorVarianceAnalysis {
     this.fRepeatability = chisqRepeatability / anova.dfE;
     this.fWL = chisqWL / dfWL;
     this.isCalculated = true;
-    return {
-      anova: anova,
-      vE: vE,
-      vB: vB,
-      sE: sE,
-      cvE: cvE,
-      sB: sB,
-      cvB: cvB,
-      s_WL: s_WL,
-      cv_WL: cv_WL,
-      chisqRepeatability: chisqRepeatability,
-      chisqWL: chisqWL,
-      fRepeatability: this.fRepeatability,
-      fWL: this.fWL,
+    return {...anova, 
+      ...{
+        vE: vE,
+        vB: vB,
+        sE: sE,
+        cvE: cvE,
+        sB: sB,
+        cvB: cvB,
+        s_WL: s_WL,
+        cv_WL: cv_WL,
+        dfWL: dfWL,
+        chisqRepeatability: chisqRepeatability,
+        chisqWL: chisqWL,
+        fRepeatability: this.fRepeatability,
+        fWL: this.fWL,
+      }
     };
   }
 
@@ -409,28 +412,29 @@ export class TwoFactorVarianceAnalysis {
 
     this.isCalculated = true;
 
-    return {
-      anova: anova,
-      vA: vA,
-      vAB: vAB,
-      vE: vE,
-      sA: sA,
-      sAB: sAB,
-      sE: sE,
-      sWL: sT,
-      cvA: cvA,
-      cvAB: cvAB,
-      cvE: cvE,
-      cvT: cvT,
-      dfWL: dfWL,
-      sWL_LCL: sWL_LCL,
-      sWL_UCL: sWL_UCL,
-      sE_LCL: sE_LCL,
-      sE_UCL: sE_UCL,
-      cvWL_LCL: cvWL_LCL,
-      cvWL_UCL: cvWL_UCL,
-      cvE_LCL: cvE_LCL,
-      cvE_UCL: cvE_UCL,
+    return {...anova, 
+      ...{
+        vA: vA,
+        vAB: vAB,
+        vE: vE,
+        sA: sA,
+        sAB: sAB,
+        sE: sE,
+        sWL: sT,
+        cvA: cvA,
+        cvAB: cvAB,
+        cvE: cvE,
+        cvT: cvT,
+        dfWL: dfWL,
+        sWL_LCL: sWL_LCL,
+        sWL_UCL: sWL_UCL,
+        sE_LCL: sE_LCL,
+        sE_UCL: sE_UCL,
+        cvWL_LCL: cvWL_LCL,
+        cvWL_UCL: cvWL_UCL,
+        cvE_LCL: cvE_LCL,
+        cvE_UCL: cvE_UCL,
+      }
     };
   }
 
@@ -447,86 +451,3 @@ export class TwoFactorVarianceAnalysis {
     return sd * Math.sqrt(df / jStat.chisquare.inv(alpha / 2, df));
   }
 }
-const factorA = [
-  "Day 1",
-  "Day 1",
-  "Day 1",
-  "Day 1",
-  "Day 2",
-  "Day 2",
-  "Day 2",
-  "Day 2",
-  "Day 3",
-  "Day 3",
-  "Day 3",
-  "Day 3",
-  "Day 4",
-  "Day 4",
-  "Day 4",
-  "Day 4",
-];
-
-const factorB = [
-  "Run 1",
-  "Run 1",
-  "Run 2",
-  "Run 2",
-  "Run 1",
-  "Run 1",
-  "Run 2",
-  "Run 2",
-  "Run 1",
-  "Run 1",
-  "Run 2",
-  "Run 2",
-  "Run 1",
-  "Run 1",
-  "Run 2",
-  "Run 2",
-];
-
-const values = [242, 246, 245, 246, 243, 242, 238, 238, 247, 239, 241, 240, 249, 241, 250, 245];
-
-const oneFactorAnova = new OneFactorAnova(factorA, values);
-const ofa = oneFactorAnova.calculate();
-console.log(`ANOVA ${JSON.stringify(ofa)}`);
-
-const oneFactorVarianceAnalysis = new OneFactorVarianceAnalysis(factorA, values, 1);
-const resOfa = oneFactorVarianceAnalysis.calculate();
-console.log(`Variance Analysis ${JSON.stringify(resOfa)}`);
-
-const twoFactorAnova = new TwoFactorAnova(factorA, factorB, values);
-
-console.log(JSON.stringify(twoFactorAnova.calculate()));
-
-const twoFactorVarianceAnalysis = new TwoFactorVarianceAnalysis(factorA, factorB, values, 0.05);
-const res = twoFactorVarianceAnalysis.calculate();
-console.log(JSON.stringify(res));
-
-let oneFactorVCAExpected = {
-  p: 4,
-  n: 16,
-  mean: 243.25,
-  ssTotal: 211,
-  sst: 90,
-  sse: 121,
-  dfTotal: 15,
-  dfE: 12,
-  dfT: 3,
-  mst: 30,
-  mse: 10.0833,
-  sn2: 64,
-  alpha1: 0.25,
-  alpha2: 0.75,
-  num: 226.8789,
-  den1: 18.75,
-  den2: 4.766,
-  dfWL: 9.6479,
-  sE: 3.175,
-  sT: 2.231,
-  sWL: 3.881,
-  fE: 1.3237,
-  fWL: 1.3243,
-};
-
-//

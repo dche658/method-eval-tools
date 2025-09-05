@@ -112,7 +112,7 @@
           </div>
         </fluent-accordion-item>
         <fluent-accordion-item expanded>
-          <span slot="heading">Regression Tool</span>
+          <span slot="heading">Comparison Tools</span>
           <div class="panel ms-font-m">
             <div class="container">
               <div>
@@ -243,7 +243,60 @@
           <div class="panel ms-font-m">
             <div class="container">
               <div>
-                Yet to be implemented.
+                <fluent-text-field id="p-days-range" 
+                  title="Column for the days (factor A).">
+                  <div class="range-label">
+                    <span>Days Range</span>
+                    <i
+                      id="select-p-days-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+              </div>
+              <div>
+                <fluent-text-field id="p-runs-range" 
+                  title="Column for the runs (factor B).">
+                  <div class="range-label">
+                    <span>Runs Range</span>
+                    <i
+                      id="select-p-runs-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div>
+                <fluent-text-field id="p-results-range" 
+                  title="Columns for the results.">
+                  <div class="range-label">
+                    <span>Results Range</span>
+                    <i
+                      id="select-p-results-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div>
+                <fluent-text-field id="p-output-range" 
+                  title="Top-left cell for outputting results.">
+                  <div class="range-label">
+                    <span>Output Range</span>
+                    <i
+                      id="select-p-output-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div>
+                <fluent-button id="run-precision" class="ms-fontColor-themePrimary"
+                  >Run</fluent-button
+                >
               </div>
             </div>
           </div>
