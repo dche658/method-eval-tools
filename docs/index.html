@@ -440,7 +440,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_installation">Installation</a></li>
+<li><a href="#_installation">Installation</a>
+<ul class="sectlevel2">
+<li><a href="#_installing_on_a_portable_device">Installing on a Portable Device</a></li>
+</ul>
+</li>
 <li><a href="#_usage">Usage</a>
 <ul class="sectlevel2">
 <li><a href="#_analytical_performance_specifications">Analytical Performance Specifications</a></li>
@@ -507,20 +511,92 @@ the add-in, follow these steps:</p>
 <li>
 <p>Open a command prompt and run the following commands (update the version number
 as needed):</p>
-</li>
-</ol>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre>nvm install lts
 nvm use 24.6.0</pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic" start="5">
+</li>
 <li>
 <p>Navigate to the directory where you extracted the downloaded repository
 and run:</p>
+<div class="listingblock">
+<div class="content">
+<pre>npm install
+npm run start</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Startup can take a few minutes to complete. Once it is finished, excel should
+open automatically with the add-in loaded.</p>
+</div>
+<div class="sect2">
+<h3 id="_installing_on_a_portable_device">Installing on a Portable Device</h3>
+<div class="paragraph">
+<p>If you do not have administrator access then you can install the add-in on a
+portable device. A high speed external solid state drive will likely give
+you the best results.</p>
+</div>
+<div class="paragraph">
+<p>Instructions for installing nodejs as a portable application have been taken
+from <a href="https://dev.to/yougotwill/portable-nodejs-without-administrator-access-1elk">here</a>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install <a href="https://cmder.app/">Cmder</a> in your desired location on the portable drive.</p>
+</li>
+<li>
+<p>Download <a href="https://github.com/coreybutler/nvm-windows">nvm-noinstall.zip</a> from the latest release.</p>
+</li>
+<li>
+<p>Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.</p>
+</li>
+<li>
+<p>Navigate to the bin folder in Cmder and run install.cmd</p>
+</li>
+<li>
+<p>When asked to enter the absolute path use your Cmder bin folder.</p>
+</li>
+<li>
+<p>Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).</p>
+</li>
+<li>
+<p>Wait until node and npm have finished installing.</p>
+</li>
+<li>
+<p>Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.</p>
+</li>
+<li>
+<p>Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.</p>
+</li>
+<li>
+<p>Add this to your existing path in Cmder&#8217;s environment settings. This can be done in a couple of ways. The first is by running the following command.</p>
+<div class="listingblock">
+<div class="content">
+<pre>set "PATH=E:\PortableApps\CmderPortable\bin\v24.6.0;%PATH%"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'</p>
+</li>
+<li>
+<p>Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).</p>
+</li>
+<li>
+<p>Close and open Cmder and you should have access to node, npm and npx</p>
+</li>
+<li>
+<p>Download and extract the add-in repository as described above.</p>
+</li>
+<li>
+<p>Then run the following commands to install the add-in and then side-load
+it into Excel.</p>
 </li>
 </ol>
 </div>
@@ -531,8 +607,14 @@ npm run start</pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Startup can take a few minutes to complete. Once it is finished, excel should
-open automatically with the add-in loaded.</p>
+<p>If you have an Excel workbook on OneDrive you can copy a link to the document
+and use the following command to side-load the add-in into Excel.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm run start -- web --document https://1drv.ms/x/c/7ba37898bfb7e549/EdiktLds9p5MvIFWYzL0-QBSw?e=5BUXE7</pre>
+</div>
+</div>
 </div>
 </div>
 </div>
@@ -1066,7 +1148,7 @@ with DF degrees of freedom</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-06 14:17:07 01000
+Last updated 2025-09-06 20:32:24 01000
 </div>
 </div>
 <script type="text/x-mathjax-config">

@@ -28,16 +28,14 @@ the add-in, follow these steps:
 . Install nvm-setup.exe
 . Open a command prompt and run the following commands (update the version number
 as needed):
-
++
 ----
 nvm install lts
 nvm use 24.6.0
 ----
-
-[start=5]
 . Navigate to the directory where you extracted the downloaded repository 
 and run:
-
++
 ----
 npm install
 npm run start
@@ -45,6 +43,48 @@ npm run start
 
 Startup can take a few minutes to complete. Once it is finished, excel should
 open automatically with the add-in loaded.
+
+=== Installing on a Portable Device
+
+If you do not have administrator access then you can install the add-in on a 
+portable device. A high speed external solid state drive will likely give
+you the best results.
+
+Instructions for installing nodejs as a portable application have been taken
+from https://dev.to/yougotwill/portable-nodejs-without-administrator-access-1elk[here].
+
+1. Install https://cmder.app/[Cmder] in your desired location on the portable drive.
+2. Download https://github.com/coreybutler/nvm-windows[nvm-noinstall.zip] from the latest release.
+3. Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.
+4. Navigate to the bin folder in Cmder and run install.cmd
+5. When asked to enter the absolute path use your Cmder bin folder.
+6. Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).
+7. Wait until node and npm have finished installing.
+8. Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.
+9. Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.
+10. Add this to your existing path in Cmder's environment settings. This can be done in a couple of ways. The first is by running the following command.
++
+----
+set "PATH=E:\PortableApps\CmderPortable\bin\v24.6.0;%PATH%"
+----
+11. Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'
+12. Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).
+13. Close and open Cmder and you should have access to node, npm and npx
+14. Download and extract the add-in repository as described above.
+15. Then run the following commands to install the add-in and then side-load
+it into Excel.
+
+----
+npm install
+npm run start
+----
+
+If you have an Excel workbook on OneDrive you can copy a link to the document
+and use the following command to side-load the add-in into Excel.
+
+----
+npm run start -- web --document https://1drv.ms/x/c/7ba37898bfb7e549/EdiktLds9p5MvIFWYzL0-QBSw?e=5BUXE7
+----
 
 == Usage
 
