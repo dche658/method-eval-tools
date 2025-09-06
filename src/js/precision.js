@@ -329,7 +329,7 @@ export class TwoFactorAnova {
       fAB: fAB,
       fA: fA,
       fB: fB,
-      n: this.totalObservations,
+      n: this.values.length,
       nA: this.numFactorA,
       nB: this.numFactorB,
       nE: this.numReps,
@@ -445,9 +445,11 @@ export class TwoFactorVarianceAnalysis {
    * and dfWL of 9.8 is rounded down to 9
    */
   getUpperConfidenceLimit(sd, df, alpha) {
-    return sd * Math.sqrt(df / jStat.chisquare.inv(1 - alpha / 2, df));
+    let ucl = sd * Math.sqrt(df / jStat.chisquare.inv(alpha / 2, df));
+    return ucl;
   }
   getLowerConfidenceLimit(sd, df, alpha) {
-    return sd * Math.sqrt(df / jStat.chisquare.inv(alpha / 2, df));
+    let lcl = sd * Math.sqrt(df / jStat.chisquare.inv(1 - (alpha / 2), df));
+    return lcl;
   }
 }

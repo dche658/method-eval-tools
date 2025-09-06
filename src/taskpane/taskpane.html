@@ -22,6 +22,7 @@
         import {
           provideFluentDesignSystem,
           fluentTextField,
+          fluentNumberField,
           fluentSelect,
           fluentOption,
           fluentButton,
@@ -34,6 +35,7 @@
       provideFluentDesignSystem()
           .register(
               fluentTextField(),
+              fluentNumberField(),
               fluentSelect(),
               fluentOption(),
               fluentButton(),
@@ -76,9 +78,9 @@
           <span slot="heading">Performance Specifications</span>
           <div class="panel ms-font-m">
             <p>
-              Analytical Performance Specifications may be entered manually or selected
-              from a range of cells in the Excel worksheet. If nothing is entered, nothing
-              will be plotted on the charts.
+              Analytical Performance Specifications may be entered manually or selected from a range
+              of cells in the Excel worksheet. If nothing is entered, nothing will be plotted on the
+              charts.
             </p>
             <div class="container">
               <div class="mt-3">
@@ -112,7 +114,7 @@
           </div>
         </fluent-accordion-item>
         <fluent-accordion-item expanded>
-          <span slot="heading">Comparison Tools</span>
+          <span slot="heading">Analyse Comparison</span>
           <div class="panel ms-font-m">
             <div class="container">
               <div>
@@ -167,7 +169,10 @@
                 </fluent-select>
               </div>
               <div class="mt-3">
-                <fluent-checkbox id="use-calculated-error-ratio" title="Calculated error ratio can only be used with Deming or Weighted Deming regression if the comparison was performed in duplicate.">
+                <fluent-checkbox
+                  id="use-calculated-error-ratio"
+                  title="Calculated error ratio can only be used with Deming or Weighted Deming regression if the comparison was performed in duplicate."
+                >
                   Use Calculated Error Ratio
                 </fluent-checkbox>
                 <fluent-text-field id="error-ratio" value="1.0">
@@ -179,12 +184,15 @@
               <div class="mt-3">
                 <span class="ms-font-m">Output Options</span>
                 <div>
-                  <fluent-checkbox id="output-labels" 
-                    title="Add labels to the results">Label output</fluent-checkbox>
+                  <fluent-checkbox id="output-labels" title="Add labels to the results"
+                    >Label output</fluent-checkbox
+                  >
                 </div>
                 <div>
-                  <fluent-text-field id="bland-altman-range"
-                    title="Cells over which to plot the Bland-Altman chart.">
+                  <fluent-text-field
+                    id="bland-altman-range"
+                    title="Cells over which to plot the Bland-Altman chart."
+                  >
                     <div class="range-label">
                       <span>Bland-Altman Range</span>
                       <i
@@ -203,8 +211,10 @@
                   </fluent-select>
                 </div>
                 <div>
-                  <fluent-text-field id="scatter-plot-range"
-                    title="Cells over which to plot the Scatter Plot chart.">
+                  <fluent-text-field
+                    id="scatter-plot-range"
+                    title="Cells over which to plot the Scatter Plot chart."
+                  >
                     <div class="range-label">
                       <span>Scatter Plot Range</span>
                       <i
@@ -216,9 +226,11 @@
                   </fluent-text-field>
                 </div>
                 <div>
-                  <fluent-text-field id="chart-data-range" 
+                  <fluent-text-field
+                    id="chart-data-range"
                     value="AA1"
-                    title="Top-left cell for outputting data used for constructing the charts.">
+                    title="Top-left cell for outputting data used for constructing the charts."
+                  >
                     <div class="range-label">
                       <span>Chart Data Output</span>
                       <i
@@ -239,12 +251,11 @@
           </div>
         </fluent-accordion-item>
         <fluent-accordion-item>
-          <span slot="heading">Precision</span>
+          <span slot="heading">Analyse Precision</span>
           <div class="panel ms-font-m">
             <div class="container">
               <div>
-                <fluent-text-field id="p-days-range" 
-                  title="Column for the days (factor A).">
+                <fluent-text-field id="p-days-range" title="Column for the days (factor A).">
                   <div class="range-label">
                     <span>Days Range</span>
                     <i
@@ -253,10 +264,10 @@
                       title="Click to enter the address of the selected cells."
                     ></i>
                   </div>
+                </fluent-text-field>
               </div>
               <div>
-                <fluent-text-field id="p-runs-range" 
-                  title="Column for the runs (factor B).">
+                <fluent-text-field id="p-runs-range" title="Column for the runs (factor B).">
                   <div class="range-label">
                     <span>Runs Range</span>
                     <i
@@ -268,8 +279,7 @@
                 </fluent-text-field>
               </div>
               <div>
-                <fluent-text-field id="p-results-range" 
-                  title="Columns for the results.">
+                <fluent-text-field id="p-results-range" title="Columns for the results.">
                   <div class="range-label">
                     <span>Results Range</span>
                     <i
@@ -281,8 +291,10 @@
                 </fluent-text-field>
               </div>
               <div>
-                <fluent-text-field id="p-output-range" 
-                  title="Top-left cell for outputting results.">
+                <fluent-text-field
+                  id="p-output-range"
+                  title="Top-left cell for outputting results."
+                >
                   <div class="range-label">
                     <span>Output Range</span>
                     <i
@@ -302,30 +314,166 @@
           </div>
         </fluent-accordion-item>
         <fluent-accordion-item>
+          <span slot="heading">Precision Layout</span>
+          <div class="panel ms-font-m">
+            <div class="container">
+              <div>
+                This section is used to setup a layout for an experiment to assess an assays
+                imprecision. It can be used for both verification and validation studies.
+              </div>
+              <div class="mt-3">
+                <fluent-number-field
+                  id="c-num-days"
+                  title="Number of days over which to run the experiment."
+                  value="5"
+                >
+                  Days
+                </fluent-number-field>
+              </div>
+              <div class="mt-3">
+                <fluent-number-field id="c-num-runs" title="Number of runs per day." value="1">
+                  Runs per day
+                </fluent-number-field>
+              </div>
+              <div class="mt-3">
+                <fluent-number-field
+                  id="c-num-reps"
+                  title="Number of replicates per run."
+                  value="5"
+                >
+                  Replicates per run
+                </fluent-number-field>
+              </div>
+              <div class="mt-3">
+                <fluent-number-field
+                  id="c-num-levels"
+                  title="Number of levels to be assessed."
+                  value="4"
+                >
+                  Number of levels
+                </fluent-number-field>
+              </div>
+              <div class="mt-3">
+                <fluent-text-field id="c-layout-range" title="Top-left cell for the layout.">
+                  <div class="range-label">
+                    <span>Layout Range</span>
+                    <i
+                      id="select-c-layout-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div class="mt-3">
+                <fluent-button id="setup-precision" class="ms-fontColor-themePrimary"
+                  >Setup</fluent-button
+                >
+              </div>
+            </div>
+          </div>
+        </fluent-accordion-item>
+        <fluent-accordion-item>
           <span slot="heading">About</span>
           <div class="panel ms-font-m">
             <p>
-              The purpose of this add-in is to provide some statistical procedures that
-              are necessary for assessment of clinical laboratory methods but are not 
-              easy to implement using builtin Excel spreadsheet functions. Currently, it
-              supports various regression methods and confidence interval calculations.
-              </p>
-            <p>
-              This add-in was developed by Dr. Doug Chesher, a retired chemical pathologist
-              now based in Queensland, Australia. The source code is available on GitHub at 
-              <a href="https://github.com/dche658/method-eval-tools">
-                https://github.com/dche658/method-eval-tools
-              </a>.
+              The purpose of this add-in is to provide some statistical procedures that are
+              necessary for assessment of clinical laboratory methods but are not easy to implement
+              using builtin Excel spreadsheet functions. Currently, it supports various regression
+              methods and confidence interval calculations.
             </p>
-            
+            <p>
+              This add-in was developed by Dr. Doug Chesher, a retired chemical pathologist now
+              based in Queensland, Australia. The source code is available on GitHub at
+              <a href="https://github.com/dche658/method-eval-tools">
+                https://github.com/dche658/method-eval-tools </a
+              >.
+            </p>
+
             <div class="mt-3">
               <p>
-                The add in was developed for use with the Method Verification Workbook.
-                The default cell ranges used by the workbook can be populated by clicking
-                the button below.
+                The add in was developed for use with the Method Verification Workbook. The default
+                cell ranges used by the workbook can be populated by clicking the button below.
               </p>
               <fluent-button id="load-defaults-btn" class="ms-fontColor-themePrimary"
                 >Populate for MVW</fluent-button
+              >
+              <p>
+                Alternatively, the defaults can be loaded from a worksheet from cells A2:B18. Having
+                the following format. The attributes in the left column must not be changed.
+              </p>
+              <table>
+                <tr>
+                  <td>aps-abs</td>
+                  <td>J4</td>
+                </tr>
+                <tr>
+                  <td>aps-rel</td>
+                  <td>J6</td>
+                </tr>
+                <tr>
+                  <td>x-range</td>
+                  <td>O61:P160</td>
+                </tr>
+                <tr>
+                  <td>y-range</td>
+                  <td>R61:S160</td>
+                </tr>
+                <tr>
+                  <td>output-range</td>
+                  <td>C167</td>
+                </tr>
+                <tr>
+                  <td>regression-method</td>
+                  <td>paba</td>
+                </tr>
+                <tr>
+                  <td>confidence-interval-method</td>
+                  <td>default</td>
+                </tr>
+                <tr>
+                  <td>use-calculated-error-ratio</td>
+                  <td>TRUE</td>
+                </tr>
+                <tr>
+                  <td>error-ratio</td>
+                  <td>1.0</td>
+                </tr>
+                <tr>
+                  <td>bland-altman-range</td>
+                  <td>N162:U175</td>
+                </tr>
+                <tr>
+                  <td>scatter-plot-range</td>
+                  <td>N177:U190</td>
+                </tr>
+                <tr>
+                  <td>output-labels</td>
+                  <td>TRUE</td>
+                </tr>
+                <tr>
+                  <td>chart-data-range</td>
+                  <td>AP61</td>
+                </tr>
+                <tr>
+                  <td>p-days-range</td>
+                  <td>B295:B319</td>
+                </tr>
+                <tr>
+                  <td>p-runs-range</td>
+                  <td>C295:C319</td>
+                </tr>
+                <tr>
+                  <td>p-results-range</td>
+                  <td>D295:G319</td>
+                </tr>
+                <tr>
+                  <td>p-output-range</td>
+                  <td>AD294</td>
+                </tr>
+              </table>
+              <fluent-button id="load-wb-def-btn" class="ms-fontColor-themePrimary"
+                >Load from Workbook</fluent-button
               >
             </div>
           </div>
@@ -333,7 +481,7 @@
       </fluent-accordion>
       <!-- Message Box for displaying errors -->
       <div id="msgbox" class="mvw-hidden floating-msgbox">
-        <div id="msgbox-content" >
+        <div id="msgbox-content">
           <!-- Message content goes here -->
         </div>
         <div class="msgbox-footer">

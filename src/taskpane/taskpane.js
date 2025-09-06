@@ -47,12 +47,18 @@ Office.onReady((info) => {
 
     // Load MVW default ranges
     document.getElementById("load-defaults-btn").onclick = () => tryCatch(setDefaultValues);
+    document.getElementById("load-wb-def-btn").onclick = () => tryCatch(loadWorkbookDefaults);
 
     // Hide the message box by default
     document.getElementById("msgbox").style.display = "none";
 
     // Set the onclick handler for the message box OK button
     document.getElementById("msgbox").onclick = () => tryCatch(alertOK);
+
+    // Setup a precision experiment layout
+    document.getElementById("setup-precision").onclick = () => tryCatch(setupPrecision);
+    document.getElementById("select-c-layout-range").onclick = () =>
+      tryCatch(selectPrecisionLayoutRange);
 
     // Display if initialisation completes
     document.getElementById("sideload-msg").style.display = "none";
@@ -384,7 +390,7 @@ async function runANOVA() {
     const factorBRng = document.getElementById("p-runs-range").value;
     const resultsRng = document.getElementById("p-results-range").value;
     const outputRange = document.getElementById("p-output-range").value;
-    const analysisType = "one-factor";
+    let analysisType = "one-factor";
 
     // Load the ranges
     const aRange = currentWorksheet.getRange(factorARng);
@@ -614,7 +620,7 @@ function analyseTwoFactor(precisionData) {
     "CV A",
     "CV AB",
     "CV E",
-    "CV T",
+    "CV WL",
     "DF WL",
     "SD WL LCL",
     "SD WL UCL",
@@ -626,6 +632,96 @@ function analyseTwoFactor(precisionData) {
     "CV E UCL",
   ];
   return formatPrecisionForExcel(labels, columnData);
+} // analyseTwoFactor
+
+// Setup the layout for a precision experiment
+async function setupPrecision() {
+  await Excel.run(async (context) => {
+    const daysVal = document.getElementById("c-num-days").value;
+    const runsVal = document.getElementById("c-num-runs").value;
+    const repsVal = document.getElementById("c-num-reps").value;
+    const levelsVal = document.getElementById("c-num-levels").value;
+    const layoutRng = document.getElementById("c-layout-range").value;
+    if (daysVal === "") {
+      throw new Error("Please enter the number of days.");
+    }
+    if (runsVal === "") {
+      throw new Error("Please enter the number of runs.");
+    }
+    if (repsVal === "") {
+      throw new Error("Please enter the number of replicates.");
+    }
+    if (levelsVal === "") {
+      throw new Error("Please enter the number of levels.");
+    }
+    if (layoutRng === "") {
+      throw new Error("Please select the top left cell of the layout range.");
+    }
+    const days = Number(daysVal);
+    const runs = Number(runsVal);
+    const reps = Number(repsVal);
+    const levels = Number(levelsVal);
+
+    if (isNaN(days) || isNaN(runs) || isNaN(reps) || isNaN(levels)) {
+      throw new Error("Please enter valid numbers for the number of days, runs, replicates and levels.");
+    }
+
+    const layout = setupLayout(days, runs, reps, levels);
+    const range = context.workbook.worksheets.getActiveWorksheet().getRange(layoutRng);
+    range.load(["rowCount", "columnCount", "values"]);
+    await context.sync();
+
+    // write the layout to Excel
+    const layoutRange = range.getAbsoluteResizedRange(layout.length, layout[0].length);
+    layoutRange.values = layout;
+    await context.sync();
+
+    // copy the range addresses to the precision analysis fields
+    const daysRange = range.getCell(1, 0).getAbsoluteResizedRange(layout.length-1, 1);
+    const runsRange = range.getCell(1, 1).getAbsoluteResizedRange(layout.length-1, 1);
+    const valuesRange = range.getCell(1, 2).getAbsoluteResizedRange(layout.length-1, levels);
+    daysRange.load(["address"]);
+    runsRange.load(["address"]);
+    valuesRange.load(["address"]);
+    await context.sync();
+    document.getElementById("p-days-range").value = daysRange.address;
+    document.getElementById("p-runs-range").value = runsRange.address;
+    document.getElementById("p-results-range").value = valuesRange.address;
+ 
+  });
+} //setupPrecision
+
+function setupLayout(days, runs, reps, levels) {
+  let arr = [];
+  let headerRow = ["Days", "Runs"]
+  for (let i=1;i<=levels;i++) {
+    headerRow.push(`Level ${i}`);
+  }
+  arr.push(headerRow);
+  for (let i=1;i<=days;i++) {
+    for (let j=1;j<=runs;j++) {
+      for (let k=1;k<=reps;k++) {
+        let row = [];
+        row.push(`Day ${i}`);
+        row.push(`Run ${j}`);
+        for (let l=1;l<=levels;l++) {
+          row.push("");
+        }
+        arr.push(row);
+      }
+    }
+  }
+  return arr;
+} // setupLayout
+
+// Setup the layout for a precision experiment
+async function selectPrecisionLayoutRange() {
+  await Excel.run(async (context) => {
+    const range = context.workbook.getSelectedRange();
+    range.load("address");
+    await context.sync();
+    document.getElementById("c-layout-range").value = range.address;
+  });
 }
 
 // The following functions are for selecting ranges for the precision analysis
@@ -790,6 +886,22 @@ function processRangeData(range) {
     return { means: means, x1: [], x2: [], devsq: [], sd: 0, cv: 0, size: size, mean: mean };
   }
 }
+
+// Read the default cell addresses from and excel workbook.
+async function loadWorkbookDefaults() {
+  await Excel.run(async (context) => {
+    const worksheet = context.workbook.worksheets.getActiveWorksheet();
+    const address = "A2:B18";
+    const range = worksheet.getRange(address);
+    range.load(["values", "rowCount", "columnCount"]);
+    await context.sync();
+    for (let row=0;row<range.rowCount;row++) {
+      const attribute = range.values[row][0];
+      const value = range.values[row][1];
+      document.getElementById(attribute).value = value;
+    }
+  });
+}//readLayout
 
 /* Configure default values for the input fields */
 function setDefaultValues() {

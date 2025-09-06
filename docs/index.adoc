@@ -259,3 +259,97 @@ the within laboratory verification limit factor F. Investigations suggest this
 occurs because the CHISQ.INV function in Excel rounds the degrees of freedom to
 an integer value. In contrast, the equivalent function in the jStat library
 used by this application is able to calculate the result with decimal values.
+
+=== Two Way Analysis Calculations
+
+These were sourced from:
+
+Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
+and the Sciences 6th ed. CRC Press, Boca Raton. p752.
+
+Clinical and Laboratory Standards Institute (CLSI). 2014.
+Evaluation of Precision of Quantitative MeasurementProcedures; 
+Approved Guideline - Third Edition. CLSI document EP05-A3.
+Clinical and Laboratory Standards Institute, Pennsylvania.
+
+a : number of levels of the first factor (factor A) (e.g. days 20)
+
+b : number of levels of the second factor (factor B) (e.g. runs 2)
+
+r : number of measurements of each pair of levels of independent 
+variables A and B. That is, the number of replicates (e.g. 2)
+
+stem:[N=a\times b\times r] : the total number of results (e.g. 80 if 2 replicates per run with 
+2 runs per day over 20 days).
+
+stem:[A_{i}] : total of all measurements of independent variable 1 at level i.
+(i = 1, 2, ..., a)
+
+stem:[B_{j}] : total of all measurements of independent variable 2 at level j.
+(j = 1, 2, ..., b)
+
+stem:[AB_{ij}] : total of all measurement at the ith level of variable 1 and jth
+level of variable 2. (i = 1, 2, ..., a; j = 1, 2, ..., b)
+
+stem:[CM=\frac{(\sum_{i=1}^{N}x_{i})^2}{N}] : correction for the mean
+
+stem:[SST=\sum_{i=0}^{N}y_{i}^{2}-CM] : total sum of squares
+
+stem:[SSA=\frac{\sum_{i=1}^{a}A_{i}^{2}}{br}-CM] : sum of squares of A
+
+stem:[SSB=\frac{\sum_{j=1}^{b}B_{j}^{2}}{ar}-CM] : sum of squares of B
+
+stem:[SSAB=\frac{\sum_{j=1}^{b}\sum_{i=1}^{a}AB_{ij}}{r}-SSA-SSB-CM] : sum of squares of AB interaction.
+
+stem:[SSE=SST-SSA-SSB-SSAB=\sum_{j=1}^{b}\sum_{i=1}^{a}\sum_{k=1}^{r}(x_{ijk}-\bar{x}_{ij})^{2}]
+
+stem:[DFA=a-1] : degrees of freedom of A
+
+stem:[DFB=b-1] : degrees of freedom of B
+
+stem:[DFAB=(a-1)\times(b-1)] : degrees of freedom of A and B
+
+stem:[DFE=N-(ab)]
+
+stem:[MSA=\frac{SSA}{DFA}] : mean square of A
+
+stem:[MSB=\frac{SSB}{DFB}] : mean square of B
+
+stem:[MSAB=\frac{SSAB}{DFAB}] : mean square of AB interaction
+
+stem:[MSE=\frac{SSE}{DFE}] : mean square of error
+
+stem:[F_{A}=\frac{MSA}{MSE}] : F-statistic of A
+
+stem:[F_{B}=\frac{MSB}{MSE}] : F-statistic of B
+
+stem:[F_{AB}=\frac{MSAB}{MSE}] : F-statistic of AB interaction
+
+stem:[V_{E}=MSE] : variance of error
+
+stem:[V_{A}=\frac{MSA-MSA}{b\times r}] : variance of A (between day)
+
+stem:[V_{AB}=\frac{MSAB-MSE}{r}] : variance of AB interaction (between run)
+
+stem:[S_{R}=\sqrt{V_{E}}] : standard deviation of repeatability
+
+stem:[S_{WL}=\sqrt{V_{A}+V_{AB}+V_{E}] : standard deviation within laboratory
+
+I need help here! This bit might not be right. Seems to work with a balanced study but 
+probably will not work with unbalanced data.
+
+stem:[\alpha_{A}=\frac{1}{b\times r}]
+
+stem:[\alpha_{AB}=\frac{r-1}{b\timesr}]
+
+stem:[\alpha_{E}=\frac{r-1}{r}]
+
+stem:[DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{AB}MSAB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{AB}MSAB)^2}{DFAB} + \frac{(\alpha_{E}MSE)^2}{DFE}}]
+
+stem:[UCL=S\times \sqrt{\frac{DF}{\chi_{1-\frac{\alpha}{2}}^{2},DF}}] : upper confidence limit 
+where stem:[\chi_{1-\frac{\alpha}{2}}^{2}] is the quantile corresponding to 1-alpha/2 confidence
+with DF degrees of freedom
+
+stem:[LCL=S\times \sqrt{\frac{DF}{\chi_{\frac{\alpha}{2}}^{2},DF}}] : lower confidence limit 
+where stem:[\chi_{\frac{\alpha}{2}}^2] is the quantile corresponding to alpha/2 confidence
+with DF degrees of freedom

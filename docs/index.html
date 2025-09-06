@@ -451,6 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_appendices">Appendices</a>
 <ul class="sectlevel2">
 <li><a href="#_one_way_analysis_calculations">One Way Analysis Calculations</a></li>
+<li><a href="#_two_way_analysis_calculations">Two Way Analysis Calculations</a></li>
 </ul>
 </li>
 </ul>
@@ -926,12 +927,146 @@ used by this application is able to calculate the result with decimal values.
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_two_way_analysis_calculations">Two Way Analysis Calculations</h3>
+<div class="paragraph">
+<p>These were sourced from:</p>
+</div>
+<div class="paragraph">
+<p>Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
+and the Sciences 6th ed. CRC Press, Boca Raton. p752.</p>
+</div>
+<div class="paragraph">
+<p>Clinical and Laboratory Standards Institute (CLSI). 2014.
+Evaluation of Precision of Quantitative MeasurementProcedures;
+Approved Guideline - Third Edition. CLSI document EP05-A3.
+Clinical and Laboratory Standards Institute, Pennsylvania.</p>
+</div>
+<div class="paragraph">
+<p>a : number of levels of the first factor (factor A) (e.g. days 20)</p>
+</div>
+<div class="paragraph">
+<p>b : number of levels of the second factor (factor B) (e.g. runs 2)</p>
+</div>
+<div class="paragraph">
+<p>r : number of measurements of each pair of levels of independent
+variables A and B. That is, the number of replicates (e.g. 2)</p>
+</div>
+<div class="paragraph">
+<p>\$N=a\times b\times r\$ : the total number of results (e.g. 80 if 2 replicates per run with
+2 runs per day over 20 days).</p>
+</div>
+<div class="paragraph">
+<p>\$A_{i}\$ : total of all measurements of independent variable 1 at level i.
+(i = 1, 2, &#8230;&#8203;, a)</p>
+</div>
+<div class="paragraph">
+<p>\$B_{j}\$ : total of all measurements of independent variable 2 at level j.
+(j = 1, 2, &#8230;&#8203;, b)</p>
+</div>
+<div class="paragraph">
+<p>\$AB_{ij}\$ : total of all measurement at the ith level of variable 1 and jth
+level of variable 2. (i = 1, 2, &#8230;&#8203;, a; j = 1, 2, &#8230;&#8203;, b)</p>
+</div>
+<div class="paragraph">
+<p>\$CM=\frac{(\sum_{i=1}^{N}x_{i})^2}{N}\$ : correction for the mean</p>
+</div>
+<div class="paragraph">
+<p>\$SST=\sum_{i=0}^{N}y_{i}^{2}-CM\$ : total sum of squares</p>
+</div>
+<div class="paragraph">
+<p>\$SSA=\frac{\sum_{i=1}^{a}A_{i}^{2}}{br}-CM\$ : sum of squares of A</p>
+</div>
+<div class="paragraph">
+<p>\$SSB=\frac{\sum_{j=1}^{b}B_{j}^{2}}{ar}-CM\$ : sum of squares of B</p>
+</div>
+<div class="paragraph">
+<p>\$SSAB=\frac{\sum_{j=1}^{b}\sum_{i=1}^{a}AB_{ij}}{r}-SSA-SSB-CM\$ : sum of squares of AB interaction.</p>
+</div>
+<div class="paragraph">
+<p>\$SSE=SST-SSA-SSB-SSAB=\sum_{j=1}^{b}\sum_{i=1}^{a}\sum_{k=1}^{r}(x_{ijk}-\bar{x}_{ij})^{2}\$</p>
+</div>
+<div class="paragraph">
+<p>\$DFA=a-1\$ : degrees of freedom of A</p>
+</div>
+<div class="paragraph">
+<p>\$DFB=b-1\$ : degrees of freedom of B</p>
+</div>
+<div class="paragraph">
+<p>\$DFAB=(a-1)\times(b-1)\$ : degrees of freedom of A and B</p>
+</div>
+<div class="paragraph">
+<p>\$DFE=N-(ab)\$</p>
+</div>
+<div class="paragraph">
+<p>\$MSA=\frac{SSA}{DFA}\$ : mean square of A</p>
+</div>
+<div class="paragraph">
+<p>\$MSB=\frac{SSB}{DFB}\$ : mean square of B</p>
+</div>
+<div class="paragraph">
+<p>\$MSAB=\frac{SSAB}{DFAB}\$ : mean square of AB interaction</p>
+</div>
+<div class="paragraph">
+<p>\$MSE=\frac{SSE}{DFE}\$ : mean square of error</p>
+</div>
+<div class="paragraph">
+<p>\$F_{A}=\frac{MSA}{MSE}\$ : F-statistic of A</p>
+</div>
+<div class="paragraph">
+<p>\$F_{B}=\frac{MSB}{MSE}\$ : F-statistic of B</p>
+</div>
+<div class="paragraph">
+<p>\$F_{AB}=\frac{MSAB}{MSE}\$ : F-statistic of AB interaction</p>
+</div>
+<div class="paragraph">
+<p>\$V_{E}=MSE\$ : variance of error</p>
+</div>
+<div class="paragraph">
+<p>\$V_{A}=\frac{MSA-MSA}{b\times r}\$ : variance of A (between day)</p>
+</div>
+<div class="paragraph">
+<p>\$V_{AB}=\frac{MSAB-MSE}{r}\$ : variance of AB interaction (between run)</p>
+</div>
+<div class="paragraph">
+<p>\$S_{R}=\sqrt{V_{E}}\$ : standard deviation of repeatability</p>
+</div>
+<div class="paragraph">
+<p>\$S_{WL}=\sqrt{V_{A}+V_{AB}+V_{E}\$ : standard deviation within laboratory</p>
+</div>
+<div class="paragraph">
+<p>I need help here! This bit might not be right. Seems to work with a balanced study but
+probably will not work with unbalanced data.</p>
+</div>
+<div class="paragraph">
+<p>\$\alpha_{A}=\frac{1}{b\times r}\$</p>
+</div>
+<div class="paragraph">
+<p>\$\alpha_{AB}=\frac{r-1}{b\timesr}\$</p>
+</div>
+<div class="paragraph">
+<p>\$\alpha_{E}=\frac{r-1}{r}\$</p>
+</div>
+<div class="paragraph">
+<p>\$DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{AB}MSAB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{AB}MSAB)^2}{DFAB} + \frac{(\alpha_{E}MSE)^2}{DFE}}\$</p>
+</div>
+<div class="paragraph">
+<p>\$UCL=S\times \sqrt{\frac{DF}{\chi_{1-\frac{\alpha}{2}}^{2},DF}}\$ : upper confidence limit
+where \$\chi_{1-\frac{\alpha}{2}}^{2}\$ is the quantile corresponding to 1-alpha/2 confidence
+with DF degrees of freedom</p>
+</div>
+<div class="paragraph">
+<p>\$LCL=S\times \sqrt{\frac{DF}{\chi_{\frac{\alpha}{2}}^{2},DF}}\$ : lower confidence limit
+where \$\chi_{\frac{\alpha}{2}}^2\$ is the quantile corresponding to alpha/2 confidence
+with DF degrees of freedom</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-05 15:11:27 01000
+Last updated 2025-09-06 14:17:07 01000
 </div>
 </div>
 <script type="text/x-mathjax-config">
