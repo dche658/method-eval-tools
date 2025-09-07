@@ -3,7 +3,7 @@
  * Requires jStat library for statistical calculations
  */
 
-import jStat from "./jstat-1.9.6.min.js";
+const { jStat } = require('jstat');
 
 class ExcelBlandAltmanChart {
   constructor(x, y, diffType, apsAbs, apsRel, chartDataRange, outputRange = "") {

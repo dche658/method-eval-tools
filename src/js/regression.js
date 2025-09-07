@@ -15,12 +15,7 @@
  * Created: August 2025.
  */
 
-/* There is a dependency on jStat for the inverse normal and student-t
- * distributions. If using as part of a node.js package, this should be
- * uncommented so it is available. In a web-page, this dependency can
- * be imported as a script element.
- */
-import jStat from "./jstat-1.9.6.min.js";
+const { jStat } = require('jstat');
 
 const CI_METHOD_JACKKNIFE = "jackknife";
 const CI_METHOD_BOOTSTRAP = "bootstrap";
