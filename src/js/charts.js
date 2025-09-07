@@ -1,7 +1,7 @@
 /*
-* ExcelBlandAltmanChart and ExcelRegressionChart classes for creating charts in Excel using Office.js
-* Requires jStat library for statistical calculations
-*/
+ * ExcelBlandAltmanChart and ExcelRegressionChart classes for creating charts in Excel using Office.js
+ * Requires jStat library for statistical calculations
+ */
 
 import jStat from "./jstat-1.9.6.min.js";
 
@@ -35,13 +35,13 @@ class ExcelBlandAltmanChart {
         this.diffType === "rel" ? (this.y[i] - this.x[i]) / means[i] : this.y[i] - this.x[i];
     }
     const meanDiff = jStat.mean(diffs);
-    const sdDiff = jStat.stdev(diffs,true); // Sample standard deviation
+    const sdDiff = jStat.stdev(diffs, true); // Sample standard deviation
     const minX = Math.min(...means);
     const maxX = Math.max(...means);
 
     let apsData = null;
     if (!(this.apsAbs <= 0 && this.apsRel <= 0)) {
-      // Calculate the APS lines only if APS values are provided 
+      // Calculate the APS lines only if APS values are provided
       apsData = this.getBlandAltmanApsData(
         minX,
         maxX,
@@ -186,7 +186,8 @@ class ExcelBlandAltmanChart {
       await context.sync();
 
       // Set the chart data values. First row will be the headers
-      const headers = this.diffType === "rel" ? ["Mean", "Relative Difference"] : ["Mean", "Difference"];
+      const headers =
+        this.diffType === "rel" ? ["Mean", "Relative Difference"] : ["Mean", "Difference"];
 
       // Initialize the chart data values
       let data = [];
@@ -202,10 +203,12 @@ class ExcelBlandAltmanChart {
       chartData.values = data;
       await context.sync();
 
-      let offset = 4 // Offset for additional series data
+      let offset = 4; // Offset for additional series data
 
       // x and y data values
-      const xyDataRange = chartData.getOffsetRange(0, 2).getAbsoluteResizedRange(this.x.length + 1, 2);
+      const xyDataRange = chartData
+        .getOffsetRange(0, 2)
+        .getAbsoluteResizedRange(this.x.length + 1, 2);
       xyDataRange.load(["address", "values"]);
       await context.sync();
       // Set the x and y values
@@ -219,7 +222,7 @@ class ExcelBlandAltmanChart {
 
       // Range for mean difference chart data
       const meanDiffXRange = chartData.getOffsetRange(1, offset).getAbsoluteResizedRange(2, 1);
-      const meanDiffYRange = chartData.getOffsetRange(1, offset+1).getAbsoluteResizedRange(2, 1);
+      const meanDiffYRange = chartData.getOffsetRange(1, offset + 1).getAbsoluteResizedRange(2, 1);
       meanDiffXRange.load(["address", "values"]);
       meanDiffYRange.load(["address", "values"]);
       await context.sync();
@@ -230,8 +233,12 @@ class ExcelBlandAltmanChart {
       await context.sync();
 
       //Upper limits of agreement
-      const upperLimitXRange = chartData.getOffsetRange(1, offset+2).getAbsoluteResizedRange(2, 1);
-      const upperLimitYRange = chartData.getOffsetRange(1, offset+3).getAbsoluteResizedRange(2, 1);
+      const upperLimitXRange = chartData
+        .getOffsetRange(1, offset + 2)
+        .getAbsoluteResizedRange(2, 1);
+      const upperLimitYRange = chartData
+        .getOffsetRange(1, offset + 3)
+        .getAbsoluteResizedRange(2, 1);
       upperLimitXRange.load(["address", "values"]);
       upperLimitYRange.load(["address", "values"]);
       await context.sync();
@@ -242,8 +249,12 @@ class ExcelBlandAltmanChart {
       await context.sync();
 
       // Lower limits of agreement
-      const lowerLimitXRange = chartData.getOffsetRange(1, offset+4).getAbsoluteResizedRange(2, 1);
-      const lowerLimitYRange = chartData.getOffsetRange(1, offset+5).getAbsoluteResizedRange(2, 1);
+      const lowerLimitXRange = chartData
+        .getOffsetRange(1, offset + 4)
+        .getAbsoluteResizedRange(2, 1);
+      const lowerLimitYRange = chartData
+        .getOffsetRange(1, offset + 5)
+        .getAbsoluteResizedRange(2, 1);
       lowerLimitXRange.load(["address", "values"]);
       lowerLimitYRange.load(["address", "values"]);
       await context.sync();
@@ -297,10 +308,10 @@ class ExcelBlandAltmanChart {
       if (model.apsData !== null) {
         // Upper APS line
         const apsUpperXRange = chartData
-          .getOffsetRange(1, offset+6)
+          .getOffsetRange(1, offset + 6)
           .getAbsoluteResizedRange(model.apsData.apsUpperX.length, 1);
         const apsUpperYRange = chartData
-          .getOffsetRange(1, offset+7)
+          .getOffsetRange(1, offset + 7)
           .getAbsoluteResizedRange(model.apsData.apsUpperY.length, 1);
         apsUpperXRange.load(["address", "values"]);
         apsUpperYRange.load(["address", "values"]);
@@ -320,10 +331,10 @@ class ExcelBlandAltmanChart {
 
         // Lower APS line
         const apsLowerXRange = chartData
-          .getOffsetRange(1, offset+8)
+          .getOffsetRange(1, offset + 8)
           .getAbsoluteResizedRange(model.apsData.apsLowerX.length, 1);
         const apsLowerYRange = chartData
-          .getOffsetRange(1, offset+9)
+          .getOffsetRange(1, offset + 9)
           .getAbsoluteResizedRange(model.apsData.apsLowerY.length, 1);
         apsLowerXRange.load(["address", "values"]);
         apsLowerYRange.load(["address", "values"]);
@@ -378,10 +389,13 @@ class ExcelRegressionChart {
     const identityX = [[minX], [maxX]]; //2 rows, 1 column
     const identityY = [[minX], [maxX]]; //2 rows, 1 column
     const regressionX = [[minX], [maxX]]; //2 rows, 1 column
-    const regressionY = [[this.intercept + this.slope * minX], [this.intercept + this.slope * maxX]]; //2 rows, 1 column
+    const regressionY = [
+      [this.intercept + this.slope * minX],
+      [this.intercept + this.slope * maxX],
+    ]; //2 rows, 1 column
     let apsData = null;
     if (!(this.apsAbs <= 0 && this.apsRel <= 0)) {
-      // Calculate the APS lines only if APS values are provided 
+      // Calculate the APS lines only if APS values are provided
       apsData = this.getApsData(minX, maxX, this.apsAbs, this.apsRel);
     }
     return {
@@ -435,7 +449,7 @@ class ExcelRegressionChart {
   /** Create Regression Chart */
   async createChart() {
     await Excel.run(async (context) => {
-            // initialise the chart model
+      // initialise the chart model
       const model = this.initializeModel();
 
       const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
@@ -470,11 +484,11 @@ class ExcelRegressionChart {
       chartData.values = data;
       await context.sync();
 
-      let offset = 4 // Offset for additional series data
+      let offset = 4; // Offset for additional series data
 
       // Range for identity line chart data
       const identityXRange = chartData.getOffsetRange(10, offset).getAbsoluteResizedRange(2, 1);
-      const identityYRange = chartData.getOffsetRange(10, offset+1).getAbsoluteResizedRange(2, 1);
+      const identityYRange = chartData.getOffsetRange(10, offset + 1).getAbsoluteResizedRange(2, 1);
       identityXRange.load(["address", "values"]);
       identityYRange.load(["address", "values"]);
       await context.sync();
@@ -483,8 +497,12 @@ class ExcelRegressionChart {
       identityYRange.values = model.identityY;
       await context.sync();
       // Range for regression line chart data
-      const regressionXRange = chartData.getOffsetRange(10, offset+2).getAbsoluteResizedRange(2, 1);
-      const regressionYRange = chartData.getOffsetRange(10, offset+3).getAbsoluteResizedRange(2, 1);
+      const regressionXRange = chartData
+        .getOffsetRange(10, offset + 2)
+        .getAbsoluteResizedRange(2, 1);
+      const regressionYRange = chartData
+        .getOffsetRange(10, offset + 3)
+        .getAbsoluteResizedRange(2, 1);
       regressionXRange.load(["address", "values"]);
       regressionYRange.load(["address", "values"]);
       await context.sync();
@@ -493,9 +511,12 @@ class ExcelRegressionChart {
       regressionYRange.values = model.regressionY;
       await context.sync();
 
-
       // Create a scatter chart
-      const chart = currentWorksheet.charts.add(Excel.ChartType.xyscatter, chartData, Excel.ChartSeriesBy.columns);
+      const chart = currentWorksheet.charts.add(
+        Excel.ChartType.xyscatter,
+        chartData,
+        Excel.ChartSeriesBy.columns
+      );
       chart.title.text = "Scatter Chart";
       chart.legend.position = Excel.ChartLegendPosition.bottom;
       chart.legend.visible = true;
@@ -523,10 +544,10 @@ class ExcelRegressionChart {
       if (model.apsData !== null) {
         // Upper APS line
         const apsUpperXRange = chartData
-          .getOffsetRange(10, offset+4)
+          .getOffsetRange(10, offset + 4)
           .getAbsoluteResizedRange(model.apsData.apsUpperX.length, 1);
         const apsUpperYRange = chartData
-          .getOffsetRange(10, offset+5)
+          .getOffsetRange(10, offset + 5)
           .getAbsoluteResizedRange(model.apsData.apsUpperY.length, 1);
         apsUpperXRange.load(["address", "values"]);
         apsUpperYRange.load(["address", "values"]);
@@ -546,10 +567,10 @@ class ExcelRegressionChart {
 
         // Lower APS line
         const apsLowerXRange = chartData
-          .getOffsetRange(10, offset+6)
+          .getOffsetRange(10, offset + 6)
           .getAbsoluteResizedRange(model.apsData.apsLowerX.length, 1);
         const apsLowerYRange = chartData
-          .getOffsetRange(10, offset+7)
+          .getOffsetRange(10, offset + 7)
           .getAbsoluteResizedRange(model.apsData.apsLowerY.length, 1);
         apsLowerXRange.load(["address", "values"]);
         apsLowerYRange.load(["address", "values"]);
@@ -567,7 +588,6 @@ class ExcelRegressionChart {
         apsLowerSeries.format.line.style = Excel.ChartLineStyle.dash; // Set the line style to dashed
         apsLowerSeries.markerStyle = Excel.ChartMarkerStyle.none; // Hide the markers
       } // if apsData
-
 
       // Set the chart position
       if (this.outputRange !== "") {

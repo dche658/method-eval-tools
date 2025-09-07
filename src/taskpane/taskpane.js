@@ -444,7 +444,7 @@ async function runANOVA() {
               } else {
                 bDict[factorB] = 1;
               }
-            } 
+            }
           } // factor B exists
         } // if result is number
       } // for row j
@@ -663,7 +663,9 @@ async function setupPrecision() {
     const levels = Number(levelsVal);
 
     if (isNaN(days) || isNaN(runs) || isNaN(reps) || isNaN(levels)) {
-      throw new Error("Please enter valid numbers for the number of days, runs, replicates and levels.");
+      throw new Error(
+        "Please enter valid numbers for the number of days, runs, replicates and levels."
+      );
     }
 
     const layout = setupLayout(days, runs, reps, levels);
@@ -677,9 +679,9 @@ async function setupPrecision() {
     await context.sync();
 
     // copy the range addresses to the precision analysis fields
-    const daysRange = range.getCell(1, 0).getAbsoluteResizedRange(layout.length-1, 1);
-    const runsRange = range.getCell(1, 1).getAbsoluteResizedRange(layout.length-1, 1);
-    const valuesRange = range.getCell(1, 2).getAbsoluteResizedRange(layout.length-1, levels);
+    const daysRange = range.getCell(1, 0).getAbsoluteResizedRange(layout.length - 1, 1);
+    const runsRange = range.getCell(1, 1).getAbsoluteResizedRange(layout.length - 1, 1);
+    const valuesRange = range.getCell(1, 2).getAbsoluteResizedRange(layout.length - 1, levels);
     daysRange.load(["address"]);
     runsRange.load(["address"]);
     valuesRange.load(["address"]);
@@ -687,24 +689,23 @@ async function setupPrecision() {
     document.getElementById("p-days-range").value = daysRange.address;
     document.getElementById("p-runs-range").value = runsRange.address;
     document.getElementById("p-results-range").value = valuesRange.address;
- 
   });
 } //setupPrecision
 
 function setupLayout(days, runs, reps, levels) {
   let arr = [];
-  let headerRow = ["Days", "Runs"]
-  for (let i=1;i<=levels;i++) {
+  let headerRow = ["Days", "Runs"];
+  for (let i = 1; i <= levels; i++) {
     headerRow.push(`Level ${i}`);
   }
   arr.push(headerRow);
-  for (let i=1;i<=days;i++) {
-    for (let j=1;j<=runs;j++) {
-      for (let k=1;k<=reps;k++) {
+  for (let i = 1; i <= days; i++) {
+    for (let j = 1; j <= runs; j++) {
+      for (let k = 1; k <= reps; k++) {
         let row = [];
         row.push(`Day ${i}`);
         row.push(`Run ${j}`);
-        for (let l=1;l<=levels;l++) {
+        for (let l = 1; l <= levels; l++) {
           row.push("");
         }
         arr.push(row);
@@ -895,13 +896,13 @@ async function loadWorkbookDefaults() {
     const range = worksheet.getRange(address);
     range.load(["values", "rowCount", "columnCount"]);
     await context.sync();
-    for (let row=0;row<range.rowCount;row++) {
+    for (let row = 0; row < range.rowCount; row++) {
       const attribute = range.values[row][0];
       const value = range.values[row][1];
       document.getElementById(attribute).value = value;
     }
   });
-}//readLayout
+} //readLayout
 
 /* Configure default values for the input fields */
 function setDefaultValues() {

@@ -4,7 +4,7 @@
  * two way ANOVA. These classes are in turn used by the OneFactorVarianceAnalysis
  * and TwoFactorVarianceAnalysis classes to perform variance component
  * analysis. However, the ANOVA classes can be used independently if needed.
- * 
+ *
  * The class OneFactorVarianceAnalysis is for a one factor design typically used for
  * verification studies, and calculates an upper verification limit.
  * The class TwoFactorVarianceAnalysis is for a two factor design typically used for
@@ -12,7 +12,6 @@
  * limit.
  */
 
-//import { average } from "./regression.js";
 import jStat from "./jstat-1.9.6.min.js";
 
 /* Class to perform one factor anova
@@ -99,14 +98,14 @@ export class OneFactorVarianceAnalysis {
     const vE = anova.mse;
     const sE = Math.sqrt(vE);
     const cvE = sE / anova.mean;
-    const n0 = (anova.n - (anova.sn2 / anova.n))/(anova.p - 1);
+    const n0 = (anova.n - anova.sn2 / anova.n) / (anova.p - 1);
     const vB = Math.max(0, (anova.mst - anova.mse) / n0);
     const sB = Math.sqrt(vB);
     const cvB = sB / anova.mean;
     const s_WL = Math.sqrt(vE + vB);
     const cv_WL = s_WL / anova.mean;
-    const alpha1 = 1 / n0;// 1 / anova.p;
-    const alpha2 = 1 - alpha1 //(n0-1)/n0;
+    const alpha1 = 1 / n0; // 1 / anova.p;
+    const alpha2 = 1 - alpha1; //(n0-1)/n0;
     const numerator = Math.pow(alpha1 * anova.mst + alpha2 * anova.mse, 2);
     const denominator1 = Math.pow(alpha1 * anova.mst, 2) / anova.dfT;
     const denominator2 = Math.pow(alpha2 * anova.mse, 2) / anova.dfE;
@@ -119,7 +118,8 @@ export class OneFactorVarianceAnalysis {
     this.fRepeatability = chisqRepeatability / anova.dfE;
     this.fWL = chisqWL / dfWL;
     this.isCalculated = true;
-    return {...anova, 
+    return {
+      ...anova,
       ...{
         vE: vE,
         vB: vB,
@@ -134,7 +134,7 @@ export class OneFactorVarianceAnalysis {
         chisqWL: chisqWL,
         fRepeatability: this.fRepeatability,
         fWL: this.fWL,
-      }
+      },
     };
   }
 
@@ -412,7 +412,8 @@ export class TwoFactorVarianceAnalysis {
 
     this.isCalculated = true;
 
-    return {...anova, 
+    return {
+      ...anova,
       ...{
         vA: vA,
         vAB: vAB,
@@ -434,7 +435,7 @@ export class TwoFactorVarianceAnalysis {
         cvWL_UCL: cvWL_UCL,
         cvE_LCL: cvE_LCL,
         cvE_UCL: cvE_UCL,
-      }
+      },
     };
   }
 
@@ -449,7 +450,7 @@ export class TwoFactorVarianceAnalysis {
     return ucl;
   }
   getLowerConfidenceLimit(sd, df, alpha) {
-    let lcl = sd * Math.sqrt(df / jStat.chisquare.inv(1 - (alpha / 2), df));
+    let lcl = sd * Math.sqrt(df / jStat.chisquare.inv(1 - alpha / 2, df));
     return lcl;
   }
 }

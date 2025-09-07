@@ -1,7 +1,9 @@
-import { 
-    OneFactorAnova, OneFactorVarianceAnalysis, 
-    TwoFactorAnova, TwoFactorVarianceAnalysis
-} from './precision.js';
+import {
+  OneFactorAnova,
+  OneFactorVarianceAnalysis,
+  TwoFactorAnova,
+  TwoFactorVarianceAnalysis,
+} from "./precision.js";
 
 const factorA = [
   "Day 1",
