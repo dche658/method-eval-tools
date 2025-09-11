@@ -440,9 +440,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_installation">Installation</a>
+<li><a href="#_side_loading_the_add_in">Side-loading the add-in</a>
 <ul class="sectlevel2">
-<li><a href="#_installing_on_a_portable_device">Installing on a Portable Device</a></li>
+<li><a href="#_option_install_on_a_portable_device">Option: Install on a Portable Device</a></li>
+<li><a href="#_option_set_a_proxy_for_npm">Option: Set a proxy for npm</a></li>
 </ul>
 </li>
 <li><a href="#_usage">Usage</a>
@@ -450,6 +451,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_analytical_performance_specifications">Analytical Performance Specifications</a></li>
 <li><a href="#_analysing_method_comparisons">Analysing Method Comparisons</a></li>
 <li><a href="#_analysing_imprecision">Analysing Imprecision</a></li>
+<li><a href="#_imprecision_layout">Imprecision Layout</a></li>
 </ul>
 </li>
 <li><a href="#_appendices">Appendices</a>
@@ -472,24 +474,61 @@ statistical tests to assess the significance of differences between methods.</p>
 </div>
 <div class="paragraph">
 <p>This tools has been designed for use by laboratory professionals in association
-with the accompanying <a href="https://metools.chesher.id.au/assets/mvw.xlsx">method verification workbook</a>. The current version provides various methods for linear
+with the accompanying <a href="https://metools.chesher.id.au/assets/mvw.xlsx">method verification workbook</a>.
+The current version provides various methods for linear
 regression analysis, including Deming regression, Weighted Deming regression,
 and Passing-Bablok regression along with their associated confidence intervals,
 which are not easy to implement using the builtin functions in Excel.</p>
 </div>
+<div class="paragraph">
+<p>Under normal circumstances, installation and activation of an Excel Add-in is
+very easy. All that is required is to go to the Add-ins menu item on the
+Home tab (Fig 1).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/addin-menu.png" alt="addin menu">
+</div>
+<div class="title">Figure 1. Add-ins menu item</div>
+</div>
+<div class="paragraph">
+<p>Find the add-in from the available add-in and select Add.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/addin-install.png" alt="addin install">
+</div>
+<div class="title">Figure 2. Adding an add-in</div>
+</div>
+<div class="paragraph">
+<p>At the current time, the add-in is only available in development mode,
+which means it must be "side-loaded".
+This is a bit more involved and requires a number of files
+to be downloaded. Doing this from behind corporate firewalls
+can be challenging unless you are familiar with using proxy
+configurations.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://learn.microsoft.com/en-au/office/dev/add-ins/">Microsoft</a>
+now recommend developing Office add-ins using standard
+web technologies such as HTML, CSS, and Javascript. Excel runs
+these as a web page within Excel. To sideload an application it
+must be run using nodejs, which is a powerful tool for developing
+server-side and client-side applications by running javascript
+outside a web browser.</p>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_installation">Installation</h2>
+<h2 id="_side_loading_the_add_in">Side-loading the add-in</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>At the current time, the add-in is only available in development mode. To install
-the add-in, follow these steps:</p>
+<p>Follow these steps to sideload the add-in:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Download the repository from <a href="https://github.com/dche658/method-eval-tools" class="bare">https://github.com/dche658/method-eval-tools</a></p>
+<p>Download the add-in repository from <a href="https://github.com/dche658/method-eval-tools" class="bare">https://github.com/dche658/method-eval-tools</a></p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -510,7 +549,7 @@ the add-in, follow these steps:</p>
 </li>
 <li>
 <p>Open a command prompt and run the following commands (update the version number
-as needed):</p>
+as needed). Note, lts just stands for long-term-support.</p>
 <div class="listingblock">
 <div class="content">
 <pre>nvm install lts
@@ -535,7 +574,7 @@ npm run start</pre>
 open automatically with the add-in loaded.</p>
 </div>
 <div class="sect2">
-<h3 id="_installing_on_a_portable_device">Installing on a Portable Device</h3>
+<h3 id="_option_install_on_a_portable_device">Option: Install on a Portable Device</h3>
 <div class="paragraph">
 <p>If you do not have administrator access then you can install the add-in on a
 portable device. A high speed external solid state drive will likely give
@@ -592,6 +631,10 @@ from <a href="https://dev.to/yougotwill/portable-nodejs-without-administrator-ac
 <p>Close and open Cmder and you should have access to node, npm and npx</p>
 </li>
 <li>
+<p>If you are behind a corporate firewall you will probably need to set the
+proxy configuration. Suggestions on how to do this a shown below.</p>
+</li>
+<li>
 <p>Download and extract the add-in repository as described above.</p>
 </li>
 <li>
@@ -616,6 +659,68 @@ and use the following command to side-load the add-in into Excel.</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_option_set_a_proxy_for_npm">Option: Set a proxy for npm</h3>
+<div class="paragraph">
+<p>Find the proxy settings for your network by opening Settings. Go to
+Network and Internet, and then Proxy.</p>
+</div>
+<div class="paragraph">
+<p>If a manual proxy has been configured, you can copy those details. If a script has
+been used, this is often located at <a href="https://your.domain/proxy.pac" class="bare">https://your.domain/proxy.pac</a>. You can generally
+see the content of the proxy.pac file by copying the url to you web browser and use
+your browser to display the file. Inspect the content of the file to find the
+appropriate proxy server url and port for your subnet (often the default).</p>
+</div>
+<div class="paragraph">
+<p>Run the following commands to set the proxy and https proxy.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config set proxy http://&lt;username&gt;:&lt;password&gt;@&lt;proxy-server-url&gt;:&lt;port&gt;
+npm config set https-proxy http://&lt;username&gt;:&lt;password&gt;@&lt;proxy-server-url&gt;:&lt;port&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the following command to confirm the npm settings</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config list</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In many cases if you run 'npm install' at this point you will get and untrusted
+certificate error. This often occurs because your organisation uses its own
+Certificate Authority. To get around this you will need to either get root
+certificate from your IT department, export it from your web browser, or run
+the "Manage computer certificates" settings app and export it from there in pem format.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/trusted-certificates.png" alt="trusted certificates">
+</div>
+</div>
+<div class="paragraph">
+<p>Configure cafile with the command</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config set cafile /path/to/your/corporate/root/certificate.pem</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The alternative approach is to temporarily Bypass SSL Validation.
+This method disables strict SSL validation and is generally not recommended
+for long-term use due to security implications.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config set strict-ssl false
+npm config set registry="http://registry.npmjs.org/"</pre>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -630,6 +735,7 @@ toggle the taskpane on the right-hand side of the Excel window.</p>
 <div class="content">
 <img src="./images/excel-with-taskpane.png" alt="excel with taskpane">
 </div>
+<div class="title">Figure 3. Taskpane</div>
 </div>
 <div class="paragraph">
 <p>The taskpane provides access to the various tools and functionalities of the add-in.
@@ -646,6 +752,7 @@ clinical requirements, biological variation, or other criteria.</p>
 <div class="content">
 <img src="./images/aps-entry.png" alt="aps entry">
 </div>
+<div class="title">Figure 4. Specifying Performance Specifications</div>
 </div>
 <div class="paragraph">
 <p>The specifications can be entered directly into the taskpane or imported from the Excel
@@ -663,6 +770,7 @@ fraction (e.g. 0.1 for 10%).</p>
 <div class="content">
 <img src="./images/regression-tool.png" alt="regression tool">
 </div>
+<div class="title">Figure 5. Method Comparison Tools</div>
 </div>
 <div class="paragraph">
 <p>The Regression tool allows you to perform various types of regression analysis on your
@@ -875,6 +983,45 @@ that address to the form.</p>
 </div>
 <div class="paragraph">
 <p>Click the "Run" button to perform the analysis.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_imprecision_layout">Imprecision Layout</h3>
+<div class="paragraph">
+<p>This section provides a simple two to create a template layout for analysis of
+imprecision. It is useful where precision is assessed over more than one day
+or in multiple runs.</p>
+</div>
+<div class="paragraph">
+<p>The default layout is the standard 5 replicates over 5 days used for assessing
+imprecision using the CLSI EP15 guideline.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/precision-layout-2.png" alt="precision layout 2">
+</div>
+<div class="title">Figure 6. Default 5 x 5 layout</div>
+</div>
+<div class="paragraph">
+<p>Alternative layouts can be created by specifying the number of days, runs, and
+replicates; selecting the top left cell (Layout Range) for the layout
+to be written; and then clicking on "Setup".</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/precision-layout-3.png" alt="precision layout 3">
+</div>
+<div class="title">Figure 7. Alternative 20 x 2 x 2 Layout</div>
+</div>
+<div class="paragraph">
+<p>In the process of writing the layout to the worksheet, the cell ranges used for
+specifying the days, runs, and values are copied to the Analyse Precision form.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/analyse-precision-cells.png" alt="analyse precision cells">
+</div>
+<div class="title">Figure 8. Copied cell ranges</div>
 </div>
 </div>
 </div>
@@ -1148,7 +1295,7 @@ with DF degrees of freedom</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-06 20:32:24 01000
+Last updated 2025-09-11 14:52:06 01000
 </div>
 </div>
 <script type="text/x-mathjax-config">

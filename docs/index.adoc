@@ -10,24 +10,51 @@ calculating various performance metrics, visualizing results, and conducting
 statistical tests to assess the significance of differences between methods.
 
 This tools has been designed for use by laboratory professionals in association
-with the accompanying https://metools.chesher.id.au/assets/mvw.xlsx[method verification workbook]. The current version provides various methods for linear
+with the accompanying https://metools.chesher.id.au/assets/mvw.xlsx[method verification workbook]. 
+The current version provides various methods for linear
 regression analysis, including Deming regression, Weighted Deming regression,
 and Passing-Bablok regression along with their associated confidence intervals,
 which are not easy to implement using the builtin functions in Excel.
 
-== Installation
+Under normal circumstances, installation and activation of an Excel Add-in is 
+very easy. All that is required is to go to the Add-ins menu item on the 
+Home tab (Fig 1).
 
-At the current time, the add-in is only available in development mode. To install
-the add-in, follow these steps:
+.Add-ins menu item
+image::addin-menu.png[]
 
-. Download the repository from https://github.com/dche658/method-eval-tools
+Find the add-in from the available add-in and select Add.
+
+.Adding an add-in
+image::addin-install.png[]
+
+At the current time, the add-in is only available in development mode,
+which means it must be "side-loaded".
+This is a bit more involved and requires a number of files
+to be downloaded. Doing this from behind corporate firewalls
+can be challenging unless you are familiar with using proxy
+configurations.
+
+https://learn.microsoft.com/en-au/office/dev/add-ins/[Microsoft] 
+now recommend developing Office add-ins using standard
+web technologies such as HTML, CSS, and Javascript. Excel runs
+these as a web page within Excel. To sideload an application it
+must be run using nodejs, which is a powerful tool for developing
+server-side and client-side applications by running javascript
+outside a web browser.
+
+== Side-loading the add-in
+
+Follow these steps to sideload the add-in:
+
+. Download the add-in repository from https://github.com/dche658/method-eval-tools
     a. You can do this by clicking the green "Code" button and selecting
     "Download ZIP".
     b. Extract the contents of the ZIP file to a directory on your computer.
 . Download nvm-setup.exe for windows from https://github.com/coreybutler/nvm-windows/releases
 . Install nvm-setup.exe
 . Open a command prompt and run the following commands (update the version number
-as needed):
+as needed). Note, lts just stands for long-term-support.
 +
 ----
 nvm install lts
@@ -44,7 +71,7 @@ npm run start
 Startup can take a few minutes to complete. Once it is finished, excel should
 open automatically with the add-in loaded.
 
-=== Installing on a Portable Device
+=== Option: Install on a Portable Device
 
 If you do not have administrator access then you can install the add-in on a 
 portable device. A high speed external solid state drive will likely give
@@ -53,25 +80,27 @@ you the best results.
 Instructions for installing nodejs as a portable application have been taken
 from https://dev.to/yougotwill/portable-nodejs-without-administrator-access-1elk[here].
 
-1. Install https://cmder.app/[Cmder] in your desired location on the portable drive.
-2. Download https://github.com/coreybutler/nvm-windows[nvm-noinstall.zip] from the latest release.
-3. Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.
-4. Navigate to the bin folder in Cmder and run install.cmd
-5. When asked to enter the absolute path use your Cmder bin folder.
-6. Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).
-7. Wait until node and npm have finished installing.
-8. Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.
-9. Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.
-10. Add this to your existing path in Cmder's environment settings. This can be done in a couple of ways. The first is by running the following command.
+. Install https://cmder.app/[Cmder] in your desired location on the portable drive.
+. Download https://github.com/coreybutler/nvm-windows[nvm-noinstall.zip] from the latest release.
+. Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.
+. Navigate to the bin folder in Cmder and run install.cmd
+. When asked to enter the absolute path use your Cmder bin folder.
+. Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).
+. Wait until node and npm have finished installing.
+. Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.
+. Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.
+. Add this to your existing path in Cmder's environment settings. This can be done in a couple of ways. The first is by running the following command.
 +
 ----
 set "PATH=E:\PortableApps\CmderPortable\bin\v24.6.0;%PATH%"
 ----
-11. Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'
-12. Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).
-13. Close and open Cmder and you should have access to node, npm and npx
-14. Download and extract the add-in repository as described above.
-15. Then run the following commands to install the add-in and then side-load
+. Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'
+. Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).
+. Close and open Cmder and you should have access to node, npm and npx
+. If you are behind a corporate firewall you will probably need to set the 
+proxy configuration. Suggestions on how to do this a shown below.
+. Download and extract the add-in repository as described above.
+. Then run the following commands to install the add-in and then side-load
 it into Excel.
 
 ----
@@ -86,12 +115,61 @@ and use the following command to side-load the add-in into Excel.
 npm run start -- web --document https://1drv.ms/x/c/7ba37898bfb7e549/EdiktLds9p5MvIFWYzL0-QBSw?e=5BUXE7
 ----
 
+=== Option: Set a proxy for npm
+
+Find the proxy settings for your network by opening Settings. Go to 
+Network and Internet, and then Proxy.
+
+If a manual proxy has been configured, you can copy those details. If a script has
+been used, this is often located at https://your.domain/proxy.pac. You can generally 
+see the content of the proxy.pac file by copying the url to you web browser and use
+your browser to display the file. Inspect the content of the file to find the 
+appropriate proxy server url and port for your subnet (often the default).
+
+Run the following commands to set the proxy and https proxy.
+
+----
+npm config set proxy http://<username>:<password>@<proxy-server-url>:<port>
+npm config set https-proxy http://<username>:<password>@<proxy-server-url>:<port>
+----
+
+Run the following command to confirm the npm settings
+
+----
+npm config list
+----
+
+In many cases if you run 'npm install' at this point you will get and untrusted 
+certificate error. This often occurs because your organisation uses its own
+Certificate Authority. To get around this you will need to either get root
+certificate from your IT department, export it from your web browser, or run
+the "Manage computer certificates" settings app and export it from there in pem format.
+
+image::trusted-certificates.png[]
+
+Configure cafile with the command
+
+----
+npm config set cafile /path/to/your/corporate/root/certificate.pem
+----
+
+The alternative approach is to temporarily Bypass SSL Validation.
+This method disables strict SSL validation and is generally not recommended 
+for long-term use due to security implications.
+
+----
+npm config set strict-ssl false
+npm config set registry="http://registry.npmjs.org/"
+----
+
+
 == Usage
 
 If the add-in is loaded correctly, you should see a new entry in the Home tab
 of the Excel ribbon called "Method Evaluation Tools". Clicking on this will 
 toggle the taskpane on the right-hand side of the Excel window.
 
+.Taskpane
 image::excel-with-taskpane.png[]
 
 The taskpane provides access to the various tools and functionalities of the add-in. 
@@ -103,6 +181,7 @@ The Analytical Performance Specifications (APS) tool allows you to set and manag
 specifications for your laboratory method. You can define specifications based on 
 clinical requirements, biological variation, or other criteria.
 
+.Specifying Performance Specifications
 image::aps-entry.png[align="center"]
 
 The specifications can be entered directly into the taskpane or imported from the Excel 
@@ -114,6 +193,7 @@ fraction (e.g. 0.1 for 10%).
 
 === Analysing Method Comparisons
 
+.Method Comparison Tools
 image::regression-tool.png[float="right"]
 
 The Regression tool allows you to perform various types of regression analysis on your 
@@ -214,6 +294,31 @@ Select the top left cell where the results of the analysis should be saved, and 
 that address to the form.
 
 Click the "Run" button to perform the analysis.
+
+=== Imprecision Layout
+
+This section provides a simple two to create a template layout for analysis of 
+imprecision. It is useful where precision is assessed over more than one day
+or in multiple runs.
+
+The default layout is the standard 5 replicates over 5 days used for assessing
+imprecision using the CLSI EP15 guideline.
+
+.Default 5 x 5 layout
+image::precision-layout-2.png[]
+
+Alternative layouts can be created by specifying the number of days, runs, and
+replicates; selecting the top left cell (Layout Range) for the layout
+to be written; and then clicking on "Setup".
+
+.Alternative 20 x 2 x 2 Layout
+image::precision-layout-3.png[]
+
+In the process of writing the layout to the worksheet, the cell ranges used for
+specifying the days, runs, and values are copied to the Analyse Precision form.
+
+.Copied cell ranges
+image::analyse-precision-cells.png[]
 
 == Appendices
 
