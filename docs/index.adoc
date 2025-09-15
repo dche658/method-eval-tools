@@ -4,17 +4,17 @@
 :toc: left
 :stem:
 
-This Excel Add-in provides a suite of tools for evaluating and comparing the 
-performance of different laboratory methods. It includes functionalities for 
-calculating various performance metrics, visualizing results, and conducting 
-statistical tests to assess the significance of differences between methods.
+The purpose of this add-in is to provide some statistical procedures that are
+necessary for verifying for validating clinical laboratory methods but are not easy to implement
+using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
+statistical analysis tool. The current interation allows the user to perform
+linear regression techniques including Passing-Bablok, Deming, and Weighted Deming.
+
+Procedures are also provide to allow users to analyse variance components 
+as described in CLSI EP15 and EP05.
 
 This tools has been designed for use by laboratory professionals in association
-with the accompanying https://metools.chesher.id.au/assets/mvw.xlsx[method verification workbook]. 
-The current version provides various methods for linear
-regression analysis, including Deming regression, Weighted Deming regression,
-and Passing-Bablok regression along with their associated confidence intervals,
-which are not easy to implement using the builtin functions in Excel.
+with the accompanying https://metools.chesher.id.au/assets/mvw.xlsx[method verification workbook].
 
 Under normal circumstances, installation and activation of an Excel Add-in is 
 very easy. All that is required is to go to the Add-ins menu item on the 
