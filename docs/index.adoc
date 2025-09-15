@@ -1,0 +1,500 @@
+= Method Evaluation Tools Excel Add-in
+:imagesdir: ./images
+:stylesdir: ./style
+:toc: left
+:stem:
+
+This Excel Add-in provides a suite of tools for evaluating and comparing the 
+performance of different laboratory methods. It includes functionalities for 
+calculating various performance metrics, visualizing results, and conducting 
+statistical tests to assess the significance of differences between methods.
+
+This tools has been designed for use by laboratory professionals in association
+with the accompanying https://metools.chesher.id.au/assets/mvw.xlsx[method verification workbook]. 
+The current version provides various methods for linear
+regression analysis, including Deming regression, Weighted Deming regression,
+and Passing-Bablok regression along with their associated confidence intervals,
+which are not easy to implement using the builtin functions in Excel.
+
+Under normal circumstances, installation and activation of an Excel Add-in is 
+very easy. All that is required is to go to the Add-ins menu item on the 
+Home tab (Fig 1).
+
+.Add-ins menu item
+image::addin-menu.png[]
+
+Find the add-in from the available add-in and select Add.
+
+.Adding an add-in
+image::addin-install.png[]
+
+At the current time, the add-in is only available in development mode,
+which means it must be "side-loaded".
+This is a bit more involved and requires a number of files
+to be downloaded. Doing this from behind corporate firewalls
+can be challenging unless you are familiar with using proxy
+configurations.
+
+https://learn.microsoft.com/en-au/office/dev/add-ins/[Microsoft] 
+now recommend developing Office add-ins using standard
+web technologies such as HTML, CSS, and Javascript. Excel runs
+these as a web page within Excel. To sideload an application it
+must be run using nodejs, which is a powerful tool for developing
+server-side and client-side applications by running javascript
+outside a web browser.
+
+== Side-loading the add-in
+
+Follow these steps to sideload the add-in:
+
+. Download the add-in repository from https://github.com/dche658/method-eval-tools
+    a. You can do this by clicking the green "Code" button and selecting
+    "Download ZIP".
+    b. Extract the contents of the ZIP file to a directory on your computer.
+. Download nvm-setup.exe for windows from https://github.com/coreybutler/nvm-windows/releases
+. Install nvm-setup.exe
+. Open a command prompt and run the following commands (update the version number
+as needed). Note, lts just stands for long-term-support.
++
+----
+nvm install lts
+nvm use 24.6.0
+----
+. Navigate to the directory where you extracted the downloaded repository 
+and run:
++
+----
+npm install
+npm run start
+----
+
+Startup can take a few minutes to complete. Once it is finished, excel should
+open automatically with the add-in loaded.
+
+=== Option: Install on a Portable Device
+
+If you do not have administrator access then you can install the add-in on a 
+portable device. A high speed external solid state drive will likely give
+you the best results.
+
+Instructions for installing nodejs as a portable application have been taken
+from https://dev.to/yougotwill/portable-nodejs-without-administrator-access-1elk[here].
+
+. Install https://cmder.app/[Cmder] in your desired location on the portable drive.
+. Download https://github.com/coreybutler/nvm-windows[nvm-noinstall.zip] from the latest release.
+. Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.
+. Navigate to the bin folder in Cmder and run install.cmd
+. When asked to enter the absolute path use your Cmder bin folder.
+. Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).
+. Wait until node and npm have finished installing.
+. Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.
+. Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.
+. Add this to your existing path in Cmder's environment settings. This can be done in a couple of ways. The first is by running the following command.
++
+----
+set "PATH=E:\PortableApps\CmderPortable\bin\v24.6.0;%PATH%"
+----
+. Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'
+. Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).
+. Close and open Cmder and you should have access to node, npm and npx
+. If you are behind a corporate firewall you will probably need to set the 
+proxy configuration. Suggestions on how to do this a shown below.
+. Download and extract the add-in repository as described above.
+. Then run the following commands to install the add-in and then side-load
+it into Excel.
+
+----
+npm install
+npm run start
+----
+
+If you have an Excel workbook on OneDrive you can copy a link to the document
+and use the following command to side-load the add-in into Excel.
+
+----
+npm run start -- web --document https://1drv.ms/x/c/7ba37898bfb7e549/EdiktLds9p5MvIFWYzL0-QBSw?e=5BUXE7
+----
+
+=== Option: Set a proxy for npm
+
+Find the proxy settings for your network by opening Settings. Go to 
+Network and Internet, and then Proxy.
+
+If a manual proxy has been configured, you can copy those details. If a script has
+been used, this is often located at https://your.domain/proxy.pac. You can generally 
+see the content of the proxy.pac file by copying the url to you web browser and use
+your browser to display the file. Inspect the content of the file to find the 
+appropriate proxy server url and port for your subnet (often the default).
+
+Run the following commands to set the proxy and https proxy.
+
+----
+npm config set proxy http://<username>:<password>@<proxy-server-url>:<port>
+npm config set https-proxy http://<username>:<password>@<proxy-server-url>:<port>
+----
+
+Run the following command to confirm the npm settings
+
+----
+npm config list
+----
+
+In many cases if you run 'npm install' at this point you will get and untrusted 
+certificate error. This often occurs because your organisation uses its own
+Certificate Authority. To get around this you will need to either get root
+certificate from your IT department, export it from your web browser, or run
+the "Manage computer certificates" settings app and export it from there in pem format.
+
+image::trusted-certificates.png[]
+
+Configure cafile with the command
+
+----
+npm config set cafile /path/to/your/corporate/root/certificate.pem
+----
+
+The alternative approach is to temporarily Bypass SSL Validation.
+This method disables strict SSL validation and is generally not recommended 
+for long-term use due to security implications.
+
+----
+npm config set strict-ssl false
+npm config set registry="http://registry.npmjs.org/"
+----
+
+
+== Usage
+
+If the add-in is loaded correctly, you should see a new entry in the Home tab
+of the Excel ribbon called "Method Evaluation Tools". Clicking on this will 
+toggle the taskpane on the right-hand side of the Excel window.
+
+.Taskpane
+image::excel-with-taskpane.png[]
+
+The taskpane provides access to the various tools and functionalities of the add-in. 
+You can select the desired tool from the menu items.
+
+=== Analytical Performance Specifications
+
+The Analytical Performance Specifications (APS) tool allows you to set and manage performance 
+specifications for your laboratory method. You can define specifications based on 
+clinical requirements, biological variation, or other criteria.
+
+.Specifying Performance Specifications
+image::aps-entry.png[align="center"]
+
+The specifications can be entered directly into the taskpane or imported from the Excel 
+worksheet.
+
+The APS are assumed to be total allowable error (TEa) specifications. "APS Absolute"
+should be entered as absolute values. "APS Relative" should be entered as a relative
+fraction (e.g. 0.1 for 10%).
+
+=== Analysing Method Comparisons
+
+.Method Comparison Tools
+image::regression-tool.png[float="right"]
+
+The Regression tool allows you to perform various types of regression analysis on your 
+method comparison data. You can select the type of regression analysis you want to 
+perform from the dropdown menu. The available options are:
+
+* Deming Regression: This method accounts for errors in both the x and y variables but assumes constant variance.
+* Weighted Deming Regression: This method accounts for errors in both the x and y variables and allows for constant coefficient of variation (CV).
+* Passing-Bablok Regression: This is a non-parametric method that does not assume any specific distribution of errors.
+
+To use the Regression tool, you need to select the data range in your Excel worksheet 
+that contains the method comparison data. Data may be in singlicate or duplicate. If the 
+comparison experiment has been conducted with measurements in duplicate, data for the
+reference method values should be in two columns. Select the cells containing the reference
+method values and then click over the select icon for that field:
+
+image::select-icon.png[]
+
+This will copy the address of the selected range to the relevant field.
+
+Repeat this process for the test method values.
+
+The "Output Range" should be a single cell where you would like results of the regression
+analysis to be saved.
+
+Confidence intervals for the slope and intercept can be calculated using either the default 
+method or bootstrap resampling. The bootstrap method is more computationally intensive but 
+may provide more accurate confidence intervals, particularly for small sample sizes or non-normal data. 
+The default method is based on a jackknife procedure for Deming regresssion,
+while a non-parametric estimate is used for Passing-Bablok regression.
+
+If Deming or Weighted Deming regression is selected, you will need to provide an estimate of the
+ratio of the variances of the measurement errors for the two methods. If measurements have been 
+made in duplicate, this can be estimated from the replicate measurements. If not, you will need to 
+provide an estimate based on prior knowledge, literature values, or make an assumption that
+both methods have similar variance and use a value of 1.0.
+
+The "Bland Altman Range" is the region over which the difference plot will be charted in Excel.
+Suppose the range is set as H15:P30, the top left of the chart will be at H15 and the bottom 
+right will be at P30. The range should be large enough to accommodate the chart, which will
+extend downwards and to the right from the top left cell.
+
+Similarly the "Scatter Plot Range" is the region over which the scatter plot will be charted in 
+Excel.
+
+"Chart Data Output" is a single cell where the address of the data range used to create the 
+charts will be saved. This should be a cell in a remote part of the worksheet, as the data will 
+be written to the right and below the specified cell, and is required for the charts to be 
+created.
+
+Once you have selected the data ranges and set the parameters, click the "Run" button
+to perform the analysis. The results will be saved to the specified output range, and 
+the charts will be created at the specified chart ranges.
+
+TIP: If you are using the method verification workbook, you can automatically populate the
+data ranges by clicking the "Populate from MVW" button. This will fill in the data ranges
+based on the defaults in the workbook.
+
+=== Analysing Imprecision
+
+Imprecision is assessed using the procedures described in CLSI EP05 and CLSI EP15, with a
+one way or two way analysis of variance. It assumes replicate analysis has been performed
+in one or more runs per day over a number of days. 
+
+The data needs to be arranged in "long format" where all results for a given level should
+appear in a single column. There should be separate columns for the day and run, with
+each row specifying both the day and the run (no blanks).
+An example of the recommended layout is shown in the table below where triplicate
+measurements have been made in each run with two runs per day over two days.
+Verification studies will generally only involve a single run each day.
+
+.Arrangement of Data
+[options="header", width=50%]
+|===
+| Day   | Run   | Level 1 | Level 2
+| Day 1 | Run 1 | 1.2     | 11.3
+| Day 1 | Run 1 | 1.1     | 12.2
+| Day 1 | Run 1 | 1.1     | 11.3
+| Day 1 | Run 2 | 1.3     | 11.9
+| Day 1 | Run 2 | 1.2     | 11.3
+| Day 1 | Run 2 | 1.3     | 12.2
+| Day 2 | Run 1 | 1.4     | 12.1
+| Day 2 | Run 1 | 1.3     | 12.0
+| Day 2 | Run 1 | 1.3     | 11.5
+| Day 2 | Run 2 | 1.5     | 11.8
+| Day 2 | Run 2 | 1.2     | 12.3
+| Day 2 | Run 2 | 1.2     | 10.4
+|===
+
+Select the column containing the days and then click over the select icon for that
+field to copy the address to the form. Do the same for the column containing the runs.
+Note if there is only a single run per day, this can be omitted.
+
+Select the columns contaning the results for each level and then click on the select
+icon for that field to copy the address to the form.
+
+Select the top left cell where the results of the analysis should be saved, and copy
+that address to the form.
+
+Click the "Run" button to perform the analysis.
+
+=== Imprecision Layout
+
+This section provides a simple two to create a template layout for analysis of 
+imprecision. It is useful where precision is assessed over more than one day
+or in multiple runs.
+
+The default layout is the standard 5 replicates over 5 days used for assessing
+imprecision using the CLSI EP15 guideline.
+
+.Default 5 x 5 layout
+image::precision-layout-2.png[]
+
+Alternative layouts can be created by specifying the number of days, runs, and
+replicates; selecting the top left cell (Layout Range) for the layout
+to be written; and then clicking on "Setup".
+
+.Alternative 20 x 2 x 2 Layout
+image::precision-layout-3.png[]
+
+In the process of writing the layout to the worksheet, the cell ranges used for
+specifying the days, runs, and values are copied to the Analyse Precision form.
+
+.Copied cell ranges
+image::analyse-precision-cells.png[]
+
+== Appendices
+
+=== One Way Analysis Calculations
+
+These were sourced from:
+
+Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
+and the Sciences 6th ed. CRC Press, Boca Raton. p752.
+
+Clinical and Laboratory Standards Institute (CLSI). 2014.
+User Verification of Precision and Estimation of Bias; 
+Approved Guideline - Third Edition. CLSI document EP15-A3. 
+Clinical and Laboratory Standards Institute, Pennsylvania.
+
+They are used for the verification studies where only one run per day is performed.
+
+N : the total number of results (e.g. 25 if 5 replicates per day over 5 days).
+
+k : number of days (factor A)
+
+stem:[\bar{\bar{x}}=\frac{\sum_{i=1}^{N}x_{i}}{N}] : grand mean
+
+stem:[SS_{Total}=\sum_{i=1}^{N}(x_{i}-\bar{\bar{x}})^{2}=\sum_{i=1}^{N}x_{i}^{2}-\frac{(\sum_{i=1}^{N}x_{i})^{2}}{N}] : sum of squares total
+
+stem:[SS1=\sum_{i=1}^{k}n_{i}(\bar{x}_{i}-\bar{\bar{x}})^{2}=sum_{i=1}^{k}\frac{(\sum_{j=1}^{n}x_{ij})^2}{n_{i}}-\frac{(\sum_{i=1}^{N}x_{i})^{2}}{N}] : sum of squares between
+
+stem:[SS2=SS_{Total}-SS1 = \sum_{i=1}^{k}\sum_{j=1}^{n_{j}}(\bar{x}_{i}-x_{ij})^{2}] : sum of squares within
+
+stem:[DF_{Total}=N-1] : degrees of freedom total
+
+stem:[DF1=k-1] : degrees of freedom between
+
+stem:[DF2=N-k] : degrees of freedom within
+
+stem:[MS1=\frac{SS1}{DF1}] : mean square between
+
+stem:[MS2=\frac{SS2}{DF2}] : mean square within
+
+stem:[F=\frac{MS1}{MS2}] : F-statistic
+
+stem:[SN2=\sum_{i=1}^{k}n_{i}^2] : sum of n in each day squared
+
+stem:[n_{0}=\frac{N-\frac{SN2}{N}}{k-1}] : average number of replicates per day
+
+stem:[V_{W}=MS2] : Variance within (repeatability)
+
+stem:[V_{B}=\frac{MS1-MS2}{n_{0}}] : Variance between
+
+stem:[V_{WL}=V_{W}+V_{B}] : Variance within lab
+
+==== Satterthwaite formula for approximating the pooled degrees of freedom.
+
+stem:[a_{1}=\frac{1}{n_{0}}]
+
+stem:[a_{2}=\frac{1-n_{0}}{n_{0}}]
+
+stem:[DF_{WL}=\frac{(a_{1}MS1+a_{2}MS2)^{2}}{\frac{(a_{1}MS1)^2}{DF1}+\frac{(a_{2}MS2)1^2}{DF2}}] : degrees of freedom within lab
+
+==== Upper Verification Limits
+
+stem:[n_{sam}] : number of samples or levels tested.
+
+stem:[\alpha] : false rejection rate (assumed to be 0.05)
+
+stem:[\frac{1-\alpha}{n_{sam}}] : confidence level with Bonferroni correction.
+
+stem:[F_{e}=\frac{\chi^{2}}{DF2}] : upper verification limit factor for repeatability
+where stem:[\chi^{2}] is the quantile for the chi-squared distribution at the
+specified confidence level with DF2 degrees of freedom.
+
+stem:[F_{WL}=\frac{\chi^{2}}{DF_{WL}}] : upper verification limit factor for within
+laboratory imprecision where stem:[\chi^{2}] is the quantile for the chi-squared 
+distribution at the specified confidence level with stem:[DF_{WL}] degrees of 
+freedom.
+
+stem:[UVL=F\times\sigma] : upper verification limit expressed as SD.
+
+stem:[UVL=F\times%CV] : upper verification limit expressed as CV.
+
+NOTE: The add-in produces slightly different results to Excel when calculating 
+the within laboratory verification limit factor F. Investigations suggest this 
+occurs because the CHISQ.INV function in Excel rounds the degrees of freedom to
+an integer value. In contrast, the equivalent function in the jStat library
+used by this application is able to calculate the result with decimal values.
+
+=== Two Way Analysis Calculations
+
+These were sourced from:
+
+Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
+and the Sciences 6th ed. CRC Press, Boca Raton. p752.
+
+Clinical and Laboratory Standards Institute (CLSI). 2014.
+Evaluation of Precision of Quantitative MeasurementProcedures; 
+Approved Guideline - Third Edition. CLSI document EP05-A3.
+Clinical and Laboratory Standards Institute, Pennsylvania.
+
+a : number of levels of the first factor (factor A) (e.g. days 20)
+
+b : number of levels of the second factor (factor B) (e.g. runs 2)
+
+r : number of measurements of each pair of levels of independent 
+variables A and B. That is, the number of replicates (e.g. 2)
+
+stem:[N=a\times b\times r] : the total number of results (e.g. 80 if 2 replicates per run with 
+2 runs per day over 20 days).
+
+stem:[A_{i}] : total of all measurements of independent variable 1 at level i.
+(i = 1, 2, ..., a)
+
+stem:[B_{j}] : total of all measurements of independent variable 2 at level j.
+(j = 1, 2, ..., b)
+
+stem:[AB_{ij}] : total of all measurement at the ith level of variable 1 and jth
+level of variable 2. (i = 1, 2, ..., a; j = 1, 2, ..., b)
+
+stem:[CM=\frac{(\sum_{i=1}^{N}x_{i})^2}{N}] : correction for the mean
+
+stem:[SST=\sum_{i=0}^{N}y_{i}^{2}-CM] : total sum of squares
+
+stem:[SSA=\frac{\sum_{i=1}^{a}A_{i}^{2}}{br}-CM] : sum of squares of A
+
+stem:[SSB=\frac{\sum_{j=1}^{b}B_{j}^{2}}{ar}-CM] : sum of squares of B
+
+stem:[SSAB=\frac{\sum_{j=1}^{b}\sum_{i=1}^{a}AB_{ij}}{r}-SSA-SSB-CM] : sum of squares of AB interaction.
+
+stem:[SSE=SST-SSA-SSB-SSAB=\sum_{j=1}^{b}\sum_{i=1}^{a}\sum_{k=1}^{r}(x_{ijk}-\bar{x}_{ij})^{2}]
+
+stem:[DFA=a-1] : degrees of freedom of A
+
+stem:[DFB=b-1] : degrees of freedom of B
+
+stem:[DFAB=(a-1)\times(b-1)] : degrees of freedom of A and B
+
+stem:[DFE=N-(ab)]
+
+stem:[MSA=\frac{SSA}{DFA}] : mean square of A
+
+stem:[MSB=\frac{SSB}{DFB}] : mean square of B
+
+stem:[MSAB=\frac{SSAB}{DFAB}] : mean square of AB interaction
+
+stem:[MSE=\frac{SSE}{DFE}] : mean square of error
+
+stem:[F_{A}=\frac{MSA}{MSE}] : F-statistic of A
+
+stem:[F_{B}=\frac{MSB}{MSE}] : F-statistic of B
+
+stem:[F_{AB}=\frac{MSAB}{MSE}] : F-statistic of AB interaction
+
+stem:[V_{E}=MSE] : variance of error
+
+stem:[V_{A}=\frac{MSA-MSA}{b\times r}] : variance of A (between day)
+
+stem:[V_{AB}=\frac{MSAB-MSE}{r}] : variance of AB interaction (between run)
+
+stem:[S_{R}=\sqrt{V_{E}}] : standard deviation of repeatability
+
+stem:[S_{WL}=\sqrt{V_{A}+V_{AB}+V_{E}] : standard deviation within laboratory
+
+I need help here! This bit might not be right. Seems to work with a balanced study but 
+probably will not work with unbalanced data.
+
+stem:[\alpha_{A}=\frac{1}{b\times r}]
+
+stem:[\alpha_{AB}=\frac{r-1}{b\timesr}]
+
+stem:[\alpha_{E}=\frac{r-1}{r}]
+
+stem:[DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{AB}MSAB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{AB}MSAB)^2}{DFAB} + \frac{(\alpha_{E}MSE)^2}{DFE}}]
+
+stem:[UCL=S\times \sqrt{\frac{DF}{\chi_{1-\frac{\alpha}{2}}^{2},DF}}] : upper confidence limit 
+where stem:[\chi_{1-\frac{\alpha}{2}}^{2}] is the quantile corresponding to 1-alpha/2 confidence
+with DF degrees of freedom
+
+stem:[LCL=S\times \sqrt{\frac{DF}{\chi_{\frac{\alpha}{2}}^{2},DF}}] : lower confidence limit 
+where stem:[\chi_{\frac{\alpha}{2}}^2] is the quantile corresponding to alpha/2 confidence
+with DF degrees of freedom

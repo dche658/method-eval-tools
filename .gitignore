@@ -1,0 +1,11 @@
+# Build output
+dist/
+
+# Node modules folder
+node_modules/
+
+# Visual Studio Code folder
+.vscode/
+
+# Testing script
+run-test-doc.cmd
