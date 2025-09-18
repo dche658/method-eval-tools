@@ -7,5 +7,9 @@ node_modules/
 # Visual Studio Code folder
 .vscode/
 
+# R files
+.RData
+.Rhistory
+
 # Testing script
 run-test-doc.cmd

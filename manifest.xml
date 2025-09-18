@@ -72,7 +72,7 @@
         <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html"/>
       </bt:Urls>
       <bt:ShortStrings>
-        <bt:String id="GetStarted.Title" DefaultValue="Get started with the essential method evaluation tools."/>
+        <bt:String id="GetStarted.Title" DefaultValue="Get started with the method evaluation tools."/>
         <bt:String id="CommandsGroup.Label" DefaultValue="ME Tools"/>
         <bt:String id="TaskpaneButton.Label" DefaultValue="Basic Tools"/>
       </bt:ShortStrings>

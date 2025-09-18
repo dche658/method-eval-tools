@@ -446,7 +446,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_option_set_a_proxy_for_npm">Option: Set a proxy for npm</a></li>
 </ul>
 </li>
-<li><a href="#_usage">Usage</a>
+<li><a href="#_using_the_add_in">Using the Add-in</a>
 <ul class="sectlevel2">
 <li><a href="#_analytical_performance_specifications">Analytical Performance Specifications</a></li>
 <li><a href="#_analysing_method_comparisons">Analysing Method Comparisons</a></li>
@@ -468,7 +468,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sectionbody">
 <div class="paragraph">
 <p>The purpose of this add-in is to provide some statistical procedures that are
-necessary for verifying for validating clinical laboratory methods but are not easy to implement
+necessary for verifying or validating clinical laboratory methods but are not easy to implement
 using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
 statistical analysis tool. The current interation allows the user to perform
 linear regression techniques including Passing-Bablok, Deming, and Weighted Deming.</p>
@@ -725,7 +725,7 @@ npm config set registry="http://registry.npmjs.org/"</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_usage">Usage</h2>
+<h2 id="_using_the_add_in">Using the Add-in</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>If the add-in is loaded correctly, you should see a new entry in the Home tab
@@ -745,7 +745,7 @@ You can select the desired tool from the menu items.</p>
 <div class="sect2">
 <h3 id="_analytical_performance_specifications">Analytical Performance Specifications</h3>
 <div class="paragraph">
-<p>The Analytical Performance Specifications (APS) tool allows you to set and manage performance
+<p>The Analytical Performance Specifications (APS) section allows you to set and manage performance
 specifications for your laboratory method. You can define specifications based on
 clinical requirements, biological variation, or other criteria.</p>
 </div>
@@ -985,6 +985,23 @@ that address to the form.</p>
 <div class="paragraph">
 <p>Click the "Run" button to perform the analysis.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+For a verification study involving performing k replicates over i days, balanced
+data is preferred but the statistical procedures will tolerate small imbalances.
+That is, days with less than the full complement of replicates. In contrast, for a
+nested design with k replicates in each of j runs over  i days, the data must be balanced
+to calculate the pooled degrees of freedom used to calculate the confidence intervals.
+Unbalanced data will cause the Add-in to report an error.
+</td>
+</tr>
+</table>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_imprecision_layout">Imprecision Layout</h3>
@@ -1167,6 +1184,10 @@ used by this application is able to calculate the result with decimal values.
 and the Sciences 6th ed. CRC Press, Boca Raton. p752.</p>
 </div>
 <div class="paragraph">
+<p>NIST/SEMATECH 3.2.3.3. Two-Way Nested ANOVA, <a href="https://www.itl.nist.gov/div898/handbook/ppc/section2/ppc233.htm" class="bare">https://www.itl.nist.gov/div898/handbook/ppc/section2/ppc233.htm</a>.
+In NIST/SEMATECH e-Handbook of Statistical Methods , 17 Sep 2025.</p>
+</div>
+<div class="paragraph">
 <p>Clinical and Laboratory Standards Institute (CLSI). 2014.
 Evaluation of Precision of Quantitative MeasurementProcedures;
 Approved Guideline - Third Edition. CLSI document EP05-A3.
@@ -1202,40 +1223,31 @@ level of variable 2. (i = 1, 2, &#8230;&#8203;, a; j = 1, 2, &#8230;&#8203;, b)<
 <p>\$CM=\frac{(\sum_{i=1}^{N}x_{i})^2}{N}\$ : correction for the mean</p>
 </div>
 <div class="paragraph">
-<p>\$SST=\sum_{i=0}^{N}y_{i}^{2}-CM\$ : total sum of squares</p>
+<p>\$SST=\sum_{i=0}^{a}\sum_{j=0}^{b}\sum_{k=0}^{r}(x_{ijk}-\bar{\bar{x}})=\sum_{i=0}^{N}x_{i}^{2}-CM\$ : total sum of squares</p>
 </div>
 <div class="paragraph">
-<p>\$SSA=\frac{\sum_{i=1}^{a}A_{i}^{2}}{br}-CM\$ : sum of squares of A</p>
+<p>\$SSA=br\sum_{i=0}^{a}(\bar{x}_{i}-\bar{\bar{x}})^2=\frac{\sum_{i=1}^{a}A_{i}^{2}}{br}-CM\$ : sum of squares of A</p>
 </div>
 <div class="paragraph">
-<p>\$SSB=\frac{\sum_{j=1}^{b}B_{j}^{2}}{ar}-CM\$ : sum of squares of B</p>
+<p>\$SSE=\sum_{i=0}^{a}\sum_{j=0}^{b}\sum_{k=0}^{r}(\bar{x}_{ijk}-\bar{x}_{ij})^2\$</p>
 </div>
 <div class="paragraph">
-<p>\$SSAB=\frac{\sum_{j=1}^{b}\sum_{i=1}^{a}AB_{ij}}{r}-SSA-SSB-CM\$ : sum of squares of AB interaction.</p>
-</div>
-<div class="paragraph">
-<p>\$SSE=SST-SSA-SSB-SSAB=\sum_{j=1}^{b}\sum_{i=1}^{a}\sum_{k=1}^{r}(x_{ijk}-\bar{x}_{ij})^{2}\$</p>
+<p>\$SSB=r\sum_{i=0}^{a}\sum_{j=0}^{b}(\bar{x}_{ij}-\bar{x}_{i})^2=SST-SSA-SSE\$ : sum of squares of B in A</p>
 </div>
 <div class="paragraph">
 <p>\$DFA=a-1\$ : degrees of freedom of A</p>
 </div>
 <div class="paragraph">
-<p>\$DFB=b-1\$ : degrees of freedom of B</p>
+<p>\$DFB=a(b-1)\$ : degrees of freedom of B in A</p>
 </div>
 <div class="paragraph">
-<p>\$DFAB=(a-1)\times(b-1)\$ : degrees of freedom of A and B</p>
-</div>
-<div class="paragraph">
-<p>\$DFE=N-(ab)\$</p>
+<p>\$DFE=ab(r-1)\$ : degrees of freedom of error</p>
 </div>
 <div class="paragraph">
 <p>\$MSA=\frac{SSA}{DFA}\$ : mean square of A</p>
 </div>
 <div class="paragraph">
-<p>\$MSB=\frac{SSB}{DFB}\$ : mean square of B</p>
-</div>
-<div class="paragraph">
-<p>\$MSAB=\frac{SSAB}{DFAB}\$ : mean square of AB interaction</p>
+<p>\$MSB=\frac{SSB}{DFB}\$ : mean square of B in A</p>
 </div>
 <div class="paragraph">
 <p>\$MSE=\frac{SSE}{DFE}\$ : mean square of error</p>
@@ -1244,41 +1256,40 @@ level of variable 2. (i = 1, 2, &#8230;&#8203;, a; j = 1, 2, &#8230;&#8203;, b)<
 <p>\$F_{A}=\frac{MSA}{MSE}\$ : F-statistic of A</p>
 </div>
 <div class="paragraph">
-<p>\$F_{B}=\frac{MSB}{MSE}\$ : F-statistic of B</p>
-</div>
-<div class="paragraph">
-<p>\$F_{AB}=\frac{MSAB}{MSE}\$ : F-statistic of AB interaction</p>
+<p>\$F_{B}=\frac{MSB}{MSE}\$ : F-statistic of B in A</p>
 </div>
 <div class="paragraph">
 <p>\$V_{E}=MSE\$ : variance of error</p>
 </div>
 <div class="paragraph">
-<p>\$V_{A}=\frac{MSA-MSA}{b\times r}\$ : variance of A (between day)</p>
+<p>\$V_{A}=\frac{MSA-MSB}{b\times r}\$ : variance of A (between day)</p>
 </div>
 <div class="paragraph">
-<p>\$V_{AB}=\frac{MSAB-MSE}{r}\$ : variance of AB interaction (between run)</p>
+<p>\$V_{B}=\frac{MSB-MSE}{r}\$ : variance of B in A (between run)</p>
 </div>
 <div class="paragraph">
 <p>\$S_{R}=\sqrt{V_{E}}\$ : standard deviation of repeatability</p>
 </div>
 <div class="paragraph">
-<p>\$S_{WL}=\sqrt{V_{A}+V_{AB}+V_{E}\$ : standard deviation within laboratory</p>
+<p>\$S_{WL}=\sqrt{V_{A}+V_{B}+V_{E}\$ : standard deviation within laboratory</p>
 </div>
 <div class="paragraph">
-<p>I need help here! This bit might not be right. Seems to work with a balanced study but
-probably will not work with unbalanced data.</p>
+<p>I need help here! This bit might not be right. Seems to work with the balanced
+data set provided in Table 1 of CLSI EP05 but the calculated value of df_WL is
+close but not the same when using Analyse-It or VCA (R package) on some other
+data sets.</p>
 </div>
 <div class="paragraph">
 <p>\$\alpha_{A}=\frac{1}{b\times r}\$</p>
 </div>
 <div class="paragraph">
-<p>\$\alpha_{AB}=\frac{r-1}{b\timesr}\$</p>
+<p>\$\alpha_{B}=\frac{r-1}{b\timesr}\$</p>
 </div>
 <div class="paragraph">
 <p>\$\alpha_{E}=\frac{r-1}{r}\$</p>
 </div>
 <div class="paragraph">
-<p>\$DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{AB}MSAB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{AB}MSAB)^2}{DFAB} + \frac{(\alpha_{E}MSE)^2}{DFE}}\$</p>
+<p>\$DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{AB}MSB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{AB}MSB)^2}{DFB} + \frac{(\alpha_{E}MSE)^2}{DFE}}\$</p>
 </div>
 <div class="paragraph">
 <p>\$UCL=S\times \sqrt{\frac{DF}{\chi_{1-\frac{\alpha}{2}}^{2},DF}}\$ : upper confidence limit
@@ -1296,7 +1307,7 @@ with DF degrees of freedom</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-15 12:24:14 01000
+Last updated 2025-09-18 10:43:07 01000
 </div>
 </div>
 <script type="text/x-mathjax-config">

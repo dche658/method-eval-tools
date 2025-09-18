@@ -5,7 +5,7 @@
 :stem:
 
 The purpose of this add-in is to provide some statistical procedures that are
-necessary for verifying for validating clinical laboratory methods but are not easy to implement
+necessary for verifying or validating clinical laboratory methods but are not easy to implement
 using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
 statistical analysis tool. The current interation allows the user to perform
 linear regression techniques including Passing-Bablok, Deming, and Weighted Deming.
@@ -163,7 +163,7 @@ npm config set registry="http://registry.npmjs.org/"
 ----
 
 
-== Usage
+== Using the Add-in
 
 If the add-in is loaded correctly, you should see a new entry in the Home tab
 of the Excel ribbon called "Method Evaluation Tools". Clicking on this will 
@@ -177,7 +177,7 @@ You can select the desired tool from the menu items.
 
 === Analytical Performance Specifications
 
-The Analytical Performance Specifications (APS) tool allows you to set and manage performance 
+The Analytical Performance Specifications (APS) section allows you to set and manage performance 
 specifications for your laboratory method. You can define specifications based on 
 clinical requirements, biological variation, or other criteria.
 
@@ -294,6 +294,13 @@ Select the top left cell where the results of the analysis should be saved, and 
 that address to the form.
 
 Click the "Run" button to perform the analysis.
+
+NOTE: For a verification study involving performing k replicates over i days, balanced
+data is preferred but the statistical procedures will tolerate small imbalances. 
+That is, days with less than the full complement of replicates. In contrast, for a 
+nested design with k replicates in each of j runs over  i days, the data must be balanced
+to calculate the pooled degrees of freedom used to calculate the confidence intervals.
+Unbalanced data will cause the Add-in to report an error.
 
 === Imprecision Layout
 
@@ -412,6 +419,9 @@ These were sourced from:
 Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
 and the Sciences 6th ed. CRC Press, Boca Raton. p752.
 
+NIST/SEMATECH 3.2.3.3. Two-Way Nested ANOVA, https://www.itl.nist.gov/div898/handbook/ppc/section2/ppc233.htm.
+In NIST/SEMATECH e-Handbook of Statistical Methods , 17 Sep 2025.
+
 Clinical and Laboratory Standards Institute (CLSI). 2014.
 Evaluation of Precision of Quantitative MeasurementProcedures; 
 Approved Guideline - Third Edition. CLSI document EP05-A3.
@@ -438,58 +448,52 @@ level of variable 2. (i = 1, 2, ..., a; j = 1, 2, ..., b)
 
 stem:[CM=\frac{(\sum_{i=1}^{N}x_{i})^2}{N}] : correction for the mean
 
-stem:[SST=\sum_{i=0}^{N}y_{i}^{2}-CM] : total sum of squares
+stem:[SST=\sum_{i=0}^{a}\sum_{j=0}^{b}\sum_{k=0}^{r}(x_{ijk}-\bar{\bar{x}})=\sum_{i=0}^{N}x_{i}^{2}-CM] : total sum of squares
 
-stem:[SSA=\frac{\sum_{i=1}^{a}A_{i}^{2}}{br}-CM] : sum of squares of A
+stem:[SSA=br\sum_{i=0}^{a}(\bar{x}_{i}-\bar{\bar{x}})^2=\frac{\sum_{i=1}^{a}A_{i}^{2}}{br}-CM] : sum of squares of A
 
-stem:[SSB=\frac{\sum_{j=1}^{b}B_{j}^{2}}{ar}-CM] : sum of squares of B
+stem:[SSE=\sum_{i=0}^{a}\sum_{j=0}^{b}\sum_{k=0}^{r}(\bar{x}_{ijk}-\bar{x}_{ij})^2]
 
-stem:[SSAB=\frac{\sum_{j=1}^{b}\sum_{i=1}^{a}AB_{ij}}{r}-SSA-SSB-CM] : sum of squares of AB interaction.
-
-stem:[SSE=SST-SSA-SSB-SSAB=\sum_{j=1}^{b}\sum_{i=1}^{a}\sum_{k=1}^{r}(x_{ijk}-\bar{x}_{ij})^{2}]
+stem:[SSB=r\sum_{i=0}^{a}\sum_{j=0}^{b}(\bar{x}_{ij}-\bar{x}_{i})^2=SST-SSA-SSE] : sum of squares of B in A
 
 stem:[DFA=a-1] : degrees of freedom of A
 
-stem:[DFB=b-1] : degrees of freedom of B
+stem:[DFB=a(b-1)] : degrees of freedom of B in A
 
-stem:[DFAB=(a-1)\times(b-1)] : degrees of freedom of A and B
-
-stem:[DFE=N-(ab)]
+stem:[DFE=ab(r-1)] : degrees of freedom of error
 
 stem:[MSA=\frac{SSA}{DFA}] : mean square of A
 
-stem:[MSB=\frac{SSB}{DFB}] : mean square of B
-
-stem:[MSAB=\frac{SSAB}{DFAB}] : mean square of AB interaction
+stem:[MSB=\frac{SSB}{DFB}] : mean square of B in A
 
 stem:[MSE=\frac{SSE}{DFE}] : mean square of error
 
 stem:[F_{A}=\frac{MSA}{MSE}] : F-statistic of A
 
-stem:[F_{B}=\frac{MSB}{MSE}] : F-statistic of B
-
-stem:[F_{AB}=\frac{MSAB}{MSE}] : F-statistic of AB interaction
+stem:[F_{B}=\frac{MSB}{MSE}] : F-statistic of B in A
 
 stem:[V_{E}=MSE] : variance of error
 
-stem:[V_{A}=\frac{MSA-MSA}{b\times r}] : variance of A (between day)
+stem:[V_{A}=\frac{MSA-MSB}{b\times r}] : variance of A (between day)
 
-stem:[V_{AB}=\frac{MSAB-MSE}{r}] : variance of AB interaction (between run)
+stem:[V_{B}=\frac{MSB-MSE}{r}] : variance of B in A (between run)
 
 stem:[S_{R}=\sqrt{V_{E}}] : standard deviation of repeatability
 
-stem:[S_{WL}=\sqrt{V_{A}+V_{AB}+V_{E}] : standard deviation within laboratory
+stem:[S_{WL}=\sqrt{V_{A}+V_{B}+V_{E}] : standard deviation within laboratory
 
-I need help here! This bit might not be right. Seems to work with a balanced study but 
-probably will not work with unbalanced data.
+I need help here! This bit might not be right. Seems to work with the balanced 
+data set provided in Table 1 of CLSI EP05 but the calculated value of df_WL is
+close but not the same when using Analyse-It or VCA (R package) on some other
+data sets.
 
 stem:[\alpha_{A}=\frac{1}{b\times r}]
 
-stem:[\alpha_{AB}=\frac{r-1}{b\timesr}]
+stem:[\alpha_{B}=\frac{r-1}{b\timesr}]
 
 stem:[\alpha_{E}=\frac{r-1}{r}]
 
-stem:[DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{AB}MSAB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{AB}MSAB)^2}{DFAB} + \frac{(\alpha_{E}MSE)^2}{DFE}}]
+stem:[DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{AB}MSB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{AB}MSB)^2}{DFB} + \frac{(\alpha_{E}MSE)^2}{DFE}}]
 
 stem:[UCL=S\times \sqrt{\frac{DF}{\chi_{1-\frac{\alpha}{2}}^{2},DF}}] : upper confidence limit 
 where stem:[\chi_{1-\frac{\alpha}{2}}^{2}] is the quantile corresponding to 1-alpha/2 confidence

@@ -23,7 +23,8 @@
     "start": "office-addin-debugging start manifest.xml",
     "stop": "office-addin-debugging stop manifest.xml",
     "validate": "office-addin-manifest validate manifest.xml",
-    "watch": "webpack --mode development --watch"
+    "watch": "webpack --mode development --watch",
+    "test": "jest"
   },
   "dependencies": {
     "core-js": "^3.36.0",
@@ -34,6 +35,8 @@
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.25.4",
     "@babel/preset-typescript": "^7.23.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.5.1",
     "@types/office-js": "^1.0.377",
     "@types/office-runtime": "^1.0.35",
     "babel-loader": "^9.1.3",
@@ -42,6 +45,7 @@
     "file-loader": "^6.2.0",
     "html-loader": "^5.0.0",
     "html-webpack-plugin": "^5.6.0",
+    "jest": "^30.1.3",
     "office-addin-cli": "^2.0.3",
     "office-addin-debugging": "^6.0.3",
     "office-addin-dev-certs": "^2.0.3",
@@ -51,6 +55,7 @@
     "os-browserify": "^0.3.0",
     "process": "^0.11.10",
     "source-map-loader": "^5.0.0",
+    "ts-jest": "^29.4.2",
     "typescript": "^5.4.2",
     "webpack": "^5.95.0",
     "webpack-cli": "^5.1.4",

@@ -211,9 +211,11 @@ export class OneFactorVarianceAnalysis {
   }
 } //OneFactorVarianceAnalysis
 
-/* Class to perform two factor anova
- * For the CLSI EP protocol of
- * n replicates per run x r runs per day x d days
+/* Class to perform two factor crossed anova
+ * Nested ANOVA needs to be used for lab precision data which uses a nested desing.
+ * This procedure was written before I understood the difference, and like the 
+ * Nested procedure, only works for balanced data.
+ *
  */
 export class TwoFactorAnova {
   private factorA: (string | number)[];
@@ -424,40 +426,251 @@ export class TwoFactorAnova {
   }
 } //End TwoFactorAnova
 
-export interface TwoFactorVariance {
+interface TwoFactorNestedAnovaTable {
   mean: number,
   sst: number,
   ssa: number,
   ssb: number,
   sse: number,
-  ssab: number,
   dfT: number,
   dfA: number,
   dfB: number,
-  dfAB: number,
   dfE: number,
   msa: number,
   msb: number,
-  msab: number,
   mse: number,
-  fAB: number,
   fA: number,
   fB: number,
   n: number,
   nA: number,
   nB: number,
   nE: number,
+}
+/* Class to perform two factor anova
+ * For the CLSI EP protocol of
+ * n replicates per run x r runs per day x d days
+ */
+export class TwoFactorNestedAnova {
+  private factorA: (string | number)[];
+  private factorB: (string | number)[];
+  private values: number[];
+  private dictA: { [key: string]: { [key: string]: number[] } };
+  private numFactorA: number;
+  private numFactorB: number;
+  private numReps: number;
+  private dictB: { [key: string]: number[] };
+  private grandMean: number;
+  private sst: number;
+  private ssa: number;
+  private ssb: number;
+  private sse: number;
+  private dfT: number;
+  private dfA: number;
+  private dfB: number;
+  private dfE: number;
+
+
+  constructor(factorA: (string | number)[], factorB: (string | number)[], values: number[]) {
+    this.factorA = factorA;
+    this.factorB = factorB;
+    this.values = values;
+    if (factorA.length !== factorB.length || factorA.length !== values.length) {
+      throw new Error("Factor A, B and values must have the same length.");
+    }
+    this.dictA = {}; //dictionary of factor A nested with factor B
+    this.numFactorA = 0; //number of days
+    this.numFactorB = 0; //number of runs
+    this.numReps = 0; //number of replicates per run
+    this.dictB = {}; //dictionary of factor B
+    this.sst = 0; //Total sum of squares
+    this.ssa = 0; //Sum of squares for factor A
+    this.ssb = 0; //Sum of squares for factor B in A
+    this.sse = 0; //Sum of squares for error
+    this.dfT = 0; //degrees of freedom for total
+    this.dfA = 0; //degrees of freedom for factor A
+    this.dfB = 0; //degrees of freedom for factor B in A
+    this.dfE = 0; //degrees of freedom for error
+
+
+    //Add values to dictionary by factor
+    for (let i = 0; i < factorA.length; i++) {
+      if (!(factorA[i] in this.dictA)) {
+        this.dictA[factorA[i]] = {};
+        this.numFactorA++;
+      }
+      let group = this.dictA[factorA[i]];
+      if (!(factorB[i] in group)) {
+        group[factorB[i]] = [];
+      }
+      // Add values for factor A: factor B combinations
+      group[factorB[i]].push(values[i]);
+      if (!(factorB[i] in this.dictB)) {
+        this.dictB[factorB[i]] = [];
+      }
+      // Add values for factor B
+      this.dictB[factorB[i]].push(values[i]);
+    }
+    this.numFactorB = 0; //Number of runs r per day
+    for (let key in this.dictA) {
+      let factorB = this.dictA[key];
+      this.numFactorB = Math.max(this.numFactorB, Object.keys(factorB).length);
+      for (let key2 in factorB) {
+        this.numReps = Math.max(this.numReps, factorB[key2].length);
+      }
+    }
+    this.grandMean = mean(values);
+  }
+
+  /* Calculate the Total Sum of Squares (SST) and the degrees of
+   * freedom dfT
+   */
+  calculateSST(): void {
+    this.sst = 0;
+    for (let i = 0; i < this.values.length; i++) {
+      this.sst += Math.pow(this.values[i] - this.grandMean, 2);
+    }
+    this.dfT = this.values.length - 1;
+  }
+
+  /* Sum of squares for the error components
+   * For each cell corresponding to factorA and factorB, calculate the sum of the squared difference
+   * between each value in the cell and the mean for that cell.
+   */
+  calculateSSE(): void {
+    this.sse = 0;
+    this.dfE = 0
+    for (let key in this.dictA) {
+      let group = this.dictA[key]; //get factor A group
+      for (let key2 in group) {
+        let groupB = group[key2]; //get factor B group
+        if (groupB.length > 1) this.dfE += 1;
+        for (let i = 0; i < groupB.length; i++) {
+            this.sse += Math.pow(groupB[i] - mean(groupB), 2);
+        }
+      }
+    }
+  }
+
+  /* Sum of squares for factor A
+   * Calculated by summing the squared differences between the means of each
+   * level of Factor A and the grand mean, weighted by the number of observations
+   * in each level.
+   */
+  calculateSSA(): void {
+    this.ssa = 0;
+    for (let key in this.dictA) {
+      let group = this.dictA[key]; //get factor A group
+      let groupMean = mean(Object.values(group).flat());
+      let groupN = Object.values(group).flat().length;
+      this.ssa += groupN * Math.pow(groupMean - this.grandMean, 2);
+    }
+    this.dfA = Object.keys(this.dictA).length - 1;
+  }
+
+  /* Sum of squares for factor B within A
+   * sum (Mean of replicates - Mean of factor A)^2 multiply by number
+   * of replicate means in each factor A
+   * 
+   * SSB calculation here done as an alternative for development purposes
+   * based on the NIST Engineering Statistical Handbook. It does not
+   * give the same results as the more simple calculation where
+   * SSB(in A) = SST - SSA - SSE.
+   * 
+   * I do not know why it is the case but the process is necessary for
+   * calculating the degrees of freedom if the data is unbalanced.
+   */
+  calculateSSB(): number {
+    let ssb = 0;
+    this.dfB = 0;
+    for (let key in this.dictA) {
+      let group = this.dictA[key]; //get factor A group
+      let groupValues = Object.values(group).flat();
+      let groupMean = mean(groupValues);
+      let countRepMeans = 0;
+      let sumDevsq = 0;
+      for (let key2 in group) {
+        let groupB = group[key2]; //get factor B group
+
+        let replicates = Object.values(groupB).flat();
+        let replicatesMean = mean(replicates);
+        countRepMeans++;
+        sumDevsq += Math.pow(replicatesMean - groupMean, 2);
+        ssb = ssb + (sumDevsq * countRepMeans)
+        this.dfB = this.dfB + (countRepMeans > 0 ? countRepMeans - 1 : 0);
+      }
+    }
+    return ssb;
+  }
+
+  calculate(): TwoFactorNestedAnovaTable {
+    if (this.numFactorA * this.numFactorB * this.numReps !== this.values.length) {
+      throw new Error("Data must be balanced (equal number of replicates per run per day) for this nested ANOVA calculation to produce accurate results. More sophisticated statistical techniques are required to process unbalanced data.");
+    }
+    this.calculateSST();
+    this.calculateSSA();
+    this.calculateSSE();
+    this.calculateSSB();
+    this.ssb = this.sst - this.ssa - this.sse;
+    let msa = this.ssa / this.dfA;
+    let msb = this.ssb / this.dfB;
+    let mse = this.sse / this.dfE;
+    let fA = msa / mse;
+    let fB = msb / mse;
+
+    return {
+      mean: this.grandMean,
+      sst: this.sst,
+      ssa: this.ssa,
+      ssb: this.ssb,
+      sse: this.sse,
+      dfT: this.dfT,
+      dfA: this.dfA,
+      dfB: this.dfB,
+      dfE: this.dfE,
+      msa: msa,
+      msb: msb,
+      mse: mse,
+      fA: fA,
+      fB: fB,
+      n: this.values.length,
+      nA: this.numFactorA,
+      nB: this.numFactorB,
+      nE: this.numReps,
+    };
+  }//calculate
+}//TwoFactorNestedAnova
+
+export interface TwoFactorVariance {
+  mean: number,
+  sst: number,
+  ssa: number,
+  ssb: number,
+  sse: number,
+  dfT: number,
+  dfA: number,
+  dfB: number,
+  dfE: number,
+  msa: number,
+  msb: number,
+  mse: number,
+  fA: number,
+  fB: number,
+  n: number,
+  nA: number,
+  nB: number,
+  nE: number,
+  vT: number,
   vA: number,
-  vAB: number,
+  vB: number,
   vE: number,
-  sA: number,
-  sAB: number,
-  sE: number,
   sWL: number,
+  sA: number,
+  sB: number,
+  sE: number,
+  cvWL: number,
   cvA: number,
-  cvAB: number,
+  cvB: number,
   cvE: number,
-  cvT: number,
   dfWL: number,
   sWL_LCL: number,
   sWL_UCL: number,
@@ -473,11 +686,10 @@ export class TwoFactorVarianceAnalysis {
   private factorA: (string | number)[];
   private factorB: (string | number)[];
   private values: number[];
-  private numLevels: number;
   private alpha: number;
-  private fRepeatability: number;
-  private fWL: number;
-  private isCalculated: boolean;
+  // private fRepeatability: number;
+  // private fWL: number;
+  // private isCalculated: boolean;
 
   /*
    * factorA as an Array (Days)
@@ -485,47 +697,49 @@ export class TwoFactorVarianceAnalysis {
    * values as an Array
    * alpha for calculation of confidence limits. Default is 0.05
    */
-  constructor(factorA: (string | number)[], factorB: (string | number)[], values: number[], numLevels: number, alpha = 0.05) {
+  constructor(factorA: (string | number)[], factorB: (string | number)[], values: number[], alpha = 0.05) {
     this.factorA = factorA;
     this.factorB = factorB;
     this.values = values;
-    this.numLevels = numLevels;
     this.alpha = alpha;
-    this.fRepeatability = 0;
-    this.fWL = 0;
-    this.isCalculated = false;
+    // this.fRepeatability = 0;
+    // this.fWL = 0;
+    // this.isCalculated = false;
   }
 
   calculate(): TwoFactorVariance {
-    const twoFactorAnova = new TwoFactorAnova(this.factorA, this.factorB, this.values);
+    const twoFactorAnova = new TwoFactorNestedAnova(this.factorA, this.factorB, this.values);
     const anova = twoFactorAnova.calculate();
 
     //variance for factor A: Between day
-    const vA = Math.max(0, (anova.msa - anova.msab) / (anova.nB * anova.nE));
+    const vA = Math.max(0, (anova.msa - anova.msb) / (anova.nB * anova.nE));
 
     //variance for error: within run repeatability
     const vE = anova.mse;
 
     //variance of interaction: between run variance
-    const vAB = Math.max(0, (anova.msab - anova.mse) / anova.nE);
+    const vB = Math.max(0, (anova.msb - anova.mse) / anova.nE);
+
+    //Within lab variance
+    const vT = vA + vB + vE;
 
     //between day SD
     const sA = Math.sqrt(vA);
 
     //between run SD
-    const sAB = Math.sqrt(vAB);
+    const sB = Math.sqrt(vB);
 
     //repeatability: within run SD
     const sE = Math.sqrt(vE);
 
     //within lab SD
-    const sT = Math.sqrt(Math.pow(sA, 2) + Math.pow(sAB, 2) + Math.pow(sE, 2));
+    const sT = Math.sqrt(vT);
 
     //between day CV
     const cvA = sA / anova.mean;
 
     //between run CV
-    const cvAB = sAB / anova.mean;
+    const cvB = sB / anova.mean;
 
     //repeatability: within run CV
     const cvE = sE / anova.mean;
@@ -534,12 +748,12 @@ export class TwoFactorVarianceAnalysis {
     const cvT = sT / anova.mean;
 
     //Calculations for Satterswaithe estimate of the degrees of freedom
-    const alphaA = 1 / (anova.nB * anova.nE);
+    const alphaA =1 / (anova.nB * anova.nE);
     const alphaAB = (anova.nE - 1) / (anova.nE * anova.nB);
     const alphaE = (anova.nE - 1) / anova.nE;
-    const numerator = Math.pow(alphaA * anova.msa + alphaAB * anova.msab + alphaE * anova.mse, 2);
+    const numerator = Math.pow(alphaA * anova.msa + alphaAB * anova.msb + alphaE * anova.mse, 2);
     const denominator1 = Math.pow(alphaA * anova.msa, 2) / anova.dfA;
-    const denominator2 = Math.pow(alphaAB * anova.msab, 2) / anova.dfAB;
+    const denominator2 = Math.pow(alphaAB * anova.msb, 2) / anova.dfB;
     const denominator3 = Math.pow(alphaE * anova.mse, 2) / anova.dfE;
     const dfWL = numerator / (denominator1 + denominator2 + denominator3);
     const sWL_UCL = this.getUpperConfidenceLimit(sT, dfWL, this.alpha);
@@ -551,22 +765,23 @@ export class TwoFactorVarianceAnalysis {
     const cvE_UCL = sE_UCL / anova.mean;
     const cvE_LCL = sE_LCL / anova.mean;
 
-    this.isCalculated = true;
+    //this.isCalculated = true;
 
     return {
       ...anova,
       ...{
+        vT: vT,
         vA: vA,
-        vAB: vAB,
+        vB: vB,
         vE: vE,
-        sA: sA,
-        sAB: sAB,
-        sE: sE,
         sWL: sT,
+        sA: sA,
+        sB: sB,
+        sE: sE,
+        cvWL: cvT,
         cvA: cvA,
-        cvAB: cvAB,
+        cvB: cvB,
         cvE: cvE,
-        cvT: cvT,
         dfWL: dfWL,
         sWL_LCL: sWL_LCL,
         sWL_UCL: sWL_UCL,

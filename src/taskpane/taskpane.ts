@@ -14,8 +14,8 @@ import {
   OneFactorVarianceAnalysis, TwoFactorVarianceAnalysis,
   OneFactorVariance, TwoFactorVariance,
 } from "../precision";
-import { 
-  ExcelBlandAltmanChart, ExcelRegressionChart 
+import {
+  ExcelBlandAltmanChart, ExcelRegressionChart
 } from "../charts";
 
 /* global console, document, Excel, Office */
@@ -91,9 +91,9 @@ async function runRegression() {
     const outputRange: string = outputRangeInput.value;
     const regressionMethod: string = regressionMethodInput.value;
     const ciMethod: string = ciMethodInput.value;
-    const useCalculatedErrorRatio: boolean = Boolean(useCalculatedErrorRatioInput.value);
-    const outputLabels: boolean = Boolean(outputLabelsInput.value);
-    const importAps: boolean = Boolean(importApsInput.value);
+    const useCalculatedErrorRatio: boolean = Boolean(useCalculatedErrorRatioInput.checked);
+    const outputLabels: boolean = Boolean(outputLabelsInput.checked);
+    const importAps: boolean = Boolean(importApsInput.checked);
     const apsAbsInput: string = apsAbsHtmlInput.value;
     const apsRelInput: string = apsRelHtmlInput.value;
 
@@ -632,7 +632,7 @@ function analyseOneFactor(precisionData: PrecisionData) {
   return formatPrecisionForExcel(labels, columnData);
 }
 
-function analyseTwoFactor(precisionData) {
+function analyseTwoFactor(precisionData: PrecisionData) {
   let columnData = new Array(precisionData.data.length);
   let res: TwoFactorVariance;
   let maxSize = 0;
@@ -643,7 +643,6 @@ function analyseTwoFactor(precisionData) {
         dataObj.aLevels,
         dataObj.bLevels,
         dataObj.results,
-        precisionData.numLevels,
         0.05
       );
       res = twoFactorAnalysis.calculate();
@@ -660,34 +659,31 @@ function analyseTwoFactor(precisionData) {
     "SSA",
     "SSB",
     "SSE",
-    "SSAB",
     "DF T",
     "DF A",
     "DF B",
-    "DF AB",
     "DF E",
     "MSA",
     "MSB",
-    "MSAB",
     "MSE",
-    "F AB",
     "F A",
     "F B",
     "N",
     "Num A",
     "Num B",
     "Num E",
+    "Var T",
     "Var A",
-    "Var AB",
+    "Var B",
     "Var E",
-    "SD A",
-    "SD AB",
-    "SD E",
     "SD WL",
-    "CV A",
-    "CV AB",
-    "CV E",
+    "SD A",
+    "SD B",
+    "SD E",
     "CV WL",
+    "CV A",
+    "CV B",
+    "CV E",
     "DF WL",
     "SD WL LCL",
     "SD WL UCL",
@@ -988,7 +984,7 @@ function processRangeData(range: Excel.Range): {
 async function loadWorkbookDefaults() {
   await Excel.run(async (context) => {
     const worksheet = context.workbook.worksheets.getActiveWorksheet();
-    const address = "A2:B18";
+    const address = "A2:B19";
     const range = worksheet.getRange(address);
     range.load(["values", "rowCount", "columnCount"]);
 
@@ -996,10 +992,18 @@ async function loadWorkbookDefaults() {
     for (let row = 0; row < range.rowCount; row++) {
       const attribute = range.values[row][0];
       const value = range.values[row][1];
-      const element = document.getElementById(attribute);
-      if (element instanceof HTMLInputElement) {
+      let element: HTMLInputElement | HTMLSelectElement;
+      if (attribute === "import-aps" ||
+        attribute === "use-calculated-error-ratio" ||
+        attribute === "output-labels") {
+        element = document.getElementById(attribute) as HTMLInputElement;
+        element.checked = value;
+      } else if (attribute === "regression-method" ||
+        attribute === "confidence-interval-method") {
+        element = document.getElementById(attribute) as HTMLSelectElement;
         element.value = value;
-      } else if (element instanceof HTMLSelectElement) {
+      } else {
+        element = document.getElementById(attribute) as HTMLInputElement;
         element.value = value;
       }
     }
@@ -1010,6 +1014,8 @@ async function loadWorkbookDefaults() {
 function setDefaultValues() {
   // Set explicitly for now but in the future we may load these from a workbook or a settings file.
   // APS
+  const importApsInput = document.getElementById("import-aps") as HTMLInputElement;
+  importApsInput.checked = true;
   const apsAbsInput = document.getElementById("aps-abs") as HTMLInputElement;
   apsAbsInput.value = "J4";
   const apsRelInput = document.getElementById("aps-rel") as HTMLInputElement;
@@ -1024,11 +1030,11 @@ function setDefaultValues() {
   outputRangeInput.value = "C167";
   const regressionMethodInput = document.getElementById(
     "regression-method"
-  ) as HTMLInputElement;
+  ) as HTMLSelectElement;
   regressionMethodInput.value = "paba";
   const confIntMethodInput = document.getElementById(
     "confidence-interval-method"
-  ) as HTMLInputElement;
+  ) as HTMLSelectElement;
   confIntMethodInput.value = "default";
   const useCalculatedErrorRatioInput = document.getElementById("use-calculated-error-ratio") as HTMLInputElement;
   useCalculatedErrorRatioInput.checked = false;
