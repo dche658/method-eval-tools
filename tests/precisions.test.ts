@@ -44,10 +44,10 @@ test('TwoFactorNestedAnova with balanced data', () => {
     const twoFactorNestedAnova = new TwoFactorNestedAnova(days, runs, values);
     const anova = twoFactorNestedAnova.calculate();
     //console.log(anova);
-    expect(round4(anova.mean)).toBeCloseTo(100.3899);
-    expect(round4(anova.ssa)).toBeCloseTo(248.5388);
-    expect(round4(anova.sse)).toBeCloseTo(400.5985);
-    expect(round4(anova.ssb)).toBeCloseTo(370.4565);
+    expect(anova.mean).toBeCloseTo(100.3899, 4);
+    expect(anova.ssa).toBeCloseTo(248.5388, 4);
+    expect(anova.sse).toBeCloseTo(400.5985, 4);
+    expect(anova.ssb).toBeCloseTo(370.4565, 4);
     expect(anova.dfT).toBe(79);
     expect(anova.dfA).toBe(19);
     expect(anova.dfE).toBe(40);
@@ -75,11 +75,11 @@ function round4(x: number): number {
 test('TwoFactorVarianceAnalysis with balanced data', () => {
     const twoFactorVarianceAnalysis = new TwoFactorVarianceAnalysis(days, runs, values, 0.05);
     const variance = twoFactorVarianceAnalysis.calculate();
-    console.log(variance);
-    expect(round4(variance.vT)).toBeCloseTo(14.2688);
-    expect(round4(variance.vA)).toBeCloseTo(0.0);
-    expect(round4(variance.vB)).toBeCloseTo(4.2539);
-    expect(round4(variance.vE)).toBeCloseTo(10.0150);
+    //console.log(variance);
+    expect(variance.vT).toBeCloseTo(14.2689, 4);
+    expect(variance.vA).toBeCloseTo(0.0, 4);
+    expect(variance.vB).toBeCloseTo(4.2539, 4);
+    expect(variance.vE).toBeCloseTo(10.0150, 4);
     expect(variance.dfA).toBe(19);
     expect(variance.dfB).toBe(20);
     expect(variance.dfE).toBe(40);
@@ -88,11 +88,11 @@ test('TwoFactorVarianceAnalysis with balanced data', () => {
 test('EP05 Table A1 with balanced data', () => {
     const twoFactorVarianceAnalysis = new TwoFactorVarianceAnalysis(days, runs, ep15_a1, 0.05);
     const variance = twoFactorVarianceAnalysis.calculate();
-    console.log(variance);
-    expect(Math.round(1000*(variance.vT))/1000).toBeCloseTo(12.934);
-    expect(Math.round(1000*(variance.vA))/1000).toBeCloseTo(1.959);
-    expect(Math.round(1000*(variance.vB + Number.EPSILON))/1000).toBeCloseTo(3.075);
-    expect(Math.round(100*(variance.vE))/100).toBeCloseTo(7.90);
+    //console.log(variance);
+    expect(variance.vT).toBeCloseTo(12.934, 3);
+    expect(variance.vA).toBeCloseTo(1.959, 3);
+    expect(variance.vB).toBeCloseTo(3.075, 3);
+    expect(variance.vE).toBeCloseTo(7.90, 2);
     expect(variance.dfA).toBe(19);
     expect(variance.dfB).toBe(20);
     expect(variance.dfE).toBe(40);

@@ -429,6 +429,8 @@ class PassingBablokRegression extends Regression {
     interceptUArr.sort((a, b) => a - b);
     half = Math.floor(n / 2.0) - 1;
 
+    //console.log(`Intercepts: ${interceptArr}; half=${half}`)
+
     if (n % 2 === 0) {
       intercept = (interceptArr[half] + interceptArr[half + 1]) / 2.0;
       interceptL = (interceptLArr[half] + interceptLArr[half + 1]) / 2.0;
