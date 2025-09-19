@@ -39,7 +39,7 @@ const PI4 = Math.PI / 4;
  *
  * Sum of (x_i - mean(x))^2
  */
-function devsq(arr: number[]) : number {
+function devsq(arr: number[]): number {
   const avg = mean(arr);
   let sum = 0;
   for (let i = 0; i < arr.length; i++) {
@@ -98,16 +98,20 @@ function quantile(arr: number[], probs: number[]): number[] | undefined {
   return quantiles;
 } //quantile
 
+/* Object returned by calculate method of a Regression instance */
+interface RegressionModel {
+  slope: number,
+  intercept: number,
+  slopeLCL: number,
+  slopeUCL: number,
+  interceptLCL: number,
+  interceptUCL: number
+}
+
 /* Base class for performing regression analysis */
 class Regression {
-  constructor() {}
-  calculate(x: number[], y: number[]) : { 
-    slope: number, 
-    intercept: number,
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number, 
-    interceptUCL: number  } {
+  constructor() { }
+  calculate(x: number[], y: number[]): RegressionModel {
     throw new Error("Method not implemented.");
   }
 }
@@ -129,13 +133,7 @@ class DemingRegression extends Regression {
    * x must be an array of numeric values
    * y must be an array of numeric values
    */
-  calculateDeming(x: number[], y: number[]) : {
-    slope: number, 
-    intercept: number,
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number, 
-    interceptUCL: number } {
+  calculateDeming(x: number[], y: number[]): RegressionModel {
     // Simple validation
     if (x.length !== y.length || x.length === 0) {
       throw new Error("Input arrays must have the same non-zero length.");
@@ -172,13 +170,14 @@ class DemingRegression extends Regression {
     };
   }
 
-  calculate(x: number[], y: number[]) : {
-    slope: number, 
+  calculate(x: number[], y: number[]): {
+    slope: number,
     intercept: number,
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number, 
-    interceptUCL: number } {
+    slopeLCL: number,
+    slopeUCL: number,
+    interceptLCL: number,
+    interceptUCL: number
+  } {
     return this.calculateDeming(x, y);
   }
 } //Deming
@@ -188,9 +187,9 @@ class DemingRegression extends Regression {
  * Assumes constant CV across the measuring range of the method
  */
 class WeightedDemingRegression extends Regression {
-    private errorRatio: number;
-    private iterMax: number;
-    private threshold: number;
+  private errorRatio: number;
+  private iterMax: number;
+  private threshold: number;
 
   /*
    * errorRatio ratio between squared measurement errors of reference- and test method, necessary for Deming regression (Default is 1).
@@ -212,13 +211,7 @@ class WeightedDemingRegression extends Regression {
    * x measurement values of reference method as an Array.
    * Y measurement values of test method as an Array.
    */
-  calculateWeightedDeming(x: number[], y: number[]) : {
-    slope: number, 
-    intercept: number,
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number, 
-    interceptUCL: number } {
+  calculateWeightedDeming(x: number[], y: number[]): RegressionModel {
     if (x.length !== y.length || x.length === 0) {
       throw new Error("Input arrays must have the same non-zero length.");
     }
@@ -319,16 +312,19 @@ class WeightedDemingRegression extends Regression {
     };
   } // #calculate
 
-  calculate(x: number[], y: number[]) : {
-    slope: number, 
-    intercept: number,
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number, 
-    interceptUCL: number } {
+  calculate(x: number[], y: number[]): RegressionModel {
     return this.calculateWeightedDeming(x, y);
   }
 } //WeightedDeming
+
+interface AngleMatrixModel {
+  matrix: number[],
+  nAllItems: number,
+  nNeg: number,
+  nNeg2: number,
+  nPos: number,
+  nPos2: number
+}
 
 class PassingBablokRegression extends Regression {
   // Initially based on mcr package for R by Sergej Potapov 2021
@@ -348,13 +344,7 @@ class PassingBablokRegression extends Regression {
     this.positiveCorrelated = positiveCorrelated;
   }
 
-  calculatePaBa(x: number[], y: number[]) : { 
-    slope: number, 
-    intercept: number, 
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number, 
-    interceptUCL: number } {
+  calculatePaBa(x: number[], y: number[]): RegressionModel {
     let slope = 0;
     let slopeL = 0;
     let slopeU = 0;
@@ -450,13 +440,7 @@ class PassingBablokRegression extends Regression {
     };
   }
 
-  calcAngleMatrix(x: number[], y: number[]) : { 
-    matrix: number[], 
-    nAllItems: number, 
-    nNeg: number, 
-    nNeg2: number, 
-    nPos: number, 
-    nPos2: number} {
+  calcAngleMatrix(x: number[], y: number[]): AngleMatrixModel {
     let nrows = x.length;
     let ncols = y.length;
     let nData = nrows * ncols;
@@ -519,7 +503,7 @@ class PassingBablokRegression extends Regression {
     };
   }
 
-  calcDiff(a: number, b: number, eps = 0.000000000001) : number {
+  calcDiff(a: number, b: number, eps = 0.000000000001): number {
     //Calculate difference between two numeric values that
     //gives exactly zero for very small relative differences.
     //Copied from mcr package for R by Sergej Potapov 2021
@@ -531,16 +515,21 @@ class PassingBablokRegression extends Regression {
     }
   }
 
-  calculate(x: number[], y: number[]) : { 
-    slope: number, 
-    intercept: number, 
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number, 
-    interceptUCL: number } {
+  calculate(x: number[], y: number[]): RegressionModel {
     return this.calculatePaBa(x, y);
   }
 } //PassingBablokRegression
+
+interface ConfidenceIntervalModel {
+  slope: number,
+  intercept: number,
+  slopeSE: number,
+  interceptSE: number,
+  slopeLCL: number,
+  slopeUCL: number,
+  interceptLCL: number,
+  interceptUCL: number
+}
 
 /* Calculate a confidence interval using a jackknife procedure.
  *
@@ -558,15 +547,7 @@ class JackknifeConfidenceInterval {
     this.alpha = alpha;
   }
 
-  calculate() : { 
-    slope: number, 
-    intercept: number, 
-    slopeSE: number, 
-    interceptSE: number, 
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number, 
-    interceptUCL: number } {
+  calculate(): ConfidenceIntervalModel {
     let n = this.x.length;
     let size = n - 1;
     if (size <= 1) throw new Error("Sample size must be greater than 2");
@@ -616,7 +597,7 @@ class JackknifeConfidenceInterval {
   /*
   * Calculate the standard error using the procedure of Linnet
   */
-  linnetSE(b_jack: number[], b_global: number) : number {
+  linnetSE(b_jack: number[], b_global: number): number {
     let n = b_jack.length; //number of data points
     let d_b = new Array<number>(n); //deviations for estimating the standard error
     for (let i = 0; i < n; i++) {
@@ -631,11 +612,11 @@ class JackknifeConfidenceInterval {
  *
  */
 class BootstrapConfidenceInterval {
-    private x: number[];
-    private y: number[];
-    private regression: Regression;
-    private alpha: number;
-    private bootstrapN: number;
+  private x: number[];
+  private y: number[];
+  private regression: Regression;
+  private alpha: number;
+  private bootstrapN: number;
 
   constructor(x: number[], y: number[], regression: Regression, bootstrapN = DEFAULT_BOOTSTRAP_N, alpha = DEFAULT_ALPHA) {
     this.x = x;
@@ -644,15 +625,7 @@ class BootstrapConfidenceInterval {
     this.bootstrapN = bootstrapN;
     this.alpha = alpha;
   }
-  calculate(): {
-    slope: number, 
-    intercept: number, 
-    slopeSE: number, 
-    interceptSE: number, 
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number, 
-    interceptUCL: number } {
+  calculate(): ConfidenceIntervalModel {
     const global_coefficents = this.regression.calculate(this.x, this.y);
 
     const coefficients = this.calculateBootstrapRegression(this.x, this.y, this.bootstrapN);
@@ -674,7 +647,7 @@ class BootstrapConfidenceInterval {
 
   //Calculate regression on each of the bootstrap samples
   //and return arrays containing the slopes (b1) and intercepts (b0)
-  calculateBootstrapRegression(x: number[], y: number[], bootstrapN: number) : { b1: number[], b0: number[] } {
+  calculateBootstrapRegression(x: number[], y: number[], bootstrapN: number): { b1: number[], b0: number[] } {
     const b1 = new Array<number>(bootstrapN);
     const b0 = new Array<number>(bootstrapN);
     for (let i = 0; i < bootstrapN; i++) {
@@ -692,7 +665,7 @@ class BootstrapConfidenceInterval {
   }
 
   //Sample with replacement
-  getBootstrapSamples(x: number[], y: number[]) : { x: number[], y: number[] } {
+  getBootstrapSamples(x: number[], y: number[]): { x: number[], y: number[] } {
     const sx = new Array<number>(x.length);
     const sy = new Array<number>(y.length);
     for (let i = 0; i < x.length; i++) {
@@ -735,15 +708,7 @@ class MethodCompRegression extends Regression {
     this.bootstrapN = bootstrapN;
   }
 
-  calculate(x: number[], y: number[]) : {
-    slope: number, 
-    intercept: number,
-    slopeLCL: number, 
-    slopeUCL: number, 
-    interceptLCL: number,
-    interceptUCL: number, 
-    slopeSE: number, 
-    interceptSE: number } {
+  calculate(x: number[], y: number[]): ConfidenceIntervalModel {
     let res = {
       slope: NaN,
       intercept: NaN,
@@ -848,4 +813,6 @@ export {
   JackknifeConfidenceInterval,
   BootstrapConfidenceInterval,
   MethodCompRegression,
+  RegressionModel,
+  ConfidenceIntervalModel,
 };
