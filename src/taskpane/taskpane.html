@@ -166,7 +166,7 @@
                   <fluent-option value="bootstrap">Bootstrap</fluent-option>
                 </fluent-select>
               </div>
-              <div class="mt-3">
+              <div id="error-ratio-container" class="mt-3 mvw-hidden">
                 <fluent-checkbox
                   id="use-calculated-error-ratio"
                   title="Calculated error ratio can only be used with Deming or Weighted Deming regression if the comparison was performed in duplicate."
@@ -175,7 +175,7 @@
                 </fluent-checkbox>
                 <fluent-text-field id="error-ratio" value="1.0">
                   <div class="range-label">
-                    <span>Error Ratio</span>
+                    <span>Error Ratio s<sub>y</sub><sup>2</sup>/s<sub>x</sub><sup>2</sup></span>
                   </div>
                 </fluent-text-field>
               </div>

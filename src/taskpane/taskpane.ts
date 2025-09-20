@@ -68,6 +68,9 @@ Office.onReady((info) => {
     // Display if initialisation completes
     document.getElementById("sideload-msg").style.display = "none";
     document.getElementById("app-body").style.display = "flex";
+
+    // Add value change listener to regression method select
+    document.getElementById("regression-method").onchange = regressionMethodChanged;
   }
 });
 
@@ -940,11 +943,15 @@ function processRangeData(range: Excel.Range): {
   if (range.columnCount > 2) {
     throw new Error("Range has more than two columns");
   }
+  let x1: number[] = [];
+  let x2: number[] = [];
+  let devsq: number[] = [];
+  let sd = 0;
+  let cv = 0;
+  let mean = 0;
+
   // If the range has two columns then we calculate assuming analysis was done in replicates
   if (range.columnCount === 2) {
-    let x1: number[] = [];
-    let x2: number[] = [];
-    let devsq: number[] = [];
     // Process two columns
     for (let i = 0; i < range.rowCount; i++) {
       //console.log(i, typeof range.values[i][0], typeof range.values[i][1]);
@@ -962,22 +969,21 @@ function processRangeData(range: Excel.Range): {
       }
     }
     // Calculate standard deviation and coefficient of variation of the replicates.
-    let sd = Math.sqrt(devsq.reduce((a, b) => a + b, 0) / (size - 1));
-    let mean = means.reduce((a, b) => a + b, 0) / size;
-    let cv = sd / mean;
-    // Return the mean and coefficient of variation
-    return { means: means, x1: x1, x2: x2, devsq: devsq, sd: sd, cv: cv, size: size, mean: mean };
+    sd = Math.sqrt(devsq.reduce((a, b) => a + b, 0) / (size - 1));
+    mean = means.reduce((a, b) => a + b, 0) / size;
+    cv = sd / mean;
   } else if (range.columnCount === 1) {
     // Process single column
     for (let i = 0; i < range.rowCount; i++) {
       if (typeof range.values[i][0] === "number") {
+        x1.push(range.values[i][0]);
         means.push(range.values[i][0]);
         size++;
       }
     }
-    let mean = means.reduce((a, b) => a + b, 0) / size;
-    return { means: means, x1: [], x2: [], devsq: [], sd: 0, cv: 0, size: size, mean: mean };
+    mean = means.reduce((a, b) => a + b, 0) / size;
   }
+  return { means: means, x1: x1, x2: x2, devsq: devsq, sd: sd, cv: cv, size: size, mean: mean };
 }
 
 // Read the default cell addresses from and excel workbook.
@@ -1058,4 +1064,16 @@ function setDefaultValues() {
   resultsRngInput.value = "D295:G319";
   const pOutputRangeInput = document.getElementById("p-output-range") as HTMLInputElement;
   pOutputRangeInput.value = "AD294";
+}
+
+function regressionMethodChanged() {
+  const regressionMethodInput = document.getElementById(
+    "regression-method"
+  ) as HTMLSelectElement;
+
+  if (regressionMethodInput.value === "deming" || regressionMethodInput.value === "wdeming") {
+    document.getElementById("error-ratio-container").style.display = "block";
+  } else {
+    document.getElementById("error-ratio-container").style.display = "none";
+  }
 }
