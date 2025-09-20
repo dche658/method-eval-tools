@@ -3,6 +3,32 @@
  */
 
 import {
+  provideFluentDesignSystem,
+  fluentTextField,
+  fluentNumberField,
+  fluentSelect,
+  fluentOption,
+  fluentButton,
+  fluentTextArea,
+  fluentAccordion,
+  fluentAccordionItem,
+  fluentCheckbox,
+} from "@fluentui/web-components";
+
+provideFluentDesignSystem()
+  .register(
+    fluentTextField(),
+    fluentNumberField(),
+    fluentSelect(),
+    fluentOption(),
+    fluentButton(),
+    fluentTextArea(),
+    fluentAccordion(),
+    fluentAccordionItem(),
+    fluentCheckbox()
+  );
+
+import {
   JackknifeConfidenceInterval,
   BootstrapConfidenceInterval,
   PassingBablokRegression,

@@ -27,6 +27,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@fluentui/web-components": "^2.6.1",
     "core-js": "^3.36.0",
     "jstat-esm": "^2.0.2",
     "regenerator-runtime": "^0.14.1"
