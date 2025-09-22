@@ -440,8 +440,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_side_loading_the_add_in">Side-loading the add-in</a>
+<li><a href="#_installing_the_add_in">Installing the Add-in</a>
 <ul class="sectlevel2">
+<li><a href="#_side_loading_the_add_in">Side-loading the add-in</a></li>
 <li><a href="#_option_install_on_a_portable_device">Option: Install on a Portable Device</a></li>
 <li><a href="#_option_set_a_proxy_for_npm">Option: Set a proxy for npm</a></li>
 </ul>
@@ -481,6 +482,11 @@ as described in CLSI EP15 and EP05.</p>
 <p>This tools has been designed for use by laboratory professionals in association
 with the accompanying <a href="https://metools.chesher.id.au/assets/mvw.xlsx">method verification workbook</a>.</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installing_the_add_in">Installing the Add-in</h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>Under normal circumstances, installation and activation of an Excel Add-in is
 very easy. All that is required is to go to the Add-ins menu item on the
@@ -518,11 +524,8 @@ must be run using nodejs, which is a powerful tool for developing
 server-side and client-side applications by running javascript
 outside a web browser.</p>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_side_loading_the_add_in">Side-loading the add-in</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_side_loading_the_add_in">Side-loading the add-in</h3>
 <div class="paragraph">
 <p>Follow these steps to sideload the add-in:</p>
 </div>
@@ -573,6 +576,7 @@ npm run start</pre>
 <div class="paragraph">
 <p>Startup can take a few minutes to complete. Once it is finished, excel should
 open automatically with the add-in loaded.</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_option_install_on_a_portable_device">Option: Install on a Portable Device</h3>
@@ -862,6 +866,24 @@ based on the defaults in the workbook.
 </tr>
 </table>
 </div>
+<div class="sect3">
+<h4 id="_concordance">Concordance</h4>
+<div class="paragraph">
+<p>Diagnostic concordance between two methods that are being compared is assessed by setting the
+diagnostic thresholds for each method and using those to calculate a Cohen&#8217;s Kappa statistic.</p>
+</div>
+<div class="paragraph">
+<p>The number of diagostic thresholds for the two methods must be the same although the
+thresholds themselves may be different for the two methods. For example a reference
+assay may be regarded as reactive if a result is &gt;= 50; not reactive if a result is &lt; 25
+and equivocal for values between 25 and 50. Where as the assay being compared may have
+thresholds of 32 and 64 respectively for the same diagnostic outcome.</p>
+</div>
+<div class="paragraph">
+<p>Again, it is necessary to select the top left cell in the worksheet where the contingency table
+and resultant statistics will be saved.</p>
+</div>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_analysing_imprecision">Analysing Imprecision</h3>
@@ -1140,12 +1162,12 @@ Clinical and Laboratory Standards Institute, Pennsylvania.</p>
 <p>\$\frac{1-\alpha}{n_{sam}}\$ : confidence level with Bonferroni correction.</p>
 </div>
 <div class="paragraph">
-<p>\$F_{e}=\frac{\chi^{2}}{DF2}\$ : upper verification limit factor for repeatability
+<p>\$F_{e}=\sqrt{\frac{\chi^{2}}{DF2}}\$ : upper verification limit factor for repeatability
 where \$\chi^{2}\$ is the quantile for the chi-squared distribution at the
 specified confidence level with DF2 degrees of freedom.</p>
 </div>
 <div class="paragraph">
-<p>\$F_{WL}=\frac{\chi^{2}}{DF_{WL}}\$ : upper verification limit factor for within
+<p>\$F_{WL}=\sqrt{\frac{\chi^{2}}{DF_{WL}}\$ : upper verification limit factor for within
 laboratory imprecision where \$\chi^{2}\$ is the quantile for the chi-squared
 distribution at the specified confidence level with \$DF_{WL}\$ degrees of
 freedom.</p>
@@ -1181,7 +1203,7 @@ used by this application is able to calculate the result with decimal values.
 </div>
 <div class="paragraph">
 <p>Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
-and the Sciences 6th ed. CRC Press, Boca Raton. p752.</p>
+and the Sciences 6th ed. CRC Press, Boca Raton.</p>
 </div>
 <div class="paragraph">
 <p>NIST/SEMATECH 3.2.3.3. Two-Way Nested ANOVA, <a href="https://www.itl.nist.gov/div898/handbook/ppc/section2/ppc233.htm" class="bare">https://www.itl.nist.gov/div898/handbook/ppc/section2/ppc233.htm</a>.
@@ -1274,22 +1296,23 @@ level of variable 2. (i = 1, 2, &#8230;&#8203;, a; j = 1, 2, &#8230;&#8203;, b)<
 <p>\$S_{WL}=\sqrt{V_{A}+V_{B}+V_{E}\$ : standard deviation within laboratory</p>
 </div>
 <div class="paragraph">
-<p>I need help here! This bit might not be right. Seems to work with the balanced
-data set provided in Table 1 of CLSI EP05 but the calculated value of df_WL is
-close but not the same when using Analyse-It or VCA (R package) on some other
-data sets.</p>
+<p>I need help here! The alpha coefficients may not be right. They were calculated
+based using the coefficients for calculating the pooled variance. It seems to
+work with data set provided in Table 1 of CLSI EP05 but the calculated value of
+df_WL is close but not the same when using Analyse-It or VCA (R package) on some
+other data sets.</p>
 </div>
 <div class="paragraph">
-<p>\$\alpha_{A}=\frac{1}{b\times r}\$</p>
+<p>\$\alpha_{A}=\frac{a}{N-1}\$</p>
 </div>
 <div class="paragraph">
-<p>\$\alpha_{B}=\frac{r-1}{b\timesr}\$</p>
+<p>\$\alpha_{B}=\frac{a(b-1)}{N-1}\$</p>
 </div>
 <div class="paragraph">
-<p>\$\alpha_{E}=\frac{r-1}{r}\$</p>
+<p>\$\alpha_{E}=\frac{N-(ab)}{N-1}\$</p>
 </div>
 <div class="paragraph">
-<p>\$DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{AB}MSB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{AB}MSB)^2}{DFB} + \frac{(\alpha_{E}MSE)^2}{DFE}}\$</p>
+<p>\$DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{B}MSB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{B}MSB)^2}{DFB} + \frac{(\alpha_{E}MSE)^2}{DFE}}\$</p>
 </div>
 <div class="paragraph">
 <p>\$UCL=S\times \sqrt{\frac{DF}{\chi_{1-\frac{\alpha}{2}}^{2},DF}}\$ : upper confidence limit
@@ -1307,7 +1330,7 @@ with DF degrees of freedom</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-18 10:43:07 01000
+Last updated 2025-09-22 10:37:54 01000
 </div>
 </div>
 <script type="text/x-mathjax-config">

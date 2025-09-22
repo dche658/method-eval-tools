@@ -12,7 +12,7 @@
     <script
       type="text/javascript"
       src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"
-    ></script> 
+    ></script>
 
     <!-- For more information on Fluent UI, visit https://developer.microsoft.com/fluentui#/. -->
     <link
@@ -41,7 +41,8 @@
         your add-in to see app body.
       </h2>
     </section>
-    <main id="app-body" class="ms-welcome__main mvw-hidden"><!-- remove mvw-hidden class in production -->
+    <main id="app-body" class="ms-welcome__main mvw-hidden">
+      <!-- remove mvw-hidden class in production -->
       <fluent-accordion expand-mode="single">
         <fluent-accordion-item>
           <span slot="heading">Performance Specifications</span>
@@ -215,6 +216,55 @@
                   >Run</fluent-button
                 >
               </div>
+              <fluent-accordion class="mt-3">
+                <fluent-accordion-item>
+                  <span slot="heading">Cohen's Kappa</span>
+                  <div class="mt-3">
+                    <div>
+                      Specify cutoffs for each method to assess concordance. Each method must have
+                      the same number of cutoffs.
+                    </div>
+                    <table>
+                      <thead>
+                        <tr>
+                          <td>X Cutoffs</td>
+                          <td>Y Cutoffs</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><fluent-number-field id="x-threshold-0"></fluent-number-field></td>
+                          <td><fluent-number-field id="y-threshold-0"></fluent-number-field></td>
+                        </tr>
+                        <tr>
+                          <td><fluent-number-field id="x-threshold-1"></fluent-number-field></td>
+                          <td><fluent-number-field id="y-threshold-1"></fluent-number-field></td>
+                        </tr>
+                        <tr>
+                          <td><fluent-number-field id="x-threshold-2"></fluent-number-field></td>
+                          <td><fluent-number-field id="y-threshold-2"></fluent-number-field></td>
+                        </tr>
+                        <tr>
+                          <td><fluent-number-field id="x-threshold-3"></fluent-number-field></td>
+                          <td><fluent-number-field id="y-threshold-3"></fluent-number-field></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="mt-3">
+                    <fluent-text-field id="concordance-output">
+                      <div class="range-label">
+                        <span>Concordance Output Range</span>
+                        <i
+                          id="select-concordance-output-range"
+                          class="ms-Icon ms-font-xl ms-Icon--OEM"
+                          title="Click to enter the address of the selected cells."
+                        ></i>
+                      </div>
+                    </fluent-text-field>
+                  </div>
+                </fluent-accordion-item>
+              </fluent-accordion>
             </div>
           </div>
         </fluent-accordion-item>
@@ -223,8 +273,8 @@
           <div class="panel ms-font-m">
             <div class="container">
               <div>
-                Use this section to analyse the imprecision of an assay. The calculations
-                are based on those described by CLSI EP15 and EP05.
+                Use this section to analyse the imprecision of an assay. The calculations are based
+                on those described by CLSI EP15 and EP05.
               </div>
               <div>
                 <fluent-text-field id="p-days-range" title="Column for the days (factor A).">
@@ -290,8 +340,8 @@
           <div class="panel ms-font-m">
             <div class="container">
               <div>
-                Use this section to setup a layout in Excel to assess an assays
-                imprecision. It can be used for both verification and validation studies.
+                Use this section to setup a layout in Excel to assess an assays imprecision. It can
+                be used for both verification and validation studies.
               </div>
               <div class="mt-3">
                 <fluent-number-field
@@ -352,11 +402,10 @@
               The purpose of this add-in is to provide some statistical procedures that are
               necessary for assessing clinical laboratory methods but are not easy to implement
               using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
-              statistical analysis tool. The current interation allows the user to perform 
-              linear regression techniques including Passing-Bablok, Deming, and Weighted Deming.
-
-              Procedures are also provide to allow users to analyse variance components as
-              described in CLSI EP15 and EP05.
+              statistical analysis tool. The current interation allows the user to perform linear
+              regression techniques including Passing-Bablok, Deming, and Weighted Deming.
+              Procedures are also provide to allow users to analyse variance components as described
+              in CLSI EP15 and EP05.
             </p>
             <p>
               The source code is available on GitHub at
@@ -368,8 +417,8 @@
             <div class="mt-3">
               <p>
                 This add in was developed for use with the associated Method Verification Workbook.
-                The default cell ranges used by the workbook can be populated by clicking the 
-                button below.
+                The default cell ranges used by the workbook can be populated by clicking the button
+                below.
               </p>
               <fluent-button id="load-defaults-btn" class="ms-fontColor-themePrimary"
                 >Populate for MVW</fluent-button
@@ -437,19 +486,23 @@
                 </tr>
                 <tr>
                   <td>p-days-range</td>
-                  <td>B295:B319</td>
+                  <td>B300:B324</td>
                 </tr>
                 <tr>
                   <td>p-runs-range</td>
-                  <td>C295:C319</td>
+                  <td>C300:C324</td>
                 </tr>
                 <tr>
                   <td>p-results-range</td>
-                  <td>D295:G319</td>
+                  <td>D300:G324</td>
                 </tr>
                 <tr>
                   <td>p-output-range</td>
-                  <td>AD294</td>
+                  <td>W299</td>
+                </tr>
+                <tr>
+                  <td>concordance-output</td>
+                  <td>C176</td>
                 </tr>
               </table>
               <fluent-button id="load-wb-def-btn" class="ms-fontColor-themePrimary"

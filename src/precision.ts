@@ -169,8 +169,8 @@ export class OneFactorVarianceAnalysis {
     //Analyse It just calculates for each level
     const chisqRepeatability = chisquare.inv(1 - this.alpha / this.numLevels, anova.dfE);
     const chisqWL = chisquare.inv(1 - this.alpha / this.numLevels, dfWL);
-    this.fRepeatability = chisqRepeatability / anova.dfE;
-    this.fWL = chisqWL / dfWL;
+    this.fRepeatability = Math.sqrt(chisqRepeatability / anova.dfE);
+    this.fWL = Math.sqrt(chisqWL / dfWL);
     this.isCalculated = true;
     return {
       ...anova,
@@ -543,7 +543,7 @@ export class TwoFactorNestedAnova {
       let group = this.dictA[key]; //get factor A group
       for (let key2 in group) {
         let groupB = group[key2]; //get factor B group
-        if (groupB.length > 1) this.dfE += 1;
+        if (groupB.length > 1) this.dfE += groupB.length - 1;
         for (let i = 0; i < groupB.length; i++) {
             this.sse += Math.pow(groupB[i] - mean(groupB), 2);
         }
@@ -579,7 +579,7 @@ export class TwoFactorNestedAnova {
    * I do not know why it is the case but the process is necessary for
    * calculating the degrees of freedom if the data is unbalanced.
    */
-  calculateSSB(): number {
+  calculateSSB(): void {
     let ssb = 0;
     this.dfB = 0;
     for (let key in this.dictA) {
@@ -595,11 +595,10 @@ export class TwoFactorNestedAnova {
         let replicatesMean = mean(replicates);
         countRepMeans++;
         sumDevsq += Math.pow(replicatesMean - groupMean, 2);
-        ssb = ssb + (sumDevsq * countRepMeans)
-        this.dfB = this.dfB + (countRepMeans > 0 ? countRepMeans - 1 : 0);
+        ssb = ssb + (sumDevsq);
       }
+      this.dfB = this.dfB + (countRepMeans > 0 ? countRepMeans - 1 : 0);
     }
-    return ssb;
   }
 
   calculate(): TwoFactorNestedAnovaTable {
@@ -748,9 +747,11 @@ export class TwoFactorVarianceAnalysis {
     const cvT = sT / anova.mean;
 
     //Calculations for Satterswaithe estimate of the degrees of freedom
-    const alphaA =1 / (anova.nB * anova.nE);
-    const alphaAB = (anova.nE - 1) / (anova.nE * anova.nB);
-    const alphaE = (anova.nE - 1) / anova.nE;
+    // alpha weightings based on degrees of freedom for pooled variance. Probably
+    // not right but seems to produce similar results to VCA and CLSI EP05
+    const alphaA = anova.nA / (anova.n - 1);//=1 / (anova.nB * anova.nE);
+    const alphaAB = (anova.nB - 1)*anova.nA/(anova.n - 1); //(anova.nE - 1) / (anova.nE * anova.nB);
+    const alphaE = (anova.n - (anova.nA * anova.nB)) / (anova.n - 1); //(anova.nE - 1) / anova.nE;
     const numerator = Math.pow(alphaA * anova.msa + alphaAB * anova.msb + alphaE * anova.mse, 2);
     const denominator1 = Math.pow(alphaA * anova.msa, 2) / anova.dfA;
     const denominator2 = Math.pow(alphaAB * anova.msb, 2) / anova.dfB;

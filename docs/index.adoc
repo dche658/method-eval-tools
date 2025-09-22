@@ -16,6 +16,8 @@ as described in CLSI EP15 and EP05.
 This tools has been designed for use by laboratory professionals in association
 with the accompanying https://metools.chesher.id.au/assets/mvw.xlsx[method verification workbook].
 
+== Installing the Add-in
+
 Under normal circumstances, installation and activation of an Excel Add-in is 
 very easy. All that is required is to go to the Add-ins menu item on the 
 Home tab (Fig 1).
@@ -43,7 +45,7 @@ must be run using nodejs, which is a powerful tool for developing
 server-side and client-side applications by running javascript
 outside a web browser.
 
-== Side-loading the add-in
+=== Side-loading the add-in
 
 Follow these steps to sideload the add-in:
 
@@ -252,6 +254,20 @@ TIP: If you are using the method verification workbook, you can automatically po
 data ranges by clicking the "Populate from MVW" button. This will fill in the data ranges
 based on the defaults in the workbook.
 
+==== Concordance
+
+Diagnostic concordance between two methods that are being compared is assessed by setting the
+diagnostic thresholds for each method and using those to calculate a Cohen's Kappa statistic.
+
+The number of diagostic thresholds for the two methods must be the same although the 
+thresholds themselves may be different for the two methods. For example a reference
+assay may be regarded as reactive if a result is >= 50; not reactive if a result is < 25 
+and equivocal for values between 25 and 50. Where as the assay being compared may have 
+thresholds of 32 and 64 respectively for the same diagnostic outcome.
+
+Again, it is necessary to select the top left cell in the worksheet where the contingency table
+and resultant statistics will be saved.
+
 === Analysing Imprecision
 
 Imprecision is assessed using the procedures described in CLSI EP05 and CLSI EP15, with a
@@ -393,11 +409,11 @@ stem:[\alpha] : false rejection rate (assumed to be 0.05)
 
 stem:[\frac{1-\alpha}{n_{sam}}] : confidence level with Bonferroni correction.
 
-stem:[F_{e}=\frac{\chi^{2}}{DF2}] : upper verification limit factor for repeatability
+stem:[F_{e}=\sqrt{\frac{\chi^{2}}{DF2}}] : upper verification limit factor for repeatability
 where stem:[\chi^{2}] is the quantile for the chi-squared distribution at the
 specified confidence level with DF2 degrees of freedom.
 
-stem:[F_{WL}=\frac{\chi^{2}}{DF_{WL}}] : upper verification limit factor for within
+stem:[F_{WL}=\sqrt{\frac{\chi^{2}}{DF_{WL}}] : upper verification limit factor for within
 laboratory imprecision where stem:[\chi^{2}] is the quantile for the chi-squared 
 distribution at the specified confidence level with stem:[DF_{WL}] degrees of 
 freedom.
@@ -417,7 +433,7 @@ used by this application is able to calculate the result with decimal values.
 These were sourced from:
 
 Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
-and the Sciences 6th ed. CRC Press, Boca Raton. p752.
+and the Sciences 6th ed. CRC Press, Boca Raton.
 
 NIST/SEMATECH 3.2.3.3. Two-Way Nested ANOVA, https://www.itl.nist.gov/div898/handbook/ppc/section2/ppc233.htm.
 In NIST/SEMATECH e-Handbook of Statistical Methods , 17 Sep 2025.
@@ -482,18 +498,19 @@ stem:[S_{R}=\sqrt{V_{E}}] : standard deviation of repeatability
 
 stem:[S_{WL}=\sqrt{V_{A}+V_{B}+V_{E}] : standard deviation within laboratory
 
-I need help here! This bit might not be right. Seems to work with the balanced 
-data set provided in Table 1 of CLSI EP05 but the calculated value of df_WL is
-close but not the same when using Analyse-It or VCA (R package) on some other
-data sets.
+I need help here! The alpha coefficients may not be right. They were calculated
+based using the coefficients for calculating the pooled variance. It seems to 
+work with data set provided in Table 1 of CLSI EP05 but the calculated value of 
+df_WL is close but not the same when using Analyse-It or VCA (R package) on some 
+other data sets.
 
-stem:[\alpha_{A}=\frac{1}{b\times r}]
+stem:[\alpha_{A}=\frac{a}{N-1}]
 
-stem:[\alpha_{B}=\frac{r-1}{b\timesr}]
+stem:[\alpha_{B}=\frac{a(b-1)}{N-1}]
 
-stem:[\alpha_{E}=\frac{r-1}{r}]
+stem:[\alpha_{E}=\frac{N-(ab)}{N-1}]
 
-stem:[DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{AB}MSB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{AB}MSB)^2}{DFB} + \frac{(\alpha_{E}MSE)^2}{DFE}}]
+stem:[DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{B}MSB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{B}MSB)^2}{DFB} + \frac{(\alpha_{E}MSE)^2}{DFE}}]
 
 stem:[UCL=S\times \sqrt{\frac{DF}{\chi_{1-\frac{\alpha}{2}}^{2},DF}}] : upper confidence limit 
 where stem:[\chi_{1-\frac{\alpha}{2}}^{2}] is the quantile corresponding to 1-alpha/2 confidence
@@ -502,3 +519,4 @@ with DF degrees of freedom
 stem:[LCL=S\times \sqrt{\frac{DF}{\chi_{\frac{\alpha}{2}}^{2},DF}}] : lower confidence limit 
 where stem:[\chi_{\frac{\alpha}{2}}^2] is the quantile corresponding to alpha/2 confidence
 with DF degrees of freedom
+

@@ -97,6 +97,11 @@ vc2 <- anovaVCA(Level1 ~ Day / Run, Data = as.data.frame(df2))
 vc2
 vc2$aov.tab
 
+df <- read_excel("mvw-test-data.xlsx", sheet = "10x3x2")
+colnames(df) = c('Day','Run','Level1')
+vc3 <- anovaVCA(Level1 ~ Day / Run, Data = as.data.frame(df))
+vc3
+
 # Regression -------------------------------------------------------------
 library(mcr)
 

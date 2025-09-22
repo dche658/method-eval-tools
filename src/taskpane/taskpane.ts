@@ -43,6 +43,7 @@ import {
 import {
   ExcelBlandAltmanChart, ExcelRegressionChart
 } from "../charts";
+import { ContingencyTableBuilder, ConcordanceCalculator } from "../concordance";
 
 /* global console, document, Excel, Office */
 
@@ -62,6 +63,9 @@ Office.onReady((info) => {
       tryCatch(selectScatterPlotRange);
     document.getElementById("select-chart-data-range").onclick = () =>
       tryCatch(selectChartDataRange);
+    document.getElementById("select-concordance-output-range").onclick = () =>
+      tryCatch(selectConcordanceOutputRange);
+
 
     // APS
     document.getElementById("select-abs-aps-address").onclick = () => tryCatch(selectApsAbsRange);
@@ -296,6 +300,28 @@ async function runRegression() {
       // Create regression chart if requested
       if (scatterPlotRange !== "") {
         createRegressionChart(xData, yData, res, apsAbs, apsRel);
+      }
+
+      // Process concordance assessment if thresholds have been specified
+      const concordanceThresholds: number[][] = loadThresholds();
+      if (concordanceThresholds.length > 0) {
+        const contingencyBuilder = new ContingencyTableBuilder(concordanceThresholds);
+        const contingencyTable = contingencyBuilder.build(xData.means, yData.means);
+        const concordanceCalculator = new ConcordanceCalculator(contingencyTable);
+        const concordanceResults = concordanceCalculator.calculate();
+        //to-do: copy to Excel
+        const concordanceCell = document.getElementById("concordance-output") as HTMLInputElement;
+        if (concordanceCell.value === "") {
+          throw Error("Please select the concordance output range.");
+        } else {
+          const concordanceRange = currentWorksheet.getRange(concordanceCell.value);
+          const contingencyRange = concordanceRange.getAbsoluteResizedRange(contingencyTable.table.length, contingencyTable.table[0].length);
+          contingencyRange.values = contingencyTable.table;
+          const offset = Math.max(8, contingencyTable.table.length + 1)
+          const cohenRange = concordanceRange.getOffsetRange(offset, 0).getAbsoluteResizedRange(6, 2);
+          cohenRange.values = concordanceCalculator.formatResultsAsArray(concordanceResults);
+          await context.sync();
+        }
       }
     } else {
       throw new RangeError("Insufficient data");
@@ -1012,11 +1038,39 @@ function processRangeData(range: Excel.Range): {
   return { means: means, x1: x1, x2: x2, devsq: devsq, sd: sd, cv: cv, size: size, mean: mean };
 }
 
+function loadThresholds(): number[][] {
+  const X_COL = 0;
+  const Y_COL = 1;
+  let thresholds: number[][] = []
+  for (let i = 0; i < 4; i++) {
+    let x_id = `x-threshold-${i}`;
+    let y_id = `y-threshold-${i}`;
+    let x_input = document.getElementById(x_id) as HTMLInputElement;
+    let y_input = document.getElementById(y_id) as HTMLInputElement;
+    if (x_input.value !== "" && y_input.value !== "") {
+      thresholds.push([Number(x_input.value), Number(y_input.value)]);
+    } else if (x_input.value !== "" || y_input.value !== "") {
+      throw Error("Concordance thresholds for x and y methods must be equal in number and aligned.");
+    }
+  }
+  return thresholds;
+}
+
+async function selectConcordanceOutputRange() {
+  await Excel.run(async (context) => {
+    const range = context.workbook.getSelectedRange();
+    range.load("address");
+    await context.sync();
+    const outputRangeInput = document.getElementById("concordance-output") as HTMLInputElement;
+    outputRangeInput.value = range.address;
+  });
+}
+
 // Read the default cell addresses from and excel workbook.
 async function loadWorkbookDefaults() {
   await Excel.run(async (context) => {
     const worksheet = context.workbook.worksheets.getActiveWorksheet();
-    const address = "A2:B19";
+    const address = "A2:B20";
     const range = worksheet.getRange(address);
     range.load(["values", "rowCount", "columnCount"]);
 
@@ -1080,16 +1134,18 @@ function setDefaultValues() {
   outputLabelsInput.checked = true;
   const chartDataRangeInput = document.getElementById("chart-data-range") as HTMLInputElement;
   chartDataRangeInput.value = "AP61";
+  const concordanceOutputCell = document.getElementById("concordance-output") as HTMLInputElement;
+  concordanceOutputCell.value = "C176";
 
   // Imprecision
   const factorARngInput = document.getElementById("p-days-range") as HTMLInputElement;
-  factorARngInput.value = "B295:B319";
+  factorARngInput.value = "B300:B324";
   const factorBRngInput = document.getElementById("p-runs-range") as HTMLInputElement;
-  factorBRngInput.value = "C295:C319";
+  factorBRngInput.value = "C300:C324";
   const resultsRngInput = document.getElementById("p-results-range") as HTMLInputElement;
-  resultsRngInput.value = "D295:G319";
+  resultsRngInput.value = "D300:G324";
   const pOutputRangeInput = document.getElementById("p-output-range") as HTMLInputElement;
-  pOutputRangeInput.value = "AD294";
+  pOutputRangeInput.value = "W299";
 }
 
 function regressionMethodChanged() {
