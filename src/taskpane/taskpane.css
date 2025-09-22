@@ -135,3 +135,16 @@ fluent-accordion-item div.panel {
   padding: 12px 10px 12px;
   margin: 3px 0 3px;
 }
+
+/* Table Borders */
+table, th, td {
+  border: 1px solid black; /* Sets a 1px solid black border for all table elements */
+}
+
+table {
+  border-collapse: collapse; /* Collapses adjacent cell borders into a single border */
+}
+
+.section-title {
+    font-weight: bold;
+}

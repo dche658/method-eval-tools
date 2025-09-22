@@ -124,6 +124,11 @@
                 </fluent-text-field>
               </div>
               <div class="mt-3">
+                  <fluent-checkbox id="output-labels" title="Add labels to the results"
+                    checked>Label output</fluent-checkbox
+                  >
+                </div>
+              <div class="mt-3">
                 <span class="ms-font-m">Regression Method</span>
                 <fluent-select id="regression-method">
                   <fluent-option value="paba">Passing-Bablok</fluent-option>
@@ -152,13 +157,11 @@
                 </fluent-text-field>
               </div>
               <div class="mt-3">
-                <span class="ms-font-m">Output Options</span>
                 <div>
-                  <fluent-checkbox id="output-labels" title="Add labels to the results"
-                    >Label output</fluent-checkbox
-                  >
-                </div>
-                <div>
+                  <hr />
+                  <div>
+                    <span class="section-title ms-fontColor-themePrimary">Charts</span>
+                  </div>
                   <fluent-text-field
                     id="bland-altman-range"
                     title="Cells over which to plot the Bland-Altman chart."
@@ -396,24 +399,8 @@
           </div>
         </fluent-accordion-item>
         <fluent-accordion-item>
-          <span slot="heading">About</span>
+          <span slot="heading">Set Defaults</span>
           <div class="panel ms-font-m">
-            <p>
-              The purpose of this add-in is to provide some statistical procedures that are
-              necessary for assessing clinical laboratory methods but are not easy to implement
-              using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
-              statistical analysis tool. The current interation allows the user to perform linear
-              regression techniques including Passing-Bablok, Deming, and Weighted Deming.
-              Procedures are also provide to allow users to analyse variance components as described
-              in CLSI EP15 and EP05.
-            </p>
-            <p>
-              The source code is available on GitHub at
-              <a href="https://github.com/dche658/method-eval-tools">
-                https://github.com/dche658/method-eval-tools </a
-              >.
-            </p>
-
             <div class="mt-3">
               <p>
                 This add in was developed for use with the associated Method Verification Workbook.
@@ -421,13 +408,27 @@
                 below.
               </p>
               <fluent-button id="load-defaults-btn" class="ms-fontColor-themePrimary"
-                >Populate for MVW</fluent-button
+                >Set MVW Defaults</fluent-button
               >
               <p>
-                Alternatively, the defaults can be loaded from a worksheet from cells A2:B18. Having
-                the following format. The attributes in the left column must not be changed.
+                Alternatively, the defaults for a user defined template can defined in a worksheet
+                and loaded from that page. The definitions need to be supplied in two columns from
+                cells A2:B20. The first column should give the name of the attribute as it appears
+                below. The second column must contain the values to be copied. A1 and B1 can be 
+                column headers but they are not read.
               </p>
+              <fluent-button id="load-wb-def-btn" 
+              class="ms-fontColor-themePrimary">Set Custom Defaults</fluent-button
+              >
+              <div class="mt-3">
               <table>
+                <thead>
+                  <tr>
+                    <th>Attribute</th>
+                    <th>Value</th>
+                  </tr>
+                </thead>
+                <tbody>
                 <tr>
                   <td>import-aps</td>
                   <td>TRUE</td>
@@ -454,11 +455,11 @@
                 </tr>
                 <tr>
                   <td>regression-method</td>
-                  <td>paba</td>
+                  <td>paba, deming, or wdeming</td>
                 </tr>
                 <tr>
                   <td>confidence-interval-method</td>
-                  <td>default</td>
+                  <td>default or bootstrap</td>
                 </tr>
                 <tr>
                   <td>use-calculated-error-ratio</td>
@@ -504,11 +505,35 @@
                   <td>concordance-output</td>
                   <td>C176</td>
                 </tr>
+                </tbody>
               </table>
-              <fluent-button id="load-wb-def-btn" class="ms-fontColor-themePrimary"
-                >Load from Workbook</fluent-button
-              >
+              </div>
             </div>
+          </div>
+        </fluent-accordion-item>
+        <fluent-accordion-item>
+          <span slot="heading">About</span>
+          <div class="panel ms-font-m">
+            <p>
+              The purpose of this add-in is to provide some statistical procedures that are
+              necessary for assessing clinical laboratory methods but are not easy to implement
+              using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
+              statistical analysis tool. The current interation allows the user to perform linear
+              regression techniques including Passing-Bablok, Deming, and Weighted Deming.
+              Procedures are also provided to allow users to analyse variance components as described
+              in CLSI EP15 and EP05.
+            </p>
+            <p>
+              Source code is available on GitHub at
+              <a href="https://github.com/dche658/method-eval-tools">
+                https://github.com/dche658/method-eval-tools </a
+              >.
+            </p>
+            <p>
+              THIS CODE IS PROVIDED AS IS WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR 
+              IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE,
+              MERCHANTABILITY, OR NON-INFRINGEMENT.
+            </p>
           </div>
         </fluent-accordion-item>
       </fluent-accordion>
