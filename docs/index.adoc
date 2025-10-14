@@ -141,7 +141,7 @@ Run the following command to confirm the npm settings
 npm config list
 ----
 
-In many cases if you run 'npm install' at this point you will get and untrusted 
+In many cases if you run 'npm install' at this point you will get an untrusted 
 certificate error. This often occurs because your organisation uses its own
 Certificate Authority. To get around this you will need to either get root
 certificate from your IT department, export it from your web browser, or run
@@ -168,7 +168,7 @@ npm config set registry="http://registry.npmjs.org/"
 == Using the Add-in
 
 If the add-in is loaded correctly, you should see a new entry in the Home tab
-of the Excel ribbon called "Method Evaluation Tools". Clicking on this will 
+of the Excel ribbon called "ME Tools". Clicking on the "Basic Tools" button will 
 toggle the taskpane on the right-hand side of the Excel window.
 
 .Taskpane
