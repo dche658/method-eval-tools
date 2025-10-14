@@ -554,10 +554,10 @@ https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Confidence_Inter
 
 Consider the contingency table:
 
-[width=50%]
+[cols="3s,^3,^3,^3,^3,^3",width=50%]
 |===
-|       4+| Rater B                    | 
-| Rater A | 1     | 2     | ... | k     | Total
+|       4+| *Rater B*                   | 
+| Rater A | *1*   | *2*  | *...* | *k*  | *Total*
 | 1       | p~11~ | p~12~ | ... | p~1k~ | p~1.~
 | 2       | p~21~ | p~22~ | ... | p~2k~ | p~2.~
 | ...     | ...   | ...   | ... | ...   | ...
@@ -565,8 +565,8 @@ Consider the contingency table:
 | Total   | p~.1~ | p~.2~ | ... | p~.k~ | 1
 |===
 
-Let stem:[p_{ij}] be the proportion of subjects placed in the __i,j__th cell, and the proportion is
-simply calculated as the tabulated value divided by the total. Let
+Let stem:[p_{ij}] be the proportion of subjects placed in the __i,j__th cell, where the proportion is
+simply calculated as the tabulated value divided by the grand total. Let
 
 stem:[p_{i.}=\sum_{j=1}^{k}p_{ij}]
 

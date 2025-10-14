@@ -459,6 +459,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_one_way_analysis_calculations">One Way Analysis Calculations</a></li>
 <li><a href="#_two_way_analysis_calculations">Two Way Analysis Calculations</a></li>
+<li><a href="#_cohens_kappa">Cohen&#8217;s Kappa</a></li>
 </ul>
 </li>
 </ul>
@@ -1380,12 +1381,141 @@ where \$\chi_{\frac{\alpha}{2}}^2\$ is the quantile corresponding to alpha/2 con
 with DF degrees of freedom</p>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_cohens_kappa">Cohen&#8217;s Kappa</h3>
+<div class="paragraph">
+<p>These were sourced from:</p>
+</div>
+<div class="paragraph">
+<p>Fleiss, J.L., Cohen, J., and Everitt, B.S. 1969. 'Large Sample Standard Errors of Kappa and Weighted Kappa'.
+Psychological Bulletin. Vol. 72, No. 5, 323-327.</p>
+</div>
+<div class="paragraph">
+<p>NSCC Statistical Software. PASS 2025 Documentation. Kappa Rater Agreement: Confidence Intervals for Kappa.
+<a href="https://www.ncss.com/software/pass/pass-documentation/" class="bare">https://www.ncss.com/software/pass/pass-documentation/</a>. Accessed: 14/10/2025.<br>
+<a href="https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Confidence_Intervals_for_Kappa.pdf" class="bare">https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Confidence_Intervals_for_Kappa.pdf</a></p>
+</div>
+<div class="paragraph">
+<p>Consider the contingency table:</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top" colspan="4"><p class="tableblock"><strong>Rater B</strong></p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Rater A</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>1</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>2</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>&#8230;&#8203;</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>k</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>Total</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>11</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>12</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>1k</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>1.</sub></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>21</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>22</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>2k</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>2.</sub></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>&#8230;&#8203;</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>k</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>k1</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>k2</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>kk</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>k.</sub></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Total</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>.1</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>.2</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>.k</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Let \$p_{ij}\$ be the proportion of subjects placed in the <em>i,j</em>th cell, where the proportion is
+simply calculated as the tabulated value divided by the grand total. Let</p>
+</div>
+<div class="paragraph">
+<p>\$p_{i.}=\sum_{j=1}^{k}p_{ij}\$</p>
+</div>
+<div class="paragraph">
+<p>the proportion of subject placed in the <em>i</em>th row, and let</p>
+</div>
+<div class="paragraph">
+<p>\$p_{.j}=\sum_{i=1}^{k}p_{ij}\$</p>
+</div>
+<div class="paragraph">
+<p>the proportion of subjects placed in the <em>j</em>th column.</p>
+</div>
+<div class="paragraph">
+<p>The observed agreement is given by:</p>
+</div>
+<div class="paragraph">
+<p>\$p_{o}=\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}\$</p>
+</div>
+<div class="paragraph">
+<p>The expected agreement is given by:</p>
+</div>
+<div class="paragraph">
+<p>\$p_{e}=\sum_{i=1}^{k}\sum_{j=1}^{k}p_{i.}p_{.j}\$</p>
+</div>
+<div class="paragraph">
+<p>Kappa is defined as:</p>
+</div>
+<div class="paragraph">
+<p>\$\kappa=\frac{p_{o}-p_{e}}{1-p_{e}}\$</p>
+</div>
+<div class="paragraph">
+<p>The estimated sample variance is given by:</p>
+</div>
+<div class="paragraph">
+<p>\$Var(\kappa)=\frac{1}{N(1-p_{e})^{4}}\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}\$</p>
+</div>
+<div class="paragraph">
+<p>therefore the estimated standard deviation is:</p>
+</div>
+<div class="paragraph">
+<p>\$SD(\kappa)=\frac{1}{(1-p_{e})^{2}}\sqrt{\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}}\$</p>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-14 12:13:55 01000
+Last updated 2025-10-14 15:57:43 01000
 </div>
 </div>
 <script type="text/x-mathjax-config">
