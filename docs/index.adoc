@@ -256,8 +256,11 @@ based on the defaults in the workbook.
 
 ==== Concordance
 
-Diagnostic concordance between two methods that are being compared is assessed by setting the
-diagnostic thresholds for each method and using those to calculate a Cohen's Kappa statistic.
+Concordance can be assessed in one of two ways. The first relates to analytical methods that 
+produce quantitative results. Under these circumstances, the 
+diagnostic concordance between two methods that are being compared is assessed by setting the
+diagnostic thresholds to define the result categories for each method and then 
+using those to calculate a Cohen's Kappa statistic.
 
 The number of diagostic thresholds for the two methods must be the same although the 
 thresholds themselves may be different for the two methods. For example a reference
@@ -267,6 +270,24 @@ thresholds of 32 and 64 respectively for the same diagnostic outcome.
 
 Again, it is necessary to select the top left cell in the worksheet where the contingency table
 and resultant statistics will be saved.
+
+The second way is for laboratory methods that produce qualitative or ordinal results. These
+are analysed in a separate section for Qualitative Comparisons. The comparison data must be
+listed in two columns and use the same labels.
+
+.Arrangement of Qualitative Data
+[options="header", width=30%]
+|===
+| Method A | Method B
+| Positive | Positive
+| Positive | Equivocal
+| Positive | Negative
+| Equivocal | Positive
+| Equivocal | Equivocal
+| Equivocal | Negative
+| Negative | Positive
+| Negative | Negative
+|===
 
 === Analysing Imprecision
 
@@ -281,7 +302,7 @@ An example of the recommended layout is shown in the table below where triplicat
 measurements have been made in each run with two runs per day over two days.
 Verification studies will generally only involve a single run each day.
 
-.Arrangement of Data
+.Arrangement of Imprecision Data
 [options="header", width=50%]
 |===
 | Day   | Run   | Level 1 | Level 2
@@ -519,4 +540,60 @@ with DF degrees of freedom
 stem:[LCL=S\times \sqrt{\frac{DF}{\chi_{\frac{\alpha}{2}}^{2},DF}}] : lower confidence limit 
 where stem:[\chi_{\frac{\alpha}{2}}^2] is the quantile corresponding to alpha/2 confidence
 with DF degrees of freedom
+
+=== Cohen's Kappa
+
+These were sourced from:
+
+Fleiss, J.L., Cohen, J., and Everitt, B.S. 1969. 'Large Sample Standard Errors of Kappa and Weighted Kappa'.
+Psychological Bulletin. Vol. 72, No. 5, 323-327.
+
+NSCC Statistical Software. PASS 2025 Documentation. Kappa Rater Agreement: Confidence Intervals for Kappa.
+https://www.ncss.com/software/pass/pass-documentation/. Accessed: 14/10/2025. +
+https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Confidence_Intervals_for_Kappa.pdf
+
+Consider the contingency table:
+
+[width=50%]
+|===
+|       4+| Rater B                    | 
+| Rater A | 1     | 2     | ... | k     | Total
+| 1       | p~11~ | p~12~ | ... | p~1k~ | p~1.~
+| 2       | p~21~ | p~22~ | ... | p~2k~ | p~2.~
+| ...     | ...   | ...   | ... | ...   | ...
+| k       | p~k1~ | p~k2~ | ... | p~kk~ | p~k.~
+| Total   | p~.1~ | p~.2~ | ... | p~.k~ | 1
+|===
+
+Let stem:[p_{ij}] be the proportion of subjects placed in the __i,j__th cell, and the proportion is
+simply calculated as the tabulated value divided by the total. Let
+
+stem:[p_{i.}=\sum_{j=1}^{k}p_{ij}]
+
+the proportion of subject placed in the __i__th row, and let
+
+stem:[p_{.j}=\sum_{i=1}^{k}p_{ij}]
+
+the proportion of subjects placed in the __j__th column.
+
+The observed agreement is given by:
+
+stem:[p_{o}=\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}]
+
+The expected agreement is given by:
+
+stem:[p_{e}=\sum_{i=1}^{k}\sum_{j=1}^{k}p_{i.}p_{.j}]
+
+Kappa is defined as:
+
+stem:[\kappa=\frac{p_{o}-p_{e}}{1-p_{e}}]
+
+
+The estimated sample variance is given by:
+
+stem:[Var(\kappa)=\frac{1}{N(1-p_{e})^{4}}\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}]
+
+therefore the estimated standard deviation is:
+
+stem:[SD(\kappa)=\frac{1}{(1-p_{e})^{2}}\sqrt{\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}}]
 

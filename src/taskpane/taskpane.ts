@@ -43,7 +43,10 @@ import {
 import {
   ExcelBlandAltmanChart, ExcelRegressionChart
 } from "../charts";
-import { ContingencyTableBuilder, ConcordanceCalculator } from "../concordance";
+import {
+  ContingencyTableBuilder, QualitativeContengencyTableBuilder,
+  ConcordanceCalculator
+} from "../concordance";
 
 /* global console, document, Excel, Office */
 
@@ -79,6 +82,13 @@ Office.onReady((info) => {
     document.getElementById("select-p-output-range").onclick = () =>
       tryCatch(selectPrecisionOutputRange);
     document.getElementById("run-precision").onclick = () => tryCatch(runANOVA);
+
+    // Qualitative data comparison
+    document.getElementById("select-qx-range").onclick = () => tryCatch(selectQualXRange);
+    document.getElementById("select-qy-range").onclick = () => tryCatch(selectQualYRange);
+    document.getElementById("select-q-output-range").onclick = () => tryCatch(selectQualOutputRange);
+    document.getElementById("qual-comparison").onclick = () => tryCatch(qualComparison);
+
 
     // Load MVW default ranges
     document.getElementById("load-defaults-btn").onclick = () => tryCatch(setDefaultValues);
@@ -479,6 +489,101 @@ async function selectChartDataRange() {
     await context.sync();
     const chartDataRangeInput = document.getElementById("chart-data-range") as HTMLInputElement;
     chartDataRangeInput.value = range.address;
+  });
+}
+
+// Select the range containing the qualitative X data
+async function selectQualXRange() {
+  await Excel.run(async (context) => {
+    const range = context.workbook.getSelectedRange();
+    range.load("address");
+    await context.sync();
+    const r = document.getElementById("qx-range") as HTMLInputElement;
+    r.value = range.address;
+  });
+}
+
+// Select the range containing the qualitative X data
+async function selectQualYRange() {
+  await Excel.run(async (context) => {
+    const range = context.workbook.getSelectedRange();
+    range.load("address");
+    await context.sync();
+    const r = document.getElementById("qy-range") as HTMLInputElement;
+    r.value = range.address;
+  });
+}
+
+// Select the output range for the qualitative comparison results
+async function selectQualOutputRange() {
+  await Excel.run(async (context) => {
+    const range = context.workbook.getSelectedRange();
+    range.load("address");
+    await context.sync();
+    const r = document.getElementById("q-output-range") as HTMLInputElement;
+    r.value = range.address;
+  });
+}
+
+// Run the qualitative data comparison
+async function qualComparison() {
+  await Excel.run(async (context) => {
+    const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
+    const xRngInput = document.getElementById("qx-range") as HTMLInputElement;
+    const yRngInput = document.getElementById("qy-range") as HTMLInputElement;
+    const outputRangeInput = document.getElementById("q-output-range") as HTMLInputElement;
+    const xRng: string = xRngInput.value;
+    const yRng: string = yRngInput.value;
+    const outputRange: string = outputRangeInput.value;
+
+    // Load the ranges
+    const xRange = currentWorksheet.getRange(xRng);
+    const yRange = currentWorksheet.getRange(yRng);
+    xRange.load(["rowCount", "columnCount", "values"]);
+    yRange.load(["rowCount", "columnCount", "values"]);
+    await context.sync();
+
+    if (xRange.rowCount !== yRange.rowCount) {
+      throw new Error("X and Y ranges must have the same number of rows");
+    }
+    let x: string[] = [];
+    let y: string[] = [];
+    for (let i = 0; i < xRange.rowCount; i++) {
+      if (xRange.values[i][0] !== null && xRange.values[i][0] !== "") {
+        if (typeof xRange.values[i][0] === "string") {
+          x.push(xRange.values[i][0]);
+        } else if (typeof xRange.values[i][0] === "number") {
+          x.push(xRange.values[i][0].toString());
+        }
+      }
+      if (yRange.values[i][0] !== null && yRange.values[i][0] !== "") {
+        if (typeof yRange.values[i][0] === "string") {
+          y.push(yRange.values[i][0]);
+        } else if (typeof yRange.values[i][0] === "number") {
+          y.push(yRange.values[i][0].toString());
+        }
+      }
+    }
+    if (x.length !== y.length) {
+      throw new Error("X and Y ranges must have the same number of rows");
+    }
+    const contingencyBuilder = new QualitativeContengencyTableBuilder();
+    const contingencyTable = contingencyBuilder.build(x, y);
+    const concordanceCalculator = new ConcordanceCalculator(contingencyTable);
+    const concordanceResults = concordanceCalculator.calculate();
+    //to-do: copy to Excel
+    const concordanceCell = document.getElementById("q-output-range") as HTMLInputElement;
+    if (concordanceCell.value === "") {
+      throw Error("Please select the concordance output range.");
+    } else {
+      const concordanceRange = currentWorksheet.getRange(concordanceCell.value);
+      const contingencyRange = concordanceRange.getAbsoluteResizedRange(contingencyTable.table.length, contingencyTable.table[0].length);
+      contingencyRange.values = contingencyTable.table;
+      const offset = Math.max(8, contingencyTable.table.length + 1)
+      const cohenRange = concordanceRange.getOffsetRange(offset, 0).getAbsoluteResizedRange(6, 2);
+      cohenRange.values = concordanceCalculator.formatResultsAsArray(concordanceResults);
+      await context.sync();
+    }
   });
 }
 
@@ -1070,7 +1175,7 @@ async function selectConcordanceOutputRange() {
 async function loadWorkbookDefaults() {
   await Excel.run(async (context) => {
     const worksheet = context.workbook.worksheets.getActiveWorksheet();
-    const address = "A2:B20";
+    const address = "A2:B23";
     const range = worksheet.getRange(address);
     range.load(["values", "rowCount", "columnCount"]);
 
@@ -1146,6 +1251,14 @@ function setDefaultValues() {
   resultsRngInput.value = "D300:G324";
   const pOutputRangeInput = document.getElementById("p-output-range") as HTMLInputElement;
   pOutputRangeInput.value = "W299";
+
+  // concordance of qualitative data
+  const qxRngInput = document.getElementById("qx-range") as HTMLInputElement;
+  const qyRngInput = document.getElementById("qy-range") as HTMLInputElement;
+  const qOutInput = document.getElementById("q-output-range") as HTMLInputElement;
+  qxRngInput.value = "E61:E160";
+  qyRngInput.value = "H61:H160";
+  qOutInput.value = "C176";
 }
 
 function regressionMethodChanged() {

@@ -29,21 +29,7 @@ class ContingencyTableBuilder {
         // console.log(xLabels);
         // console.log(yLabels);
         // console.log(values);
-        let table: (string | number)[][] = new Array<(string | number)[]>(values.length + 1);
-        for (let i = 0; i < values.length + 1; i++) {
-            table[i] = new Array<(string | number)>(values[0].length + 1); //create the row
-            for (let j = 0; j < values[0].length + 1; j++) {
-                if (i === 0 && j === 0) {
-                    table[i][j] = "";
-                } else if (i === 0) {
-                    table[i][j] = yLabels[j - 1];
-                } else if (j === 0) {
-                    table[i][j] = xLabels[i - 1];
-                } else {
-                    table[i][j] = values[i - 1][j - 1];
-                }
-            }
-        }
+        const table = formatContingencyTable(values, xLabels, yLabels);
         return {
             values: values,
             xLabels: xLabels,
@@ -102,6 +88,61 @@ interface ConcordanceResults {
     ucl: number,
 }
 
+// Sum matrix by row or col
+function sum(matrix: number[][], by: string): number[] {
+    const sums: number[] = new Array(matrix.length).fill(0);
+    if (by === "row") {
+        for (let i = 0; i < matrix.length; i++) {
+            sums[i] = matrix[i].reduce((sum, val) => sum + val, 0);
+        }
+    } else if (by === "col") {
+        for (let i = 0; i < matrix.length; i++) {
+            for (let j = 0; j < matrix[i].length; j++) {
+                sums[j] += matrix[i][j];
+            }
+        }
+    }
+    return sums;
+}
+
+function formatContingencyTable(values: number[][], xLabels: string[], yLabels: string[]): (string | number)[][] {
+    const rowSums = sum(values, "row");
+    const colSums = sum(values, "col");
+    let table: (string | number)[][] = new Array<(string | number)[]>(values.length + 2);
+    for (let i = 0; i < values.length + 1; i++) {
+        table[i] = new Array<(string | number)>(values[0].length + 2); //create the row
+        for (let j = 0; j < values[0].length + 1; j++) {
+            if (i === 0 && j === 0) {
+                table[i][j] = "";
+            } else if (i === 0) {
+                table[i][j] = yLabels[j - 1];
+            } else if (j === 0) {
+                table[i][j] = xLabels[i - 1];
+            } else {
+                table[i][j] = values[i - 1][j - 1];
+            }
+        }
+    }
+    //add last row
+    table[table.length - 1] = new Array<(string | number)>(values[0].length + 2)
+    //console.log(table);
+
+    // Add row sums
+    table[0][table[0].length - 1] = "Total";
+    for (let row = 1; row < table.length-1; row++) {
+        table[row][table[row].length-1] = rowSums[row-1];
+    }
+    // Add column sums
+    table[table.length-1][0] = "Total";
+    for (let col = 1; col < table[0].length-1; col++) {
+        table[table.length-1][col] = colSums[col-1];
+    }
+    // Add total
+    table[table.length-1][table[table.length-1].length-1] = colSums.reduce((sum, val) => sum + val, 0);
+    return table;
+}
+
+
 class ConcordanceCalculator {
     private table: ContingencyTable;
     private alpha: number;
@@ -125,6 +166,7 @@ class ConcordanceCalculator {
             };
         }
 
+        // Calculate proportions
         const p = [...(this.table.values)];
         for (let i = 0; i < p.length; i++) {
             p[i] = [...this.table.values[i]]
@@ -144,8 +186,8 @@ class ConcordanceCalculator {
         let expectedAgreement = 0;
         const rowSums: number[] = new Array(this.table.values.length).fill(0);
         const colSums: number[] = new Array(this.table.values[0].length).fill(0);
-        const p_i: number[] = new Array(p.length).fill(0); //row sum for proportions
-        const p_j: number[] = new Array(p[0].length).fill(0) //column sum for proportions
+        const p_i: number[] = new Array(p.length).fill(0); //row sum for proportions p_{i.}
+        const p_j: number[] = new Array(p[0].length).fill(0) //column sum for proportions p_{.i}
 
         for (let i = 0; i < this.table.values.length; i++) {
             for (let j = 0; j < this.table.values[i].length; j++) {
@@ -178,8 +220,8 @@ class ConcordanceCalculator {
         }
 
         //
-        let sdKappa = (1 / Math.pow(1 - expectedAgreement, 2)) * Math.sqrt((Math.pow(1 - overallAgreement, 2) * sumPij + sumPii) -
-            Math.pow(overallAgreement * expectedAgreement - 2 * expectedAgreement + overallAgreement, 2));
+        let sdKappa = (1 / Math.pow(1 - expectedAgreement, 2)) * (Math.sqrt((Math.pow(1 - overallAgreement, 2) * sumPij + sumPii) -
+            Math.pow(overallAgreement * expectedAgreement - 2 * expectedAgreement + overallAgreement, 2)));
         let seKappa = sdKappa / Math.sqrt(n);
 
         let zCrit = normal.inv(1 - this.alpha / 2, 0, 1);
@@ -205,7 +247,53 @@ class ConcordanceCalculator {
         ];
         return arr;
     }
-        
+
 }
 
-export { ContingencyTableBuilder, ConcordanceCalculator };
+class QualitativeContengencyTableBuilder {
+    build(x: (string | number)[], y: (string | number)[]): ContingencyTable {
+        const categories = this.getCategories(x, y);
+        // initialize contingency table counts to zero
+        const values: number[][] = new Array<number[]>(categories.length);
+        for (let row = 0; row < categories.length; row++) {
+            values[row] = new Array<number>(categories.length);
+            for (let col = 0; col < categories.length; col++) {
+                values[row][col] = 0;
+            }
+        }
+        // tabulate data
+        for (let i = 0; i < x.length; i++) {
+            const rowIndex = categories.indexOf(x[i].toString());
+            const colIndex = categories.indexOf(y[i].toString());
+            values[rowIndex][colIndex]++;
+        }
+
+        const table = formatContingencyTable(values, categories, categories);
+
+        return {
+            values: values,
+            xLabels: categories,
+            ylabels: categories,
+            table: table,
+        }
+    }
+
+    getCategories(x: (string | number)[], y: (string | number)[]): string[] {
+        const categories = new Set<string>();
+        for (let i = 0; i < x.length; i++) {
+            categories.add(x[i].toString());
+        }
+        for (let i = 0; i < y.length; i++) {
+            categories.add(y[i].toString());
+        }
+        return Array.from(categories);
+    }
+}
+
+export {
+    ContingencyTableBuilder,
+    QualitativeContengencyTableBuilder,
+    ConcordanceCalculator,
+    sum,
+    formatContingencyTable,
+};

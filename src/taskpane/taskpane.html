@@ -399,7 +399,58 @@
           </div>
         </fluent-accordion-item>
         <fluent-accordion-item>
-          <span slot="heading">Set Defaults</span>
+          <span slot="heading">Qualitative Comparison</span>
+          <div class="panel ms-font-m">
+            <div class="container">
+              <div>
+                Assess concordance of qualitative data and calculate Cohen's Kappa.
+              </div>
+              <div>
+                <fluent-text-field id="qx-range" title="Cells containing the reference method results.">
+                  <div class="range-label">
+                    <span>X Range</span>
+                    <i
+                      id="select-qx-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div>
+                <fluent-text-field id="qy-range" title="Cells containing the test method results.">
+                  <div class="range-label">
+                    <span>Y Range</span>
+                    <i
+                      id="select-qy-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div>
+                <fluent-text-field id="q-output-range" title="Top-left cell for outputting results.">
+                  <div class="range-label">
+                    <span>Output Range</span>
+                    <i
+                      id="select-q-output-range"
+                      class="ms-Icon ms-font-xl ms-Icon--OEM"
+                      title="Click to enter the address of the selected cells."
+                    ></i>
+                  </div>
+                </fluent-text-field>
+              </div>
+              <div class="mt-3">
+                <fluent-button id="qual-comparison" class="ms-fontColor-themePrimary"
+                  >Run</fluent-button
+                >
+              </div>
+            </div>
+          </div>
+        </fluent-accordion-item>
+        <fluent-accordion-item>
+          <span slot="heading">Set Range Defaults</span>
           <div class="panel ms-font-m">
             <div class="mt-3">
               <p>
@@ -503,6 +554,18 @@
                 </tr>
                 <tr>
                   <td>concordance-output</td>
+                  <td>C176</td>
+                </tr>
+                <tr>
+                  <td>qx-range</td>
+                  <td>E61:E160</td>
+                </tr>
+                <tr>
+                  <td>qy-range</td>
+                  <td>H61:H160</td>
+                </tr>
+                <tr>
+                  <td>q-output-range</td>
                   <td>C176</td>
                 </tr>
                 </tbody>

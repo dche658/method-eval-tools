@@ -869,8 +869,11 @@ based on the defaults in the workbook.
 <div class="sect3">
 <h4 id="_concordance">Concordance</h4>
 <div class="paragraph">
-<p>Diagnostic concordance between two methods that are being compared is assessed by setting the
-diagnostic thresholds for each method and using those to calculate a Cohen&#8217;s Kappa statistic.</p>
+<p>Concordance can be assessed in one of two ways. The first relates to analytical methods that
+produce quantitative results. Under these circumstances, the
+diagnostic concordance between two methods that are being compared is assessed by setting the
+diagnostic thresholds to define the result categories for each method and then
+using those to calculate a Cohen&#8217;s Kappa statistic.</p>
 </div>
 <div class="paragraph">
 <p>The number of diagostic thresholds for the two methods must be the same although the
@@ -883,6 +886,58 @@ thresholds of 32 and 64 respectively for the same diagnostic outcome.</p>
 <p>Again, it is necessary to select the top left cell in the worksheet where the contingency table
 and resultant statistics will be saved.</p>
 </div>
+<div class="paragraph">
+<p>The second way is for laboratory methods that produce qualitative or ordinal results. These
+are analysed in a separate section for Qualitative Comparisons. The comparison data must be
+listed in two columns and use the same labels.</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 30%;">
+<caption class="title">Table 1. Arrangement of Qualitative Data</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method A</th>
+<th class="tableblock halign-left valign-top">Method B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <div class="sect2">
@@ -901,7 +956,7 @@ measurements have been made in each run with two runs per day over two days.
 Verification studies will generally only involve a single run each day.</p>
 </div>
 <table class="tableblock frame-all grid-all" style="width: 50%;">
-<caption class="title">Table 1. Arrangement of Data</caption>
+<caption class="title">Table 2. Arrangement of Imprecision Data</caption>
 <colgroup>
 <col style="width: 25%;">
 <col style="width: 25%;">
@@ -1330,7 +1385,7 @@ with DF degrees of freedom</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-09-22 10:37:54 01000
+Last updated 2025-10-14 12:13:55 01000
 </div>
 </div>
 <script type="text/x-mathjax-config">

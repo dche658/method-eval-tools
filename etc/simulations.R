@@ -122,3 +122,21 @@ summary(reg)
 
 reg = mcreg(x,y, method.reg = "WDeming", method.ci = "jackknife")
 summary(reg)
+
+# Normal data ------------------------------------------------------------
+
+vals <- rnorm(500, 100, 15)
+sex <- c(rep("M",250),rep("F",250))
+age <- c(rep(10,50),
+         rep(20,50),
+         rep(30,50),
+         rep(40,50),
+         rep(50,50),
+         rep(10,50),
+         rep(20,50),
+         rep(30,50),
+         rep(40,50),
+         rep(50,50))
+df <- data.frame(age=age,sex=sex, vals = vals)
+write.csv(df,"norm-data.csv", row.names = FALSE)
+getwd()
