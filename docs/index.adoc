@@ -593,11 +593,11 @@ The estimated sample variance is given by:
 
 stem:[Var(\kappa)=\frac{1}{N(1-p_{e})^{4}}\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}]
 
-therefore the estimated standard deviation is:
+therefore the estimated standard error is:
 
-stem:[SD(\kappa)=\frac{1}{(1-p_{e})^{2}}\sqrt{\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}}]
+stem:[SE(\kappa)=\frac{\sqrt{Var(\kappa)}}{\sqrt{N}}=\frac{1}{(1-p_{e})^{2}}\sqrt{\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}}]
 
 The confidence intervals are then calculated as
 
-stem:[\kappa \pm z_{\alpha/2}SD(\kappa)]
+stem:[\kappa \pm z_{\alpha/2}SE(\kappa)]
 

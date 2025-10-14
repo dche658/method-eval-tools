@@ -1504,16 +1504,16 @@ simply calculated as the tabulated value divided by the grand total. Let</p>
 <p>\$Var(\kappa)=\frac{1}{N(1-p_{e})^{4}}\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}\$</p>
 </div>
 <div class="paragraph">
-<p>therefore the estimated standard deviation is:</p>
+<p>therefore the estimated standard error is:</p>
 </div>
 <div class="paragraph">
-<p>\$SD(\kappa)=\frac{1}{(1-p_{e})^{2}}\sqrt{\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}}\$</p>
+<p>\$SE(\kappa)=\frac{\sqrt{Var(\kappa)}}{\sqrt{N}}=\frac{1}{(1-p_{e})^{2}}\sqrt{\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}}\$</p>
 </div>
 <div class="paragraph">
 <p>The confidence intervals are then calculated as</p>
 </div>
 <div class="paragraph">
-<p>\$\kappa \pm z_{\alpha/2}SD(\kappa)\$</p>
+<p>\$\kappa \pm z_{\alpha/2}SE(\kappa)\$</p>
 </div>
 </div>
 </div>
@@ -1521,7 +1521,7 @@ simply calculated as the tabulated value divided by the grand total. Let</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-10-14 16:21:16 01000
+Last updated 2025-10-14 16:32:28 01000
 </div>
 </div>
 <script type="text/x-mathjax-config">
