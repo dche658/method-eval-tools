@@ -39,6 +39,7 @@ import {
 import {
   OneFactorVarianceAnalysis, TwoFactorVarianceAnalysis,
   OneFactorVariance, TwoFactorVariance,
+  grubbsTest, Outlier,
 } from "../precision";
 import {
   ExcelBlandAltmanChart, ExcelRegressionChart
@@ -82,6 +83,8 @@ Office.onReady((info) => {
     document.getElementById("select-p-output-range").onclick = () =>
       tryCatch(selectPrecisionOutputRange);
     document.getElementById("run-precision").onclick = () => tryCatch(runANOVA);
+    document.getElementById("check-for-outliers").onclick = () => tryCatch(grubbsTestForOutliers);
+
 
     // Qualitative data comparison
     document.getElementById("select-qx-range").onclick = () => tryCatch(selectQualXRange);
@@ -597,6 +600,47 @@ interface DataObject {
   bDict: {};
 }
 
+async function grubbsTestForOutliers() {
+  await Excel.run(async (context) => {
+    const outlierList: {out:Outlier, col:number}[] = [];
+    const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
+    const resultsRngInput = document.getElementById("p-results-range") as HTMLInputElement;
+    const resultsRng = resultsRngInput.value;
+    const rRange = currentWorksheet.getRange(resultsRng);
+    rRange.load(["rowCount", "columnCount", "values"]);
+    await context.sync();
+
+    //check for outliers for each column
+    for (let i = 0; i < rRange.columnCount; i++) {
+      let results: number[] = [];
+      for (let j = 0; j < rRange.rowCount; j++) {
+        if (typeof rRange.values[j][i] == "number") {
+          results.push(rRange.values[j][i]);
+        }
+      }
+      if (results.length > 0) {
+        const outlier = grubbsTest(results);
+        if (outlier.outlier !== undefined && typeof outlier.outlier === "number") {
+          const item = {out: outlier, col: i};
+          outlierList.push(item);
+          const cell = rRange.getCell(outlier.index,i);
+          cell.format.fill.color = "yellow";
+        }
+      }
+    }
+    if (outlierList.length > 0) {
+      let msg = "Outliers found:<br/>";
+      for (let i = 0; i < outlierList.length; i++) {
+        msg += "Row: " + outlierList[i].out.index +", Col: " + (outlierList[i].col + 1) + ", Value: " + outlierList[i].out.outlier + "<br/>";
+      }
+      displayMessage(msg, "info");
+    } else {
+      displayMessage("No outliers found.", "info");
+    }
+    await context.sync();
+  });
+}
+
 interface PrecisionData {
   numLevels: number;
   data: DataObject[];
@@ -1012,11 +1056,20 @@ async function tryCatch(callback) {
     // Log the error to the console
     console.error(error);
     // Display the error in a message box
+    displayMessage(error.message);
+    // const msgbox = document.getElementById("msgbox");
+    // const msgboxContent = document.getElementById("msgbox-content");
+    // msgbox.style.display = "block";
+    // msgboxContent.innerHTML = error.message;
+  }
+}
+
+function displayMessage(message: string, type="error") {
+  // Display the error in a message box
     const msgbox = document.getElementById("msgbox");
     const msgboxContent = document.getElementById("msgbox-content");
     msgbox.style.display = "block";
-    msgboxContent.innerHTML = error.message;
-  }
+    msgboxContent.innerHTML = message;
 }
 
 /** Create Bland Altman Chart */

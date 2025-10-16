@@ -1,6 +1,6 @@
 /* npm install -D typescript jest ts-jest @types/jest @types/node
  */
-import { TwoFactorNestedAnova, TwoFactorVarianceAnalysis, TwoFactorVariance } from '../src/precision';
+import { TwoFactorNestedAnova, TwoFactorVarianceAnalysis, TwoFactorVariance, grubbsTest, Outlier } from '../src/precision';
 
 const days = ["Day 1", "Day 1", "Day 1", "Day 1", "Day 2", "Day 2", "Day 2", "Day 2",
     "Day 3", "Day 3", "Day 3", "Day 3", "Day 4", "Day 4", "Day 4", "Day 4",
@@ -111,4 +111,20 @@ test('TwoFactorVarianceAnalysis with unbalanced data', () => {
     values2.splice(6,2);
     const twoFactorVarianceAnalysis = new TwoFactorVarianceAnalysis(days2, runs2, values2, 0.05);
     expect(() => twoFactorVarianceAnalysis.calculate()).toThrow(Error);
+});
+
+test("Grubb's test with outlier", () => {
+    const data = [242,246,245,246,243,242,238,238,247,239,241,240,249,241,250,245,246,242,243,240,244,245,270,247,241];
+    let outlier: Outlier = grubbsTest(data);
+    expect(outlier.gCrit).toBeCloseTo(3.135, 3);
+    expect(outlier.outlier).toBe(270);
+    expect(outlier.index).toBe(22);
+});
+
+test("Grubb's test without outliers", () => {
+    const data = [242,246,245,246,243,242,238,238,247,239,241,240,249,241,250,245,246,242,243,240,244,245,250,247,241];
+    let outlier: Outlier = grubbsTest(data);
+    expect(outlier.gCrit).toBe(undefined);
+    expect(outlier.outlier).toBe(undefined);
+    expect(outlier.index).toBe(undefined);
 });

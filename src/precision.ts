@@ -12,7 +12,7 @@
  * limit.
  */
 
-const { mean, chisquare } = require('jstat-esm');
+const { mean, stdev, chisquare, studentt } = require('jstat-esm');
 
 /* Class to perform one factor anova
  * Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
@@ -545,7 +545,7 @@ export class TwoFactorNestedAnova {
         let groupB = group[key2]; //get factor B group
         if (groupB.length > 1) this.dfE += groupB.length - 1;
         for (let i = 0; i < groupB.length; i++) {
-            this.sse += Math.pow(groupB[i] - mean(groupB), 2);
+          this.sse += Math.pow(groupB[i] - mean(groupB), 2);
         }
       }
     }
@@ -750,7 +750,7 @@ export class TwoFactorVarianceAnalysis {
     // alpha weightings based on degrees of freedom for pooled variance. Probably
     // not right but seems to produce similar results to VCA and CLSI EP05
     const alphaA = anova.nA / (anova.n - 1);//=1 / (anova.nB * anova.nE);
-    const alphaAB = (anova.nB - 1)*anova.nA/(anova.n - 1); //(anova.nE - 1) / (anova.nE * anova.nB);
+    const alphaAB = (anova.nB - 1) * anova.nA / (anova.n - 1); //(anova.nE - 1) / (anova.nE * anova.nB);
     const alphaE = (anova.n - (anova.nA * anova.nB)) / (anova.n - 1); //(anova.nE - 1) / anova.nE;
     const numerator = Math.pow(alphaA * anova.msa + alphaAB * anova.msb + alphaE * anova.mse, 2);
     const denominator1 = Math.pow(alphaA * anova.msa, 2) / anova.dfA;
@@ -811,3 +811,38 @@ export class TwoFactorVarianceAnalysis {
     return lcl;
   }
 } //TwoFactorVarianceAnalysis
+
+
+export interface Outlier {
+  outlier: number | undefined, 
+  index: number | undefined,
+  g: number | undefined, 
+  gCrit: number | undefined
+}
+
+// Function from Wikipedia https://en.wikipedia.org/wiki/Grubbs%27s_test
+export function grubbsTest(data: number[], alpha = 0.01): Outlier {
+  const outlier = { outlier: undefined, index: undefined, g: undefined, gCrit: undefined }
+  const n = data.length;
+  const mean = data.reduce((a, b) => a + b, 0) / n;
+  const t = studentt.inv(1 - alpha / (2 * n), n - 2);
+  const gCrit = ((n - 1) / Math.sqrt(n)) * Math.sqrt(Math.pow(t, 2) / (n - 2 + Math.pow(t, 2)));
+
+  let maxDeltaIndex = 0;
+  let maxDelta = 0;
+  for (let i = 0; i < n; i++) {
+    const delta = Math.abs(data[i] - mean);
+    if (delta > maxDelta) {
+      maxDelta = delta;
+      maxDeltaIndex = i;
+    }
+  }
+  const g = maxDelta / stdev(data);
+  if (g > gCrit) {
+    outlier.outlier = data[maxDeltaIndex];
+    outlier.index = maxDeltaIndex;
+    outlier.g = g;
+    outlier.gCrit = gCrit;
+  }
+  return outlier;
+}
