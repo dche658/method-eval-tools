@@ -612,15 +612,27 @@ async function grubbsTestForOutliers() {
 
     //check for outliers for each column
     for (let i = 0; i < rRange.columnCount; i++) {
-      let results: number[] = [];
+      // array for processing data
+      let results: number[] = []; 
+      // array to keep track of value index on spreadsheet.
+      // needed this to allow for missing values
+      const arr: number[] = [];
+      
       for (let j = 0; j < rRange.rowCount; j++) {
+        // add value to results array only if numeric
         if (typeof rRange.values[j][i] == "number") {
           results.push(rRange.values[j][i]);
         }
+        // add value to arr array
+        arr.push(rRange.values[j][i]);
       }
       if (results.length > 0) {
+        // run grubbs test
         const outlier = grubbsTest(results);
         if (outlier.outlier !== undefined && typeof outlier.outlier === "number") {
+          //In case there a missing values before the outlier
+          const arrIdx = arr.indexOf(outlier.outlier);
+          outlier.index = arrIdx;
           const item = {out: outlier, col: i};
           outlierList.push(item);
           const cell = rRange.getCell(outlier.index,i);
@@ -628,10 +640,11 @@ async function grubbsTestForOutliers() {
         }
       }
     }
+    // display message
     if (outlierList.length > 0) {
       let msg = "Outliers found:<br/>";
       for (let i = 0; i < outlierList.length; i++) {
-        msg += "Row: " + outlierList[i].out.index +", Col: " + (outlierList[i].col + 1) + ", Value: " + outlierList[i].out.outlier + "<br/>";
+        msg += "Row: " + (outlierList[i].out.index + 1) +", Col: " + (outlierList[i].col + 1) + ", Value: " + outlierList[i].out.outlier + "<br/>";
       }
       displayMessage(msg, "info");
     } else {
@@ -1056,7 +1069,7 @@ async function tryCatch(callback) {
     // Log the error to the console
     console.error(error);
     // Display the error in a message box
-    displayMessage(error.message);
+    displayMessage(error.message, "error");
     // const msgbox = document.getElementById("msgbox");
     // const msgboxContent = document.getElementById("msgbox-content");
     // msgbox.style.display = "block";
@@ -1069,6 +1082,12 @@ function displayMessage(message: string, type="error") {
     const msgbox = document.getElementById("msgbox");
     const msgboxContent = document.getElementById("msgbox-content");
     msgbox.style.display = "block";
+    if (type === "error") {
+      msgbox.style.backgroundColor = "#fde7e9";
+    } else if (type === "info") {
+      msgbox.style.backgroundColor = "#faffa4";
+    }
+
     msgboxContent.innerHTML = message;
 }
 
