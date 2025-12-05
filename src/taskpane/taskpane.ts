@@ -48,6 +48,7 @@ import {
   ContingencyTableBuilder, QualitativeContengencyTableBuilder,
   ConcordanceCalculator
 } from "../concordance";
+import { isValidExcelRange } from "../utils";
 
 /* global console, document, Excel, Office */
 
@@ -156,12 +157,32 @@ async function runRegression() {
     const errorRatioInput = document.getElementById("error-ratio") as HTMLInputElement;
     const errorRatioGiven = errorRatioInput.value;
 
+    // Check range validity
+    if (!isValidExcelRange(xRng)) {
+      throw new Error("X range is not a valid Excel range.");
+    }
+    if (!isValidExcelRange(yRng)) {
+      throw new Error("Y range is not a valid Excel range.");
+    }
+    if (!isValidExcelRange(outputRange)) {
+      throw new Error("Output range is not a valid Excel range.");
+    }
+    if (blandAltmanRange !== "" && !isValidExcelRange(blandAltmanRange)) {
+      throw new Error("Bland-Altman range is not a valid Excel range.");
+    }
+    if (scatterPlotRange !== "" && !isValidExcelRange(scatterPlotRange)) {
+      throw new Error("Scatter plot range is not a valid Excel range.");
+    }
+
     let apsAbs = -1;
     let apsRel = -1;
     // Load APS data if importAps is checked
     if (importAps) {
       if (apsAbsInput === "" || apsRelInput === "") {
         throw new Error("Please select the APS absolute and relative ranges.");
+      }
+      if (!isValidExcelRange(apsAbsInput) || !isValidExcelRange(apsRelInput)) {
+        throw new Error("APS absolute or relative range is not a valid Excel range. Uncheck 'Import from Excel' or correct the ranges.");
       }
       // Load the APS data from the ranges
       const apsAbsRange = currentWorksheet.getRange(apsAbsInput);
@@ -200,6 +221,7 @@ async function runRegression() {
     // Load the ranges
     const xRange = currentWorksheet.getRange(xRng);
     const yRange = currentWorksheet.getRange(yRng);
+    let outputRng = currentWorksheet.getRange(outputRange);
     xRange.load(["rowCount", "columnCount", "values"]);
     yRange.load(["rowCount", "columnCount", "values"]);
     await context.sync();
@@ -257,7 +279,7 @@ async function runRegression() {
       }
 
       //Ensure output has two rows and four columns
-      let outputRng = currentWorksheet.getRange(outputRange);
+      
       outputRng.load([`rowCount`, `columnCount`]);
       await context.sync();
       let deltaRows = 2 - outputRng.rowCount;
@@ -538,7 +560,16 @@ async function qualComparison() {
     const xRng: string = xRngInput.value;
     const yRng: string = yRngInput.value;
     const outputRange: string = outputRangeInput.value;
-
+    // Check range validity
+    if (!isValidExcelRange(xRng)) {
+      throw new Error("Concordance X range is not a valid Excel range.");
+    }
+    if (!isValidExcelRange(yRng)) {
+      throw new Error("Concordance Y range is not a valid Excel range.");
+    }
+    if (!isValidExcelRange(outputRange)) {
+      throw new Error("Concordance output range is not a valid Excel range.");
+    }
     // Load the ranges
     const xRange = currentWorksheet.getRange(xRng);
     const yRange = currentWorksheet.getRange(yRng);
@@ -671,6 +702,19 @@ async function runANOVA() {
     const outputRangeInput = document.getElementById("p-output-range") as HTMLInputElement;
     const outputRange = outputRangeInput.value;
     let analysisType = "one-factor";
+
+    if (!isValidExcelRange(factorARng)) {
+      throw new Error("Precision factor A range is not a valid Excel range.");
+    }
+    if (factorBRng !== "" && !isValidExcelRange(factorBRng)) {
+      throw new Error("Precision factor B range is not a valid Excel range.");
+    }
+    if (!isValidExcelRange(resultsRng)) {
+      throw new Error("Precision results range is not a valid Excel range.");
+    }
+    if (!isValidExcelRange(outputRange)) {
+      throw new Error("Precision output range is not a valid Excel range.");
+    }
 
     // Load the ranges
     const aRange = currentWorksheet.getRange(factorARng);
@@ -1103,6 +1147,9 @@ function createBlandAltmanChart(xData, yData, apsAbs, apsRel) {
 
   // Range for chart data
   const chartDataRangeInput = document.getElementById("chart-data-range") as HTMLInputElement;
+  if (!isValidExcelRange(chartDataRangeInput.value)) {
+    throw new Error("Please select a valid Excel cell for the chart data.");
+  }
   const chartDataRange = chartDataRangeInput.value;
   if (chartDataRange === "") {
     throw new Error("Please select the chart data range.");
