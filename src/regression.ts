@@ -109,11 +109,8 @@ interface RegressionModel {
 }
 
 /* Base class for performing regression analysis */
-class Regression {
-  constructor() { }
-  calculate(x: number[], y: number[]): RegressionModel {
-    throw new Error("Method not implemented.");
-  }
+interface Regression {
+  calculate(x: number[], y: number[]): RegressionModel
 }
 
 /* Ordinary Deming Regression
@@ -121,11 +118,10 @@ class Regression {
  * Error ratio is the SD for comparison method to SD of
  * the reference method.
  */
-class DemingRegression extends Regression {
+class DemingRegression implements Regression {
   private errorRatio: number;
 
   constructor(errorRatio = DEFAULT_ERROR_RATIO) {
-    super();
     this.errorRatio = errorRatio;
   }
 
@@ -186,7 +182,7 @@ class DemingRegression extends Regression {
  *
  * Assumes constant CV across the measuring range of the method
  */
-class WeightedDemingRegression extends Regression {
+class WeightedDemingRegression implements Regression {
   private errorRatio: number;
   private iterMax: number;
   private threshold: number;
@@ -201,7 +197,6 @@ class WeightedDemingRegression extends Regression {
     iterMax = DEFAULT_ITER_MAX,
     threshold = DEFAULT_THRESHOLD
   ) {
-    super();
     this.errorRatio = errorRatio;
     this.iterMax = iterMax;
     this.threshold = threshold;
@@ -326,7 +321,7 @@ interface AngleMatrixModel {
   nPos2: number
 }
 
-class PassingBablokRegression extends Regression {
+class PassingBablokRegression implements Regression {
   // Initially based on mcr package for R by Sergej Potapov 2021
   // but only implemented for positively correlated data and to always
   // calculate the non-parametric confidence intervals using the method of Passing and Bablock
@@ -339,7 +334,6 @@ class PassingBablokRegression extends Regression {
   private positiveCorrelated: boolean;
 
   constructor(alpha = DEFAULT_ALPHA, positiveCorrelated = true) {
-    super();
     this.alpha = alpha;
     this.positiveCorrelated = positiveCorrelated;
   }
@@ -680,7 +674,7 @@ class BootstrapConfidenceInterval {
   }
 }
 
-class MethodCompRegression extends Regression {
+class MethodCompRegression implements Regression {
   private regressionMethod: string;
   private errorRatio: number;
   private iterMax: number;
@@ -698,7 +692,6 @@ class MethodCompRegression extends Regression {
     ciMethod: string = CI_METHOD_DEFAULT,
     bootstrapN: number = DEFAULT_BOOTSTRAP_N
   ) {
-    super();
     this.regressionMethod = regressionMethod;
     this.errorRatio = errorRatio;
     this.iterMax = iterMax;

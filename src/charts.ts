@@ -83,7 +83,7 @@ class ExcelBlandAltmanChart {
             );
         }
 
-        const loaData = this.getLimitOfAgreementData(minX, maxX, means, meanDiff, sdDiff);
+        const loaData = this.getLimitOfAgreementData(minX, maxX, meanDiff, sdDiff);
 
         const meanDiffData = this.getMeanDifferenceData(minX, maxX, meanDiff);
 
@@ -110,7 +110,7 @@ class ExcelBlandAltmanChart {
         };
     } // getMeanDifferenceData
 
-    getLimitOfAgreementData(minX: number, maxX: number, means: number[], meanDiff: number, sdDiff: number): {
+    getLimitOfAgreementData(minX: number, maxX: number, meanDiff: number, sdDiff: number): {
         upperLimitXValues: number[][],
         upperLimitYValues: number[][],
         lowerLimitXValues: number[][],

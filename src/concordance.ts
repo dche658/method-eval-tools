@@ -39,6 +39,7 @@ class ContingencyTableBuilder {
     }
 
     getLabels(col: number): string[] {
+        //console.log(this.thresholds);
         let labels: string[] = new Array<string>(this.thresholds.length + 1);
         for (let row = 0; row <= this.thresholds.length; row++) {
             if (row === 0) {

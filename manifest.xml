@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
-  <Id>5f366002-85f4-4596-824e-073593347127</Id>
+  <Id>2fd3ebf4-8c70-447c-9ebe-40fa41f89128</Id>
   <Version>1.0.0</Version>
   <ProviderName>Douglas Chesher</ProviderName>
   <DefaultLocale>en-AU</DefaultLocale>
   <DisplayName DefaultValue="Method Evaluation Tools"/>
-  <Description DefaultValue="Tools for clinical laboratory method evaluation."/>
+  <Description DefaultValue="Tools for clinical laboratory method evaluation"/>
   <IconUrl DefaultValue="https://localhost:3000/assets/icon-32.png"/>
   <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-64.png"/>
   <SupportUrl DefaultValue="https://metools.chesher.id.au/help"/>
   <AppDomains>
-    <AppDomain>https://localhost:3000</AppDomain>
+    <AppDomain>https://metools.chesher.id.au</AppDomain>
   </AppDomains>
   <Hosts>
     <Host Name="Workbook"/>
