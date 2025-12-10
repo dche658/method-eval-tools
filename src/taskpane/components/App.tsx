@@ -16,6 +16,7 @@ import {
   ToastTitle,
   Toast,
   ToastBody,
+  Tooltip,
 } from "@fluentui/react-components";
 
 import {
@@ -714,7 +715,8 @@ const App: React.FC<AppProps> = () => {
               <RangeInput label="Output Range"
                 rangeValue={compOutRangeValue}
                 setRangeValue={setCompOutRangeValue}
-                validationMessage="Must be a valid Excel cell reference. e.g., E1" />
+                validationMessage="Must be a valid Excel cell reference. e.g., E1"
+                tooltipContent="Top left cell where the regression statistics are to be saved." />
               <div className={styles.field}>
                 <label htmlFor={regressionTypeId}>Regression Method:</label>
                 <Select value={regressionType} id={regressionTypeId}
@@ -753,7 +755,8 @@ const App: React.FC<AppProps> = () => {
               <RangeInput label="Bland-Altman Output Range"
                 rangeValue={baRangeValue}
                 setRangeValue={setBaRangeValue}
-                validationMessage="Must be a valid Excel range. e.g., C2:I15" />
+                validationMessage="Must be a valid Excel range. e.g., C2:I15"
+                tooltipContent="Cell range over which the Bland-Altman chart will be displayed" />
               <div className={styles.field}>
                 <label htmlFor="difference-type">Difference Plot Type:</label>
                 <Select value={differencePlotType} id="difference-type"
@@ -765,16 +768,18 @@ const App: React.FC<AppProps> = () => {
               <RangeInput label="Scatter Chart Output Range"
                 rangeValue={scRangeValue}
                 setRangeValue={setScRangeValue}
-                validationMessage="Must be a valid Excel range. e.g., C16:I19" />
+                validationMessage="Must be a valid Excel range. e.g., C16:I19"
+                tooltipContent="Cell range over which the scatter chart will be displayed" />
               <RangeInput label="Chart Data Output Range"
                 rangeValue={cdRangeValue}
                 setRangeValue={setCdRangeValue}
-                validationMessage="Must be a valid Excel cell reference. e.g., H1" />
+                validationMessage="Must be a valid Excel cell reference. e.g., H1" 
+                tooltipContent="Top left cell where data used to construct the charts is to be saved."/>
               <div className={styles.field}>
                 <Button appearance="primary"
                   onClick={runRegression}>Run Regression</Button>
               </div>
-              <Accordion>
+              <Accordion collapsible={true}>
                 <AccordionItem value="3">
                   <AccordionHeader>Cohen's Kappa/</AccordionHeader>
                   <AccordionPanel>
@@ -804,7 +809,8 @@ const App: React.FC<AppProps> = () => {
 
                     <RangeInput label="Concordance Output Range"
                       rangeValue={concordanceOutputRange}
-                      setRangeValue={setConcordanceOutputRange} />
+                      setRangeValue={setConcordanceOutputRange}
+                      tooltipContent="Top left cell where the concordance metrics will be saved." />
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>

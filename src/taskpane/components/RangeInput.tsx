@@ -8,6 +8,7 @@ interface RangeInputProps {
     setRangeValue?: (value: string) => void;
     label: string;
     validationMessage?: string;
+    tooltipContent?: string;
 }
 
 const useStyles = makeStyles({
@@ -23,7 +24,7 @@ const useStyles = makeStyles({
 
 const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
     const [validationMessage, setValidationMessage] = useState<string>("");
-    
+
     const styles = useStyles();
 
     const selectRange = async () => {
@@ -44,22 +45,42 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
             setValidationMessage("");
         }
     };
+
+    function hasTooltip() {
+        if (props.tooltipContent) {
+            return (
+                <Tooltip content={props.tooltipContent} relationship="label">
+                    <Input
+                        value={props.rangeValue}
+                        className="mb-3"
+                        pattern="^(?:([a-zA-Z\d\x5F\x2D]*\x21)?(\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})(:\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})?)$"
+                        onChange={handleTextChange}
+                    />
+                </Tooltip>
+            );
+        } else {
+            return (
+                <Input
+                    value={props.rangeValue}
+                    className="mb-3"
+                    pattern="^(?:([a-zA-Z\d\x5F\x2D]*\x21)?(\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})(:\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})?)$"
+                    onChange={handleTextChange}
+                />
+            );
+        }
+    }
+
     return (
         <div className={styles.field}>
-        <Field label={props.label}
-        validationMessage={validationMessage}>
-            <div className={styles.root} >
-            <Input
-                value={props.rangeValue}
-                className="mb-3"
-                pattern="^(?:([a-zA-Z\d\x5F\x2D]*\x21)?(\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})(:\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})?)$"
-                onChange={handleTextChange}
-            />
-            <Tooltip content="Copy selected range" relationship="label">
-                <Button icon={<AppsRegular />} onClick={selectRange} />
-            </Tooltip>
-            </div>
-        </Field>
+            <Field label={props.label}
+                validationMessage={validationMessage}>
+                <div className={styles.root} >
+                    {hasTooltip()}
+                    <Tooltip content="Copy selected range" relationship="label">
+                        <Button icon={<AppsRegular />} onClick={selectRange} />
+                    </Tooltip>
+                </div>
+            </Field>
         </div>
     );
 };

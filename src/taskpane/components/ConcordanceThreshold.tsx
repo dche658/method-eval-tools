@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { Input, makeStyles } from "@fluentui/react-components";
+import { tokens } from "@fluentui/react-components"
 
 interface ConcordanceThresholdProps {
     xThreshold0: string;
@@ -28,13 +29,13 @@ const useStyles = makeStyles({
     gridcontainer: {
         display: "grid",
         gridTemplateColumns: "120px 120px",
-        backgroundColor: "lightgray",
-        borderRight: "1px solid black",
-        borderBottom: "1px solid black",
+        backgroundColor: tokens.colorNeutralCardBackground,
+        borderRight: "1px solid "+tokens.colorPaletteAnchorBorderActive,
+        borderBottom: "1px solid "+tokens.colorPaletteAnchorBorderActive,
     },
     griddiv: {
-        borderTop: "1px solid black",
-        borderLeft: "1px solid black",
+        borderTop: "1px solid "+tokens.colorPaletteAnchorBorderActive,
+        borderLeft: "1px solid "+tokens.colorPaletteAnchorBorderActive,
         padding: "3px",
         justifyContent: "center",
         alignItems: "center",
