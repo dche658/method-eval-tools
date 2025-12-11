@@ -678,7 +678,7 @@ const App: React.FC<AppProps> = () => {
   return (
     <div className={styles.root}>
       <Toaster toasterId={toasterId} position="top" timeout={5000} pauseOnHover />
-      <Accordion defaultOpenItems="1">
+      <Accordion defaultOpenItems="2">
         <AccordionItem value="1">
           <AccordionHeader>Performance Specifications</AccordionHeader>
           <AccordionPanel>
@@ -703,6 +703,7 @@ const App: React.FC<AppProps> = () => {
         <AccordionItem value="2">
           <AccordionHeader>Comparison</AccordionHeader>
           <AccordionPanel>
+
             <Card>
               <RangeInput label="X Range"
                 rangeValue={xRangeValue}
@@ -773,8 +774,8 @@ const App: React.FC<AppProps> = () => {
               <RangeInput label="Chart Data Output Range"
                 rangeValue={cdRangeValue}
                 setRangeValue={setCdRangeValue}
-                validationMessage="Must be a valid Excel cell reference. e.g., H1" 
-                tooltipContent="Top left cell where data used to construct the charts is to be saved."/>
+                validationMessage="Must be a valid Excel cell reference. e.g., H1"
+                tooltipContent="Top left cell where data used to construct the charts is to be saved." />
               <div className={styles.field}>
                 <Button appearance="primary"
                   onClick={runRegression}>Run Regression</Button>
