@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
 import RangeInput from "./RangeInput";
-import ApsInput from "./ApsInput";
 import ConcordanceThreshold from "./ConcordanceThreshold";
 import PrecisionLayout from "./PrecisionLayout";
 import Qualitative from "./Qualitative";
@@ -689,14 +688,18 @@ const App: React.FC<AppProps> = () => {
                 onChange={toggleImportApsSettings}
                 className={styles.field}
               />
-              <ApsInput label="APS Absolute"
+              <RangeInput label="APS Absolute"
                 rangeValue={apsAbsValue}
                 setRangeValue={setApsAbsValue}
-                validationMessage="Must be a number or valid Excel cell reference. e.g., D1" />
-              <ApsInput label="APS Relative"
+                validationMessage="Must be a number or valid Excel cell reference. e.g., D1"
+                tooltipContent="Excel cell reference or APS absolute value"
+                allowNumbers={true} />
+              <RangeInput label="APS Relative"
                 rangeValue={apsRelValue}
                 setRangeValue={setApsRelValue}
-                validationMessage="Must be a number or valid Excel cell reference. e.g., D2" />
+                validationMessage="Must be a number or valid Excel cell reference. e.g., D2"
+                tooltipContent="Excel cell reference or APS relative value as a fraction. e.g., enter 0.1 for 10%"
+                allowNumbers={true} />
             </Card>
           </AccordionPanel>
         </AccordionItem>

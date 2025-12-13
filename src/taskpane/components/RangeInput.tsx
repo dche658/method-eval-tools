@@ -3,12 +3,22 @@ import { useState } from "react";
 import { Button, Field, Input, Tooltip, tokens, makeStyles } from "@fluentui/react-components";
 import { AppsRegular } from "@fluentui/react-icons";
 
+
+// ^(?:([a-zA-Z\\d\\x5F\\x2D]*\\x21)? Begin optionally with number, letter, hypen, or underscore followed by exclamation mark.
+// (\\$?[A-Z]{1,3}\\$?[1-9]{1}\\d{0,6}) Optionally match dollar sign followed by 1-3 letters followed optionally by dollar sign followed by one or more digits greater than 1
+// (:\\$?[A-Z]{1,3}\\$?[1-9]{1}\\d{0,6})?)$ Optionally match group beginning with colon followed optionally by dollar sign followed by 1-3 letters followed optionally by dollar sign followed by one or more digits greater than 1.
+const REGEX_RANGE_ONLY = "^(?:([a-zA-Z\\d\\x5F\\x2D]*\\x21)?(\\$?[A-Z]{1,3}\\$?[1-9]{1}\\d{0,6})(:\\$?[A-Z]{1,3}\\$?[1-9]{1}\\d{0,6})?)$"
+
+// Optionally match integer or decimal number or as above.
+const REGEX_RANGE_PLUS_NUMBERS = "^(?:(\\d+\\x2E?\\d*)?(([a-zA-Z\\d\\x5F\\x2D]*\\x21)?(\\$?[A-Z]{1,3}\\$?[1-9]{1}\\d{0,6})(:\\$?[A-Z]{1,3}\\$?[1-9]{1}\\d{0,6})?)?)$"
+
 interface RangeInputProps {
     rangeValue: string;
     setRangeValue?: (value: string) => void;
     label: string;
     validationMessage?: string;
     tooltipContent?: string;
+    allowNumbers?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -47,13 +57,14 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
     };
 
     function hasTooltip() {
+        const PATTERN = props.allowNumbers ? REGEX_RANGE_PLUS_NUMBERS : REGEX_RANGE_ONLY;
         if (props.tooltipContent) {
             return (
                 <Tooltip content={props.tooltipContent} relationship="label">
                     <Input
                         value={props.rangeValue}
                         className="mb-3"
-                        pattern="^(?:([a-zA-Z\d\x5F\x2D]*\x21)?(\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})(:\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})?)$"
+                        pattern={PATTERN}
                         onChange={handleTextChange}
                     />
                 </Tooltip>
@@ -63,7 +74,7 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
                 <Input
                     value={props.rangeValue}
                     className="mb-3"
-                    pattern="^(?:([a-zA-Z\d\x5F\x2D]*\x21)?(\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})(:\$?[A-Z]{1,3}\$?[1-9]{1}\d{0,6})?)$"
+                    pattern={PATTERN}
                     onChange={handleTextChange}
                 />
             );
