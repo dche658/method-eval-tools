@@ -13,3 +13,5 @@ node_modules/
 
 # Testing script
 run-test-doc.cmd
+
+docs/index.html
