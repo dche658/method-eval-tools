@@ -8,7 +8,8 @@ import Qualitative from "./Qualitative";
 import {
   makeStyles, useId,
   Accordion, AccordionItem, AccordionHeader, AccordionPanel,
-  Select, Button, Checkbox, Field, Input,
+  Select, Button, Checkbox, CheckboxProps,
+  Field, Input,
   Card,
   Toaster,
   useToastController,
@@ -230,6 +231,10 @@ const App: React.FC<AppProps> = () => {
   const [qualYRangeValue, setQualYRangeValue] = React.useState<string>("");
   const [qualOutputRangeValue, setQualOutputRangeValue] = React.useState<string>("");
 
+  const [layoutSheet, setLayoutSheet] = React.useState<string>("Layout");
+  const [importLayoutChecked, setImportLayoutChecked] = React.useState<CheckboxProps["checked"]>(false);
+
+
   const regressionTypeId = useId("regression-type");
   const toasterId = useId("toaster");
   const { dispatchToast } = useToastController(toasterId);
@@ -239,51 +244,55 @@ const App: React.FC<AppProps> = () => {
 
   /* Configure default values for the input fields */
   const setDefaultValues = () => {
-    // Set explicitly for now but in the future we may load these from a workbook or a settings file.
-    try {
-      // APS
-      setImportApsSettings(true);
-      setApsAbsValue("J4");
-      setApsRelValue("J6");
+    if (importLayoutChecked) {
+      loadWorkbookDefaults();
+    } else {
+      // Set explicitly for now but in the future we may load these from a workbook or a settings file.
+      try {
+        // APS
+        setImportApsSettings(true);
+        setApsAbsValue("J4");
+        setApsRelValue("J6");
 
-      // Method Comparison
-      setXRangeValue("O61:P160");
-      setYRangeValue("R61:S160");
-      setCompOutRangeValue("C167");
-      setRegressionType("paba");
-      setCiMethod("default");
-      setUseCalcErrorRatio(false);
-      setLabelOutput(true);
-      setErrorRatio("1.0");
-      setDifferencePlotType("rel");
-      setBaRangeValue("N162:U175");
-      setScRangeValue("N177:U190");
-      setCdRangeValue("AP61");
-      setConcordanceOutputRange("C176");
+        // Method Comparison
+        setXRangeValue("O61:P160");
+        setYRangeValue("R61:S160");
+        setCompOutRangeValue("C167");
+        setRegressionType("paba");
+        setCiMethod("default");
+        setUseCalcErrorRatio(false);
+        setLabelOutput(true);
+        setErrorRatio("1.0");
+        setDifferencePlotType("rel");
+        setBaRangeValue("N162:U175");
+        setScRangeValue("N177:U190");
+        setCdRangeValue("AP61");
+        setConcordanceOutputRange("C176");
 
-      // Imprecision
+        // Imprecision
 
-      setFactorARangeValue("B300:B324");
-      setFactorBRangeValue("C300:C324");
-      setResultsRangeValue("D300:G324");
-      setPrecOutRangeValue("W299");
+        setFactorARangeValue("B300:B324");
+        setFactorBRangeValue("C300:C324");
+        setResultsRangeValue("D300:G324");
+        setPrecOutRangeValue("W299");
 
-      // concordance of qualitative data
-      setQualXRangeValue("E61:E160");
-      setQualYRangeValue("H61:H160");
-      setQualOutputRangeValue("C176");
-      notify("success", "Ranges have been successfully updated");
-    } catch (error) {
-      notify("error", error.message);
+        // concordance of qualitative data
+        setQualXRangeValue("E61:E160");
+        setQualYRangeValue("H61:H160");
+        setQualOutputRangeValue("C176");
+        notify("success", "Ranges have been successfully updated");
+      } catch (error) {
+        notify("error", error.message);
+      }
     }
-
   } // setDefaultValues
 
   // Read the default cell addresses from and excel workbook.
   const loadWorkbookDefaults = async () => {
     await Excel.run(async (context) => {
       try {
-        const worksheet = context.workbook.worksheets.getActiveWorksheet();
+        if (layoutSheet === "") throw new Error("Please specify the name of the layout sheet.");
+        const worksheet = context.workbook.worksheets.getItem(layoutSheet);
         const address = "A2:B23";
         const range = worksheet.getRange(address);
         range.load(["values", "rowCount", "columnCount"]);
@@ -867,7 +876,7 @@ const App: React.FC<AppProps> = () => {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem value="7">
-          <AccordionHeader>Set Range Defaults</AccordionHeader>
+          <AccordionHeader>Load Range Defaults</AccordionHeader>
           <AccordionPanel>
             <Card>
               <div className={styles.container}>
@@ -878,7 +887,8 @@ const App: React.FC<AppProps> = () => {
                     below.
                   </p>
                   <Button appearance="primary"
-                    onClick={setDefaultValues}>Set MVW Defaults</Button>
+                    onClick={setDefaultValues}>Load Defaults</Button>
+                  
                   <p>
                     Alternatively, the defaults for a user defined template can defined in a worksheet
                     and loaded from that page. The definitions need to be supplied in two columns from
@@ -886,8 +896,12 @@ const App: React.FC<AppProps> = () => {
                     below. The second column must contain the values to be copied. A1 and B1 can be
                     column headers but they are not read.
                   </p>
-                  <Button appearance="primary"
-                    onClick={loadWorkbookDefaults}>Set Custom Defaults</Button>
+                  <Checkbox label={"Import from worksheet"} checked={importLayoutChecked} onChange={(_ev, data) => setImportLayoutChecked(data.checked)} />
+                  <Field label="Layout Sheet" className={styles.field}>
+                    <Tooltip relationship="description" content="Name of the worksheet specifying the default values.">
+                      <Input value={layoutSheet} onChange={(ev) => setLayoutSheet(ev.target.value)} type="text" />
+                    </Tooltip>
+                  </Field>
                   <div className={styles.field}>
                     <table>
                       <thead>
