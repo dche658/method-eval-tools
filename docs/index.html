@@ -440,6 +440,18 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
+<li><a href="#_using_the_add_in">Using the Add-in</a>
+<ul class="sectlevel2">
+<li><a href="#_analytical_performance_specifications">Analytical Performance Specifications</a></li>
+<li><a href="#_analysing_method_comparisons">Analysing Method Comparisons</a>
+<ul class="sectlevel3">
+<li><a href="#_concordance">Concordance</a></li>
+</ul>
+</li>
+<li><a href="#_analysing_imprecision">Analysing Imprecision</a></li>
+<li><a href="#_imprecision_layout">Imprecision Layout</a></li>
+</ul>
+</li>
 <li><a href="#_installing_the_add_in">Installing the Add-in</a>
 <ul class="sectlevel2">
 <li><a href="#_side_loading_the_add_in">Side-loading the add-in</a></li>
@@ -447,20 +459,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_option_set_a_proxy_for_npm">Option: Set a proxy for npm</a></li>
 </ul>
 </li>
-<li><a href="#_using_the_add_in">Using the Add-in</a>
-<ul class="sectlevel2">
-<li><a href="#_analytical_performance_specifications">Analytical Performance Specifications</a></li>
-<li><a href="#_analysing_method_comparisons">Analysing Method Comparisons</a></li>
-<li><a href="#_analysing_imprecision">Analysing Imprecision</a></li>
-<li><a href="#_imprecision_layout">Imprecision Layout</a></li>
-</ul>
-</li>
 <li><a href="#_appendices">Appendices</a>
 <ul class="sectlevel2">
+<li><a href="#_license">License</a></li>
+<li><a href="#_calculations">Calculations</a>
+<ul class="sectlevel3">
 <li><a href="#_one_way_analysis_calculations">One Way Analysis Calculations</a></li>
 <li><a href="#_two_way_analysis_calculations">Two Way Analysis Calculations</a></li>
 <li><a href="#_cohens_kappa">Cohen&#8217;s Kappa</a></li>
 <li><a href="#_grubbs_test_for_outliers">Grubb&#8217;s Test for Outliers</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -477,256 +486,12 @@ statistical analysis tool. The current interation allows the user to perform
 linear regression techniques including Passing-Bablok, Deming, and Weighted Deming.</p>
 </div>
 <div class="paragraph">
-<p>Procedures are also provide to allow users to analyse variance components
+<p>Procedures are also provided to allow users to analyse variance components
 as described in CLSI EP15 and EP05.</p>
 </div>
 <div class="paragraph">
 <p>This tools has been designed for use by laboratory professionals in association
 with the accompanying <a href="https://metools.chesher.id.au/assets/mvw.xlsx">method verification workbook</a>.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_installing_the_add_in">Installing the Add-in</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Under normal circumstances, installation and activation of an Excel Add-in is
-very easy. All that is required is to go to the Add-ins menu item on the
-Home tab (Fig 1).</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/addin-menu.png" alt="addin menu">
-</div>
-<div class="title">Figure 1. Add-ins menu item</div>
-</div>
-<div class="paragraph">
-<p>Find the add-in from the available add-in and select Add.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/addin-install.png" alt="addin install">
-</div>
-<div class="title">Figure 2. Adding an add-in</div>
-</div>
-<div class="paragraph">
-<p>At the current time, the add-in is only available in development mode,
-which means it must be "side-loaded".
-This is a bit more involved and requires a number of files
-to be downloaded. Doing this from behind corporate firewalls
-can be challenging unless you are familiar with using proxy
-configurations.</p>
-</div>
-<div class="paragraph">
-<p><a href="https://learn.microsoft.com/en-au/office/dev/add-ins/">Microsoft</a>
-now recommend developing Office add-ins using standard
-web technologies such as HTML, CSS, and Javascript. Excel runs
-these as a web page within Excel. To sideload an application it
-must be run using nodejs, which is a powerful tool for developing
-server-side and client-side applications by running javascript
-outside a web browser.</p>
-</div>
-<div class="sect2">
-<h3 id="_side_loading_the_add_in">Side-loading the add-in</h3>
-<div class="paragraph">
-<p>Follow these steps to sideload the add-in:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Download the add-in repository from <a href="https://github.com/dche658/method-eval-tools" class="bare">https://github.com/dche658/method-eval-tools</a></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>You can do this by clicking the green "Code" button and selecting
-"Download ZIP".</p>
-</li>
-<li>
-<p>Extract the contents of the ZIP file to a directory on your computer.</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p>Download nvm-setup.exe for windows from <a href="https://github.com/coreybutler/nvm-windows/releases" class="bare">https://github.com/coreybutler/nvm-windows/releases</a></p>
-</li>
-<li>
-<p>Install nvm-setup.exe</p>
-</li>
-<li>
-<p>Open a command prompt and run the following commands (update the version number
-as needed). Note, lts just stands for long-term-support.</p>
-<div class="listingblock">
-<div class="content">
-<pre>nvm install lts
-nvm use 24.6.0</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Navigate to the directory where you extracted the downloaded repository
-and run:</p>
-<div class="listingblock">
-<div class="content">
-<pre>npm install
-npm run start</pre>
-</div>
-</div>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Startup can take a few minutes to complete. Once it is finished, excel should
-open automatically with the add-in loaded.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_option_install_on_a_portable_device">Option: Install on a Portable Device</h3>
-<div class="paragraph">
-<p>If you do not have administrator access then you can install the add-in on a
-portable device. A high speed external solid state drive will likely give
-you the best results.</p>
-</div>
-<div class="paragraph">
-<p>Instructions for installing nodejs as a portable application have been taken
-from <a href="https://dev.to/yougotwill/portable-nodejs-without-administrator-access-1elk">here</a>.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Install <a href="https://cmder.app/">Cmder</a> in your desired location on the portable drive.</p>
-</li>
-<li>
-<p>Download <a href="https://github.com/coreybutler/nvm-windows">nvm-noinstall.zip</a> from the latest release.</p>
-</li>
-<li>
-<p>Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.</p>
-</li>
-<li>
-<p>Navigate to the bin folder in Cmder and run install.cmd</p>
-</li>
-<li>
-<p>When asked to enter the absolute path use your Cmder bin folder.</p>
-</li>
-<li>
-<p>Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).</p>
-</li>
-<li>
-<p>Wait until node and npm have finished installing.</p>
-</li>
-<li>
-<p>Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.</p>
-</li>
-<li>
-<p>Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.</p>
-</li>
-<li>
-<p>Add this to your existing path in Cmder&#8217;s environment settings. This can be done in a couple of ways. The first is by running the following command.</p>
-<div class="listingblock">
-<div class="content">
-<pre>set "PATH=E:\PortableApps\CmderPortable\bin\v24.6.0;%PATH%"</pre>
-</div>
-</div>
-</li>
-<li>
-<p>Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'</p>
-</li>
-<li>
-<p>Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).</p>
-</li>
-<li>
-<p>Close and open Cmder and you should have access to node, npm and npx</p>
-</li>
-<li>
-<p>If you are behind a corporate firewall you will probably need to set the
-proxy configuration. Suggestions on how to do this a shown below.</p>
-</li>
-<li>
-<p>Download and extract the add-in repository as described above.</p>
-</li>
-<li>
-<p>Then run the following commands to install the add-in and then side-load
-it into Excel.</p>
-</li>
-</ol>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>npm install
-npm run start</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>If you have an Excel workbook on OneDrive you can copy a link to the document
-and use the following command to side-load the add-in into Excel.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>npm run start -- web --document https://1drv.ms/x/c/7ba37898bfb7e549/EdiktLds9p5MvIFWYzL0-QBSw?e=5BUXE7</pre>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_option_set_a_proxy_for_npm">Option: Set a proxy for npm</h3>
-<div class="paragraph">
-<p>Find the proxy settings for your network by opening Settings. Go to
-Network and Internet, and then Proxy.</p>
-</div>
-<div class="paragraph">
-<p>If a manual proxy has been configured, you can copy those details. If a script has
-been used, this is often located at <a href="https://your.domain/proxy.pac" class="bare">https://your.domain/proxy.pac</a>. You can generally
-see the content of the proxy.pac file by copying the url to you web browser and use
-your browser to display the file. Inspect the content of the file to find the
-appropriate proxy server url and port for your subnet (often the default).</p>
-</div>
-<div class="paragraph">
-<p>Run the following commands to set the proxy and https proxy.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>npm config set proxy http://&lt;username&gt;:&lt;password&gt;@&lt;proxy-server-url&gt;:&lt;port&gt;
-npm config set https-proxy http://&lt;username&gt;:&lt;password&gt;@&lt;proxy-server-url&gt;:&lt;port&gt;</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Run the following command to confirm the npm settings</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>npm config list</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>In many cases if you run 'npm install' at this point you will get an untrusted
-certificate error. This often occurs because your organisation uses its own
-Certificate Authority. To get around this you will need to either get root
-certificate from your IT department, export it from your web browser, or run
-the "Manage computer certificates" settings app and export it from there in pem format.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/trusted-certificates.png" alt="trusted certificates">
-</div>
-</div>
-<div class="paragraph">
-<p>Configure cafile with the command</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>npm config set cafile /path/to/your/corporate/root/certificate.pem</pre>
-</div>
-</div>
-<div class="paragraph">
-<p>The alternative approach is to temporarily Bypass SSL Validation.
-This method disables strict SSL validation and is generally not recommended
-for long-term use due to security implications.</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre>npm config set strict-ssl false
-npm config set registry="http://registry.npmjs.org/"</pre>
-</div>
-</div>
 </div>
 </div>
 </div>
@@ -742,7 +507,7 @@ toggle the taskpane on the right-hand side of the Excel window.</p>
 <div class="content">
 <img src="./images/excel-with-taskpane.png" alt="excel with taskpane">
 </div>
-<div class="title">Figure 3. Taskpane</div>
+<div class="title">Figure 1. Taskpane</div>
 </div>
 <div class="paragraph">
 <p>The taskpane provides access to the various tools and functionalities of the add-in.
@@ -759,7 +524,7 @@ clinical requirements, biological variation, or other criteria.</p>
 <div class="content">
 <img src="./images/aps-entry.png" alt="aps entry">
 </div>
-<div class="title">Figure 4. Specifying Performance Specifications</div>
+<div class="title">Figure 2. Setting Performance Specifications</div>
 </div>
 <div class="paragraph">
 <p>The specifications can be entered directly into the taskpane or imported from the Excel
@@ -777,7 +542,7 @@ fraction (e.g. 0.1 for 10%).</p>
 <div class="content">
 <img src="./images/regression-tool.png" alt="regression tool">
 </div>
-<div class="title">Figure 5. Method Comparison Tools</div>
+<div class="title">Figure 3. Method Comparison Tools</div>
 </div>
 <div class="paragraph">
 <p>The Regression tool allows you to perform various types of regression analysis on your
@@ -810,7 +575,7 @@ method values and then click over the select icon for that field:</p>
 </div>
 </div>
 <div class="paragraph">
-<p>This will copy the address of the selected range to the relevant field.</p>
+<p>This will copy the address of the selected range to the relevant field in the taskpane.</p>
 </div>
 <div class="paragraph">
 <p>Repeat this process for the test method values.</p>
@@ -862,8 +627,8 @@ the charts will be created at the specified chart ranges.</p>
 </td>
 <td class="content">
 If you are using the method verification workbook, you can automatically populate the
-data ranges by clicking the "Populate from MVW" button. This will fill in the data ranges
-based on the defaults in the workbook.
+cell ranges by clicking the "Load Defaults" button. This will fill in the cell ranges
+based on the default locations in the workbook.
 </td>
 </tr>
 </table>
@@ -1106,7 +871,7 @@ imprecision using the CLSI EP15 guideline.</p>
 <div class="content">
 <img src="./images/precision-layout-2.png" alt="precision layout 2">
 </div>
-<div class="title">Figure 6. Default 5 x 5 layout</div>
+<div class="title">Figure 4. Default 5 x 5 layout</div>
 </div>
 <div class="paragraph">
 <p>Alternative layouts can be created by specifying the number of days, runs, and
@@ -1117,7 +882,7 @@ to be written; and then clicking on "Setup".</p>
 <div class="content">
 <img src="./images/precision-layout-3.png" alt="precision layout 3">
 </div>
-<div class="title">Figure 7. Alternative 20 x 2 x 2 Layout</div>
+<div class="title">Figure 5. Alternative 20 x 2 x 2 Layout</div>
 </div>
 <div class="paragraph">
 <p>In the process of writing the layout to the worksheet, the cell ranges used for
@@ -1127,7 +892,281 @@ specifying the days, runs, and values are copied to the Analyse Precision form.<
 <div class="content">
 <img src="./images/analyse-precision-cells.png" alt="analyse precision cells">
 </div>
-<div class="title">Figure 8. Copied cell ranges</div>
+<div class="title">Figure 6. Copied cell ranges</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_installing_the_add_in">Installing the Add-in</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Under normal circumstances, installation and activation of an Excel Add-in is
+very easy. All that is required is to go to the Add-ins menu item on the
+Home tab (Fig 1).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/addin-menu.png" alt="addin menu">
+</div>
+<div class="title">Figure 7. Add-ins menu item</div>
+</div>
+<div class="paragraph">
+<p>Find the add-in from the available add-in and select Add.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/addin-install.png" alt="addin install">
+</div>
+<div class="title">Figure 8. Adding an add-in</div>
+</div>
+<div class="paragraph">
+<p>At the current time, the add-in is only available in development mode,
+which means it must be "side-loaded".
+This is a bit more involved and requires a number of files
+to be downloaded. Doing this from behind corporate firewalls
+can be challenging unless you are familiar with using proxy
+configurations.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://learn.microsoft.com/en-au/office/dev/add-ins/">Microsoft</a>
+now recommend developing Office add-ins using standard
+web technologies such as HTML, CSS, and Javascript. Excel runs
+these as a web page within Excel. To sideload an application it
+must be run using nodejs, which is a powerful tool for developing
+server-side and client-side applications by running javascript
+outside a web browser.</p>
+</div>
+<div class="sect2">
+<h3 id="_side_loading_the_add_in">Side-loading the add-in</h3>
+<div class="paragraph">
+<p>Follow these steps to sideload the add-in:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download the add-in repository from <a href="https://github.com/dche658/method-eval-tools" class="bare">https://github.com/dche658/method-eval-tools</a></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>You can do this by clicking the green "Code" button and selecting
+"Download ZIP".</p>
+</li>
+<li>
+<p>Extract the contents of the ZIP file to a directory on your computer.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Alternatively, if you have git installed on your computer you can clone the repository
+with the following command:</p>
+<div class="listingblock">
+<div class="content">
+<pre>git clone https://github.com/dche658/method-eval-tools.git</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Download nvm-setup.exe for windows from <a href="https://github.com/coreybutler/nvm-windows/releases" class="bare">https://github.com/coreybutler/nvm-windows/releases</a></p>
+</li>
+<li>
+<p>Install nvm-setup.exe</p>
+</li>
+<li>
+<p>Open a command prompt and run the following commands (update the version number
+as needed). Note, lts just stands for long-term-support.</p>
+<div class="listingblock">
+<div class="content">
+<pre>nvm install lts
+nvm use 24.6.0</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Navigate to the directory where you extracted the downloaded repository
+and run:</p>
+<div class="listingblock">
+<div class="content">
+<pre>npm install</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will take quite some time to complete as all the libraries used in
+development must be downloaded and installed.</p>
+</div>
+</li>
+<li>
+<p>Finally, execute the add-in with:</p>
+<div class="listingblock">
+<div class="content">
+<pre>npm run start</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>A separate terminal window will open, after which Excel will be launched.
+Startup can take a few minutes to complete.</p>
+</div>
+<div class="paragraph">
+<p>When you have finished using Excel and the add-in, do not just close the
+terminal window. You must execute the stop command so the cache is cleared.
+Otherwise, problems can arise when you try to run the add-in again.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm run stop</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_option_install_on_a_portable_device">Option: Install on a Portable Device</h3>
+<div class="paragraph">
+<p>If you do not have administrator access then you can install the add-in on a
+portable device. A high speed external solid state drive will likely give
+you the best results.</p>
+</div>
+<div class="paragraph">
+<p>Instructions for installing nodejs as a portable application have been taken
+from <a href="https://dev.to/yougotwill/portable-nodejs-without-administrator-access-1elk">here</a>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install <a href="https://cmder.app/">Cmder</a> in your desired location on the portable drive.</p>
+</li>
+<li>
+<p>Download <a href="https://github.com/coreybutler/nvm-windows">nvm-noinstall.zip</a> from the latest release.</p>
+</li>
+<li>
+<p>Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.</p>
+</li>
+<li>
+<p>Navigate to the bin folder in Cmder and run install.cmd</p>
+</li>
+<li>
+<p>When asked to enter the absolute path use your Cmder bin folder.</p>
+</li>
+<li>
+<p>Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).</p>
+</li>
+<li>
+<p>Wait until node and npm have finished installing.</p>
+</li>
+<li>
+<p>Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.</p>
+</li>
+<li>
+<p>Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.</p>
+</li>
+<li>
+<p>Add this to your existing path in Cmder&#8217;s environment settings. This can be done in a couple of ways. The first is by running the following command.</p>
+<div class="listingblock">
+<div class="content">
+<pre>set "PATH=E:\PortableApps\CmderPortable\bin\v24.6.0;%PATH%"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'</p>
+</li>
+<li>
+<p>Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).</p>
+</li>
+<li>
+<p>Close and open Cmder and you should have access to node, npm and npx</p>
+</li>
+<li>
+<p>If you are behind a corporate firewall you will probably need to set the
+proxy configuration. Suggestions on how to do this a shown below.</p>
+</li>
+<li>
+<p>Download and extract the add-in repository as described above.</p>
+</li>
+<li>
+<p>Then run the following commands to install the add-in and then side-load
+it into Excel.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm install
+npm run start</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have an Excel workbook on OneDrive you can copy a link to the document
+and use the following command to side-load the add-in into Excel.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm run start -- web --document https://1drv.ms/x/c/7ba37898bfb7e549/EdiktLds9p5MvIFWYzL0-QBSw?e=5BUXE7</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_option_set_a_proxy_for_npm">Option: Set a proxy for npm</h3>
+<div class="paragraph">
+<p>Find the proxy settings for your network by opening Settings. Go to
+Network and Internet, and then Proxy.</p>
+</div>
+<div class="paragraph">
+<p>If a manual proxy has been configured, you can copy those details. If a script has
+been used, this is often located at <a href="https://your.domain/proxy.pac" class="bare">https://your.domain/proxy.pac</a>. You can generally
+see the content of the proxy.pac file by copying the url to you web browser and use
+your browser to display the file. Inspect the content of the file to find the
+appropriate proxy server url and port for your subnet (often the default).</p>
+</div>
+<div class="paragraph">
+<p>Run the following commands to set the proxy and https proxy.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config set proxy http://&lt;username&gt;:&lt;password&gt;@&lt;proxy-server-url&gt;:&lt;port&gt;
+npm config set https-proxy http://&lt;username&gt;:&lt;password&gt;@&lt;proxy-server-url&gt;:&lt;port&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the following command to confirm the npm settings</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config list</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In many cases if you run 'npm install' at this point you will get an untrusted
+certificate error. This often occurs because your organisation uses its own
+Certificate Authority. To get around this you will need to either get root
+certificate from your IT department, export it from your web browser, or run
+the "Manage computer certificates" settings app and export it from there in pem format.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/trusted-certificates.png" alt="trusted certificates">
+</div>
+</div>
+<div class="paragraph">
+<p>Configure cafile with the command</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config set cafile /path/to/your/corporate/root/certificate.pem</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The alternative approach is to temporarily Bypass SSL Validation.
+This method disables strict SSL validation and is generally not recommended
+for long-term use due to security implications.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config set strict-ssl false
+npm config set registry="http://registry.npmjs.org/"</pre>
+</div>
 </div>
 </div>
 </div>
@@ -1136,7 +1175,38 @@ specifying the days, runs, and values are copied to the Analyse Precision form.<
 <h2 id="_appendices">Appendices</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_one_way_analysis_calculations">One Way Analysis Calculations</h3>
+<h3 id="_license">License</h3>
+<div class="paragraph">
+<p>MIT License Copyright (c) 2025 Douglas Chesher</p>
+</div>
+<div class="paragraph">
+<p>Permission is hereby granted, free of
+charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the
+following conditions:</p>
+</div>
+<div class="paragraph">
+<p>The above copyright notice and this permission notice
+(including the next paragraph) shall be included in all copies or substantial
+portions of the Software.</p>
+</div>
+<div class="paragraph">
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_calculations">Calculations</h3>
+<div class="sect3">
+<h4 id="_one_way_analysis_calculations">One Way Analysis Calculations</h4>
 <div class="paragraph">
 <p>These were sourced from:</p>
 </div>
@@ -1204,8 +1274,8 @@ Clinical and Laboratory Standards Institute, Pennsylvania.</p>
 <div class="paragraph">
 <p>\$V_{WL}=V_{W}+V_{B}\$ : Variance within lab</p>
 </div>
-<div class="sect3">
-<h4 id="_satterthwaite_formula_for_approximating_the_pooled_degrees_of_freedom">Satterthwaite formula for approximating the pooled degrees of freedom.</h4>
+<div class="sect4">
+<h5 id="_satterthwaite_formula_for_approximating_the_pooled_degrees_of_freedom">Satterthwaite formula for approximating the pooled degrees of freedom.</h5>
 <div class="paragraph">
 <p>\$a_{1}=\frac{1}{n_{0}}\$</p>
 </div>
@@ -1216,8 +1286,8 @@ Clinical and Laboratory Standards Institute, Pennsylvania.</p>
 <p>\$DF_{WL}=\frac{(a_{1}MS1+a_{2}MS2)^{2}}{\frac{(a_{1}MS1)^2}{DF1}+\frac{(a_{2}MS2)1^2}{DF2}}\$ : degrees of freedom within lab</p>
 </div>
 </div>
-<div class="sect3">
-<h4 id="_upper_verification_limits">Upper Verification Limits</h4>
+<div class="sect4">
+<h5 id="_upper_verification_limits">Upper Verification Limits</h5>
 <div class="paragraph">
 <p>\$n_{sam}\$ : number of samples or levels tested.</p>
 </div>
@@ -1262,8 +1332,8 @@ used by this application is able to calculate the result with decimal values.
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_two_way_analysis_calculations">Two Way Analysis Calculations</h3>
+<div class="sect3">
+<h4 id="_two_way_analysis_calculations">Two Way Analysis Calculations</h4>
 <div class="paragraph">
 <p>These were sourced from:</p>
 </div>
@@ -1391,8 +1461,8 @@ where \$\chi_{\frac{\alpha}{2}}^2\$ is the quantile corresponding to alpha/2 con
 with DF degrees of freedom</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_cohens_kappa">Cohen&#8217;s Kappa</h3>
+<div class="sect3">
+<h4 id="_cohens_kappa">Cohen&#8217;s Kappa</h4>
 <div class="paragraph">
 <p>These were sourced from:</p>
 </div>
@@ -1526,8 +1596,8 @@ simply calculated as the tabulated value divided by the grand total. Let</p>
 <p>\$\kappa \pm z_{\alpha/2}SE(\kappa)\$</p>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_grubbs_test_for_outliers">Grubb&#8217;s Test for Outliers</h3>
+<div class="sect3">
+<h4 id="_grubbs_test_for_outliers">Grubb&#8217;s Test for Outliers</h4>
 <div class="paragraph">
 <p>NIST/SEMATECH 1.3.5.17.1. Grubbs' Test for Outliers, <a href="https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h1.htm" class="bare">https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h1.htm</a>.
 In NIST/SEMATECH e-Handbook of Statistical Methods , 16/10/2025.</p>
@@ -1558,9 +1628,10 @@ H<sub>a</sub>:	There is exactly one outlier in the data set</p>
 </div>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2025-12-16 09:07:00 01000
+Last updated 2025-12-17 14:54:15 01000
 </div>
 </div>
 <script type="text/x-mathjax-config">

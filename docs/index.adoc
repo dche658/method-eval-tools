@@ -2,6 +2,7 @@
 :imagesdir: ./images
 :stylesdir: ./style
 :toc: left
+:toclevels: 3
 :stem:
 
 The purpose of this add-in is to provide some statistical procedures that are
@@ -10,160 +11,11 @@ using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
 statistical analysis tool. The current interation allows the user to perform
 linear regression techniques including Passing-Bablok, Deming, and Weighted Deming.
 
-Procedures are also provide to allow users to analyse variance components 
+Procedures are also provided to allow users to analyse variance components 
 as described in CLSI EP15 and EP05.
 
 This tools has been designed for use by laboratory professionals in association
 with the accompanying https://metools.chesher.id.au/assets/mvw.xlsx[method verification workbook].
-
-== Installing the Add-in
-
-Under normal circumstances, installation and activation of an Excel Add-in is 
-very easy. All that is required is to go to the Add-ins menu item on the 
-Home tab (Fig 1).
-
-.Add-ins menu item
-image::addin-menu.png[]
-
-Find the add-in from the available add-in and select Add.
-
-.Adding an add-in
-image::addin-install.png[]
-
-At the current time, the add-in is only available in development mode,
-which means it must be "side-loaded".
-This is a bit more involved and requires a number of files
-to be downloaded. Doing this from behind corporate firewalls
-can be challenging unless you are familiar with using proxy
-configurations.
-
-https://learn.microsoft.com/en-au/office/dev/add-ins/[Microsoft] 
-now recommend developing Office add-ins using standard
-web technologies such as HTML, CSS, and Javascript. Excel runs
-these as a web page within Excel. To sideload an application it
-must be run using nodejs, which is a powerful tool for developing
-server-side and client-side applications by running javascript
-outside a web browser.
-
-=== Side-loading the add-in
-
-Follow these steps to sideload the add-in:
-
-. Download the add-in repository from https://github.com/dche658/method-eval-tools
-    a. You can do this by clicking the green "Code" button and selecting
-    "Download ZIP".
-    b. Extract the contents of the ZIP file to a directory on your computer.
-. Download nvm-setup.exe for windows from https://github.com/coreybutler/nvm-windows/releases
-. Install nvm-setup.exe
-. Open a command prompt and run the following commands (update the version number
-as needed). Note, lts just stands for long-term-support.
-+
-----
-nvm install lts
-nvm use 24.6.0
-----
-. Navigate to the directory where you extracted the downloaded repository 
-and run:
-+
-----
-npm install
-npm run start
-----
-
-Startup can take a few minutes to complete. Once it is finished, excel should
-open automatically with the add-in loaded.
-
-=== Option: Install on a Portable Device
-
-If you do not have administrator access then you can install the add-in on a 
-portable device. A high speed external solid state drive will likely give
-you the best results.
-
-Instructions for installing nodejs as a portable application have been taken
-from https://dev.to/yougotwill/portable-nodejs-without-administrator-access-1elk[here].
-
-. Install https://cmder.app/[Cmder] in your desired location on the portable drive.
-. Download https://github.com/coreybutler/nvm-windows[nvm-noinstall.zip] from the latest release.
-. Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.
-. Navigate to the bin folder in Cmder and run install.cmd
-. When asked to enter the absolute path use your Cmder bin folder.
-. Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).
-. Wait until node and npm have finished installing.
-. Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.
-. Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.
-. Add this to your existing path in Cmder's environment settings. This can be done in a couple of ways. The first is by running the following command.
-+
-----
-set "PATH=E:\PortableApps\CmderPortable\bin\v24.6.0;%PATH%"
-----
-. Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'
-. Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).
-. Close and open Cmder and you should have access to node, npm and npx
-. If you are behind a corporate firewall you will probably need to set the 
-proxy configuration. Suggestions on how to do this a shown below.
-. Download and extract the add-in repository as described above.
-. Then run the following commands to install the add-in and then side-load
-it into Excel.
-
-----
-npm install
-npm run start
-----
-
-If you have an Excel workbook on OneDrive you can copy a link to the document
-and use the following command to side-load the add-in into Excel.
-
-----
-npm run start -- web --document https://1drv.ms/x/c/7ba37898bfb7e549/EdiktLds9p5MvIFWYzL0-QBSw?e=5BUXE7
-----
-
-=== Option: Set a proxy for npm
-
-Find the proxy settings for your network by opening Settings. Go to 
-Network and Internet, and then Proxy.
-
-If a manual proxy has been configured, you can copy those details. If a script has
-been used, this is often located at https://your.domain/proxy.pac. You can generally 
-see the content of the proxy.pac file by copying the url to you web browser and use
-your browser to display the file. Inspect the content of the file to find the 
-appropriate proxy server url and port for your subnet (often the default).
-
-Run the following commands to set the proxy and https proxy.
-
-----
-npm config set proxy http://<username>:<password>@<proxy-server-url>:<port>
-npm config set https-proxy http://<username>:<password>@<proxy-server-url>:<port>
-----
-
-Run the following command to confirm the npm settings
-
-----
-npm config list
-----
-
-In many cases if you run 'npm install' at this point you will get an untrusted 
-certificate error. This often occurs because your organisation uses its own
-Certificate Authority. To get around this you will need to either get root
-certificate from your IT department, export it from your web browser, or run
-the "Manage computer certificates" settings app and export it from there in pem format.
-
-image::trusted-certificates.png[]
-
-Configure cafile with the command
-
-----
-npm config set cafile /path/to/your/corporate/root/certificate.pem
-----
-
-The alternative approach is to temporarily Bypass SSL Validation.
-This method disables strict SSL validation and is generally not recommended 
-for long-term use due to security implications.
-
-----
-npm config set strict-ssl false
-npm config set registry="http://registry.npmjs.org/"
-----
-
 
 == Using the Add-in
 
@@ -183,7 +35,7 @@ The Analytical Performance Specifications (APS) section allows you to set and ma
 specifications for your laboratory method. You can define specifications based on 
 clinical requirements, biological variation, or other criteria.
 
-.Specifying Performance Specifications
+.Setting Performance Specifications
 image::aps-entry.png[align="center"]
 
 The specifications can be entered directly into the taskpane or imported from the Excel 
@@ -214,7 +66,7 @@ method values and then click over the select icon for that field:
 
 image::select-icon.png[]
 
-This will copy the address of the selected range to the relevant field.
+This will copy the address of the selected range to the relevant field in the taskpane.
 
 Repeat this process for the test method values.
 
@@ -251,8 +103,8 @@ to perform the analysis. The results will be saved to the specified output range
 the charts will be created at the specified chart ranges.
 
 TIP: If you are using the method verification workbook, you can automatically populate the
-data ranges by clicking the "Populate from MVW" button. This will fill in the data ranges
-based on the defaults in the workbook.
+cell ranges by clicking the "Load Defaults" button. This will fill in the cell ranges
+based on the default locations in the workbook.
 
 ==== Concordance
 
@@ -372,9 +224,204 @@ specifying the days, runs, and values are copied to the Analyse Precision form.
 .Copied cell ranges
 image::analyse-precision-cells.png[]
 
+== Installing the Add-in
+
+Under normal circumstances, installation and activation of an Excel Add-in is 
+very easy. All that is required is to go to the Add-ins menu item on the 
+Home tab (Fig 1).
+
+.Add-ins menu item
+image::addin-menu.png[]
+
+Find the add-in from the available add-in and select Add.
+
+.Adding an add-in
+image::addin-install.png[]
+
+At the current time, the add-in is only available in development mode,
+which means it must be "side-loaded".
+This is a bit more involved and requires a number of files
+to be downloaded. Doing this from behind corporate firewalls
+can be challenging unless you are familiar with using proxy
+configurations.
+
+https://learn.microsoft.com/en-au/office/dev/add-ins/[Microsoft] 
+now recommend developing Office add-ins using standard
+web technologies such as HTML, CSS, and Javascript. Excel runs
+these as a web page within Excel. To sideload an application it
+must be run using nodejs, which is a powerful tool for developing
+server-side and client-side applications by running javascript
+outside a web browser.
+
+=== Side-loading the add-in
+
+Follow these steps to sideload the add-in:
+
+. Download the add-in repository from https://github.com/dche658/method-eval-tools
+    a. You can do this by clicking the green "Code" button and selecting
+    "Download ZIP".
+    b. Extract the contents of the ZIP file to a directory on your computer.
+. Alternatively, if you have git installed on your computer you can clone the repository 
+with the following command:
++
+----
+git clone https://github.com/dche658/method-eval-tools.git
+----
+
+. Download nvm-setup.exe for windows from https://github.com/coreybutler/nvm-windows/releases
+. Install nvm-setup.exe
+. Open a command prompt and run the following commands (update the version number
+as needed). Note, lts just stands for long-term-support.
++
+----
+nvm install lts
+nvm use 24.6.0
+----
+. Navigate to the directory where you extracted the downloaded repository 
+and run:
++
+----
+npm install
+----
++
+This will take quite some time to complete as all the libraries used in 
+development must be downloaded and installed. 
+. Finally, execute the add-in with:
++
+----
+npm run start
+----
+
+A separate terminal window will open, after which Excel will be launched.
+Startup can take a few minutes to complete. 
+
+When you have finished using Excel and the add-in, do not just close the 
+terminal window. You must execute the stop command so the cache is cleared.
+Otherwise, problems can arise when you try to run the add-in again.
+----
+npm run stop
+----
+
+=== Option: Install on a Portable Device
+
+If you do not have administrator access then you can install the add-in on a 
+portable device. A high speed external solid state drive will likely give
+you the best results.
+
+Instructions for installing nodejs as a portable application have been taken
+from https://dev.to/yougotwill/portable-nodejs-without-administrator-access-1elk[here].
+
+. Install https://cmder.app/[Cmder] in your desired location on the portable drive.
+. Download https://github.com/coreybutler/nvm-windows[nvm-noinstall.zip] from the latest release.
+. Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.
+. Navigate to the bin folder in Cmder and run install.cmd
+. When asked to enter the absolute path use your Cmder bin folder.
+. Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).
+. Wait until node and npm have finished installing.
+. Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.
+. Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.
+. Add this to your existing path in Cmder's environment settings. This can be done in a couple of ways. The first is by running the following command.
++
+----
+set "PATH=E:\PortableApps\CmderPortable\bin\v24.6.0;%PATH%"
+----
+. Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'
+. Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).
+. Close and open Cmder and you should have access to node, npm and npx
+. If you are behind a corporate firewall you will probably need to set the 
+proxy configuration. Suggestions on how to do this a shown below.
+. Download and extract the add-in repository as described above.
+. Then run the following commands to install the add-in and then side-load
+it into Excel.
+
+----
+npm install
+npm run start
+----
+
+If you have an Excel workbook on OneDrive you can copy a link to the document
+and use the following command to side-load the add-in into Excel.
+
+----
+npm run start -- web --document https://1drv.ms/x/c/7ba37898bfb7e549/EdiktLds9p5MvIFWYzL0-QBSw?e=5BUXE7
+----
+
+=== Option: Set a proxy for npm
+
+Find the proxy settings for your network by opening Settings. Go to 
+Network and Internet, and then Proxy.
+
+If a manual proxy has been configured, you can copy those details. If a script has
+been used, this is often located at https://your.domain/proxy.pac. You can generally 
+see the content of the proxy.pac file by copying the url to you web browser and use
+your browser to display the file. Inspect the content of the file to find the 
+appropriate proxy server url and port for your subnet (often the default).
+
+Run the following commands to set the proxy and https proxy.
+
+----
+npm config set proxy http://<username>:<password>@<proxy-server-url>:<port>
+npm config set https-proxy http://<username>:<password>@<proxy-server-url>:<port>
+----
+
+Run the following command to confirm the npm settings
+
+----
+npm config list
+----
+
+In many cases if you run 'npm install' at this point you will get an untrusted 
+certificate error. This often occurs because your organisation uses its own
+Certificate Authority. To get around this you will need to either get root
+certificate from your IT department, export it from your web browser, or run
+the "Manage computer certificates" settings app and export it from there in pem format.
+
+image::trusted-certificates.png[]
+
+Configure cafile with the command
+
+----
+npm config set cafile /path/to/your/corporate/root/certificate.pem
+----
+
+The alternative approach is to temporarily Bypass SSL Validation.
+This method disables strict SSL validation and is generally not recommended 
+for long-term use due to security implications.
+
+----
+npm config set strict-ssl false
+npm config set registry="http://registry.npmjs.org/"
+----
+
 == Appendices
 
-=== One Way Analysis Calculations
+=== License
+
+MIT License Copyright (c) 2025 Douglas Chesher
+
+Permission is hereby granted, free of
+charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the
+following conditions:
+
+The above copyright notice and this permission notice
+(including the next paragraph) shall be included in all copies or substantial
+portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+=== Calculations
+
+==== One Way Analysis Calculations
 
 These were sourced from:
 
@@ -422,7 +469,7 @@ stem:[V_{B}=\frac{MS1-MS2}{n_{0}}] : Variance between
 
 stem:[V_{WL}=V_{W}+V_{B}] : Variance within lab
 
-==== Satterthwaite formula for approximating the pooled degrees of freedom.
+===== Satterthwaite formula for approximating the pooled degrees of freedom.
 
 stem:[a_{1}=\frac{1}{n_{0}}]
 
@@ -430,7 +477,7 @@ stem:[a_{2}=\frac{1-n_{0}}{n_{0}}]
 
 stem:[DF_{WL}=\frac{(a_{1}MS1+a_{2}MS2)^{2}}{\frac{(a_{1}MS1)^2}{DF1}+\frac{(a_{2}MS2)1^2}{DF2}}] : degrees of freedom within lab
 
-==== Upper Verification Limits
+===== Upper Verification Limits
 
 stem:[n_{sam}] : number of samples or levels tested.
 
@@ -457,7 +504,7 @@ occurs because the CHISQ.INV function in Excel rounds the degrees of freedom to
 an integer value. In contrast, the equivalent function in the jStat library
 used by this application is able to calculate the result with decimal values.
 
-=== Two Way Analysis Calculations
+==== Two Way Analysis Calculations
 
 These were sourced from:
 
@@ -549,7 +596,7 @@ stem:[LCL=S\times \sqrt{\frac{DF}{\chi_{\frac{\alpha}{2}}^{2},DF}}] : lower conf
 where stem:[\chi_{\frac{\alpha}{2}}^2] is the quantile corresponding to alpha/2 confidence
 with DF degrees of freedom
 
-=== Cohen's Kappa
+==== Cohen's Kappa
 
 These were sourced from:
 
@@ -609,7 +656,7 @@ The confidence intervals are then calculated as
 
 stem:[\kappa \pm z_{\alpha/2}SE(\kappa)]
 
-=== Grubb's Test for Outliers
+==== Grubb's Test for Outliers
 
 NIST/SEMATECH 1.3.5.17.1. Grubbs' Test for Outliers, https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h1.htm.
 In NIST/SEMATECH e-Handbook of Statistical Methods , 16/10/2025.
