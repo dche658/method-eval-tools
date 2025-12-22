@@ -42,7 +42,7 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
             const range = context.workbook.getSelectedRange();
             range.load("address");
             await context.sync();
-            console.log(`Selected range address: ${range.address}`);
+            //console.log(`Selected range address: ${range.address}`);
             props.setRangeValue(range.address);
         });
     }
