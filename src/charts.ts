@@ -4,7 +4,7 @@
  * Requires jStat library for statistical calculations
  */
 
-const { mean, stdev } = require('jstat-esm');
+import { mean, stdev } from 'jstat-esm';
 
 class ExcelBlandAltmanChart {
     private x: number[]; // Array of numbers

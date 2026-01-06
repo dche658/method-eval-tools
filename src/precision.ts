@@ -12,7 +12,7 @@
  * limit.
  */
 
-const { mean, stdev, chisquare, studentt } = require('jstat-esm');
+import { mean, stdev, chisquare, studentt } from 'jstat-esm';
 
 /* Class to perform one factor anova
  * Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering

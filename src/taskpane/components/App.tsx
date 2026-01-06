@@ -65,7 +65,9 @@ const useStyles = makeStyles({
   }
 });
 
-function processRangeData(range: Excel.Range): {
+/* Interface for the input data
+*/
+interface InputData {
   means: number[];
   x1: number[];
   x2: number[];
@@ -74,7 +76,12 @@ function processRangeData(range: Excel.Range): {
   cv: number;
   size: number;
   mean: number;
-} {
+}
+/*
+* Read data from the excel range and copy to an array. If there is more than one column
+* then calculate the mean.
+*/
+function processRangeData(range: Excel.Range): InputData {
   let means: number[] = [];
   let size = 0;
 
@@ -131,24 +138,28 @@ function processRangeData(range: Excel.Range): {
   return { means: means, x1: x1, x2: x2, devsq: devsq, sd: sd, cv: cv, size: size, mean: mean };
 }
 
+interface RegressionResults {
+  slope: number;
+  intercept: number;
+  slopeLCL: number;
+  slopeUCL: number;
+  interceptLCL: number;
+  interceptUCL: number;
+  slopeSE: number;
+  interceptSE: number;
+}
+
+/* Main function to perform regression analysis on the supplied data
+*/
 function doRegression(
   x: number[],
   y: number[],
   regressionMethod: string,
   ciMethod: string,
   errorRatio: number = DEFAULT_ERROR_RATIO
-): {
-  slope: number,
-  intercept: number,
-  slopeSE: number,
-  interceptSE: number,
-  slopeLCL: number,
-  slopeUCL: number,
-  interceptLCL: number,
-  interceptUCL: number
-} {
+): RegressionResults {
   //console.log(`Error ratio is ${errorRatio}`);
-  let res = {
+  let res: RegressionResults = {
     slope: NaN,
     intercept: NaN,
     slopeSE: NaN,
@@ -194,8 +205,8 @@ function doRegression(
   return res;
 } //doRegression
 
-
-//const App: React.FC<AppProps> = (props: AppProps) => {
+/* Main application entry
+*/
 const App: React.FC<AppProps> = () => {
   const [apsAbsValue, setApsAbsValue] = useState<string>("");
   const [apsRelValue, setApsRelValue] = useState<string>("");
@@ -377,6 +388,8 @@ const App: React.FC<AppProps> = () => {
     });
   } //readLayout
 
+  /* Display messages
+  */
   const notify = (intent: string, message: string) => {
     switch (intent) {
       case "error":
@@ -408,7 +421,7 @@ const App: React.FC<AppProps> = () => {
     }
   }
 
-  function createBlandAltmanChart(xData, yData, apsAbs, apsRel) {
+  function createBlandAltmanChart(xData: InputData, yData: InputData, apsAbs: number, apsRel: number) {
     if (cdRangeValue === "") {
       throw new Error("Please specify the chart data output range.");
     }
@@ -424,7 +437,7 @@ const App: React.FC<AppProps> = () => {
     blandAltmanChart.createChart();
   } // createBlandAltmanChart
 
-  function createRegressionChart(xData, yData, regressionResults, apsAbs, apsRel) {
+  function createRegressionChart(xData: InputData, yData: InputData, regressionResults: RegressionResults, apsAbs: number, apsRel: number) {
     if (cdRangeValue === "") {
       throw new Error("Please specify the chart data output range.");
     }
@@ -570,7 +583,7 @@ const App: React.FC<AppProps> = () => {
           outputRng = outputRng.getResizedRange(deltaRows, deltaCols);
 
           // Run the regression
-          let res = doRegression(
+          let res: RegressionResults = doRegression(
             xArr,
             yArr,
             regressionType,

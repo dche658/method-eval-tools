@@ -15,7 +15,7 @@
  * Created: August 2025.
  */
 
-const { normal, studentt, mean, stdev } = require('jstat-esm');
+import { normal, studentt, mean, stdev } from 'jstat-esm';
 
 const CI_METHOD_JACKKNIFE = "jackknife";
 const CI_METHOD_BOOTSTRAP = "bootstrap";
