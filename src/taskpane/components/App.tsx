@@ -62,6 +62,9 @@ const useStyles = makeStyles({
   },
   selection: {
     maxWidth: "220px",
+  },
+  label: {
+    fontWeight: "bold",
   }
 });
 
@@ -699,7 +702,7 @@ const App: React.FC<AppProps> = () => {
   return (
     <div className={styles.root}>
       <Toaster toasterId={toasterId} position="top" timeout={5000} pauseOnHover />
-      <Accordion defaultOpenItems="2">
+      <Accordion defaultOpenItems="8">
         <AccordionItem value="1">
           <AccordionHeader>Performance Specifications</AccordionHeader>
           <AccordionPanel>
@@ -1032,11 +1035,12 @@ const App: React.FC<AppProps> = () => {
                   statistical analysis tool. The current interation allows the user to perform linear
                   regression techniques including Passing-Bablok, Deming, and Weighted Deming.
                   Procedures are also provided to allow users to analyse variance components as described
-                  in CLSI EP15 and EP05.
+                  in CLSI EP15 and EP05. <span className={styles.label}>Instructions for use</span> can be found <a 
+                  href="https://metools.chesher.id.au/help/index.html" target="help">here</a>.
                 </p>
                 <p>
-                  Source code is available on GitHub at
-                  <a href="https://github.com/dche658/method-eval-tools">
+                  Source code is available on GitHub at <a
+                  href="https://github.com/dche658/method-eval-tools">
                     https://github.com/dche658/method-eval-tools </a
                   >.
                 </p>
