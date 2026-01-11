@@ -10,6 +10,10 @@
  * The class TwoFactorVarianceAnalysis is for a two factor design typically used for
  * validation studies and calculates confidence limits instead of a verification
  * limit.
+ * 
+ * Author: Douglas Chesher
+ *
+ * Created: August 2025.
  */
 
 import { mean, stdev, chisquare, studentt } from 'jstat-esm';
@@ -814,9 +818,9 @@ export class TwoFactorVarianceAnalysis {
 
 
 export interface Outlier {
-  outlier: number | undefined, 
+  outlier: number | undefined,
   index: number | undefined,
-  g: number | undefined, 
+  g: number | undefined,
   gCrit: number | undefined
 }
 

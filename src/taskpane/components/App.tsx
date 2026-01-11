@@ -1,3 +1,16 @@
+/*
+* Main component for the add-in. 
+*
+* The Bland-Altman and Regression analysis was developed first so those 
+* components appear hear. To reduce the complexity and size of this file 
+* the other functions were moved to separate subcomponents but the properties
+* for the complete add-in are all defined here as they are in many cases
+* required to be used in more than one subcomponent.
+* 
+* Author: Douglas Chesher
+*
+* Created: October 2025.
+*/
 import * as React from "react";
 import { useState } from "react";
 import RangeInput from "./RangeInput";
@@ -68,6 +81,7 @@ const useStyles = makeStyles({
   }
 });
 
+
 /* Interface for the input data
 */
 interface InputData {
@@ -80,6 +94,7 @@ interface InputData {
   size: number;
   mean: number;
 }
+
 /*
 * Read data from the excel range and copy to an array. If there is more than one column
 * then calculate the mean.
@@ -520,8 +535,8 @@ const App: React.FC<AppProps> = () => {
             apsRel = -1; // Default value if not provided
           }
         }
-        console.log(`APS absolute: ${apsAbs}`);
-        console.log(`APS relative: ${apsRel}`);
+        //console.log(`APS absolute: ${apsAbs}`);
+        //console.log(`APS relative: ${apsRel}`);
         // Load the ranges
         const xRange = currentWorksheet.getRange(xRangeValue);
         const yRange = currentWorksheet.getRange(yRangeValue);
@@ -634,12 +649,12 @@ const App: React.FC<AppProps> = () => {
           // Process concordance assessment if thresholds have been specified
           const concordanceThresholds = loadThresholds();
           if (concordanceThresholds.length > 0) {
-            console.log(concordanceThresholds)
+            //console.log(concordanceThresholds)
             const contingencyBuilder = new ContingencyTableBuilder(concordanceThresholds);
             const contingencyTable = contingencyBuilder.build(xData.means, yData.means);
             const concordanceCalculator = new ConcordanceCalculator(contingencyTable);
             const concordanceResults = concordanceCalculator.calculate();
-            //to-do: copy to Excel
+            //Copy to Excel
             if (concordanceOutputRange === "") {
               throw Error("Please select the concordance output range.");
             } else {

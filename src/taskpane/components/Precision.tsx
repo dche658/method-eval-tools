@@ -1,3 +1,14 @@
+/*
+* Analysis of imprecision panel.
+*
+* Data are assumed to be in a hybrid long format with a column for the day,
+* a column for the run, and then tabulated with n columns for each level
+* to be assessed.
+* 
+* Author: Douglas Chesher
+*
+* Created: August 2025.
+*/
 import * as React from "react";
 
 import { makeStyles, Button } from "@fluentui/react-components";
@@ -199,7 +210,7 @@ export default function Precision(props: PrecisionProps) {
                     precisionData.data[i] = dataObject;
                 } // for column i
                 //Iterate over the column data
-                let rangeValues;
+                let rangeValues: (string | number)[][];
                 if (analysisType === "one-factor") {
                     rangeValues = analyseOneFactor(precisionData);
                 } else {
@@ -218,7 +229,7 @@ export default function Precision(props: PrecisionProps) {
         });
     } // runPrecisionAnalysis
 
-    function analyseOneFactor(precisionData: PrecisionData) {
+    function analyseOneFactor(precisionData: PrecisionData): (string | number)[][] {
         let columnData = new Array(precisionData.data.length);
         let res: OneFactorVariance;
         for (let i = 0; i < precisionData.data.length; i++) {
@@ -268,7 +279,7 @@ export default function Precision(props: PrecisionProps) {
         return formatPrecisionForExcel(labels, columnData);
     }
 
-    function analyseTwoFactor(precisionData: PrecisionData) {
+    function analyseTwoFactor(precisionData: PrecisionData): (string | number)[][] {
         let columnData = new Array(precisionData.data.length);
         let res: TwoFactorVariance;
         let maxSize = 0;

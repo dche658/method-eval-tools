@@ -1,6 +1,21 @@
+/* Range input component.
+*
+* If numbers are allowed then accept numbers or an Excel range specification.
+* If numbers are not allowed, then only accept an Excel range specification.
+* 
+* A range is specified in the form A3:B23 or as an absolute reference using
+* the dollar symbol, e.g. $A$3:$B:$23. Various combinations may be used.
+* 
+* The sheet name may also be specified. e.g. Sheet1!A3:B23. This is the form
+* that is used if the range is read from the selected cells.
+* 
+* Author: Douglas Chesher
+*
+* Created: October 2025.
+*/
 import * as React from "react";
 import { useState } from "react";
-import { Button, Field, Input, Tooltip, tokens, makeStyles } from "@fluentui/react-components";
+import { Button, Field, Input, Tooltip, makeStyles } from "@fluentui/react-components";
 import { AppsRegular } from "@fluentui/react-icons";
 
 

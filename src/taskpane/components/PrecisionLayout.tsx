@@ -1,3 +1,10 @@
+/*
+* Panel to build the template for the imprecision experiment.
+*
+* Author: Douglas Chesher
+*
+* Created: September 2025.
+*/
 import * as React from "react";
 
 import { makeStyles, Button, Field, Input } from "@fluentui/react-components";

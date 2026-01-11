@@ -1,8 +1,24 @@
+/*
+* Classes to build contingency tables and calculate Cohen's Kappa
+* statistic
+* 
+* Author: Douglas Chesher
+*
+* Created: September 2025.
+*/
+
 import { normal } from 'jstat-esm';
 
 const X_COL = 0; // column index for x data
 const Y_COL = 1; // column index for y data
 
+/*
+* Representation of a contingency tables
+* values is a two dimensional array with the summed values
+* xLabels are the row labels found in the left hand column of the table
+* yLabels are the column labels in the top row
+* table is a formatted version of the table
+*/
 interface ContingencyTable {
     values: number[][],
     xLabels: string[],
@@ -10,7 +26,15 @@ interface ContingencyTable {
     table: (string | number)[][]
 }
 
+/*
+* Class to build the contingency table from data in two numeric arrays
+* and the stated thresholds. The arrays are assumed to represent two
+* columns of results from the measurement of each sample (rows) by two
+* different methods. The number of thresholds must be the same for each
+* method. The thresholds must be in numeric order.
+*/
 class ContingencyTableBuilder {
+    // Thresholds as [n rows][2 columns]
     private thresholds: number[][];
 
     constructor(thresholds: number[][]) {
@@ -19,16 +43,19 @@ class ContingencyTableBuilder {
 
     build(x: number[], y: number[]): ContingencyTable {
         let values: number[][] = this.initializeValues(this.thresholds.length + 1);
+        // tabulate data
         for (let i = 0; i < x.length; i++) {
             let rowIndex = this.getCategoryIndex(X_COL, x[i]);
             let colIndex = this.getCategoryIndex(Y_COL, y[i]);
             values[rowIndex][colIndex]++;
         }
+        // build labels
         let xLabels: string[] = this.getLabels(X_COL);
         let yLabels: string[] = this.getLabels(Y_COL);
         // console.log(xLabels);
         // console.log(yLabels);
         // console.log(values);
+        // create a formatted table
         const table = formatContingencyTable(values, xLabels, yLabels);
         return {
             values: values,
@@ -38,6 +65,12 @@ class ContingencyTableBuilder {
         }
     }
 
+    /*
+    * Build the label strings based on the thresholds
+    * Less than lowest threshold: "< t1"
+    * Between thresholds ">= t1 - < t2"
+    * Greater than highest threshold ">= t2"
+    */
     getLabels(col: number): string[] {
         //console.log(this.thresholds);
         let labels: string[] = new Array<string>(this.thresholds.length + 1);
@@ -53,16 +86,26 @@ class ContingencyTableBuilder {
         return labels;
     }
 
+    /*
+    * Compare value to the thresholds for the stated column. It assumes the thresholds
+    * are in numeric order from smallest to largest.
+    * 
+    * Returns the index within the contingency table.
+    */
     getCategoryIndex(col: number, val: number): number {
         let index = 0;
+        // assess against each threshold
         for (let row = 0; row < this.thresholds.length; row++) {
             if (row === 0 && val < this.thresholds[row][col]) {
+                //value is less than the lowest threshold
                 index = 0;
                 break;
             } else if (row > 0 && val >= this.thresholds[row - 1][col] && val < this.thresholds[row][col]) {
+                //value is between two thresholds.
                 index = row;
                 break;
             } else if (row === this.thresholds.length - 1 && val >= this.thresholds[row][col]) {
+                //value is greater than the highest threshold
                 index = row + 1;
                 break;
             }
@@ -70,6 +113,9 @@ class ContingencyTableBuilder {
         return index;
     }
 
+    /* Create [t]x[t] matrix and fill with zeros.
+    * Where t is the number of thresholds + 1
+    */
     initializeValues(size: number): number[][] {
         const values: number[][] = new Array<number[]>(size);
         for (let i = 0; i < size; i++) {
@@ -80,6 +126,10 @@ class ContingencyTableBuilder {
 
 } //ContingencyTableBuilder
 
+/*
+* Results of the concordance analysis including Cohen's Kappa and 
+* the upper and lower confidence limits
+*/
 interface ConcordanceResults {
     overallAgreement: number,
     expectedAgreement: number,
@@ -89,7 +139,8 @@ interface ConcordanceResults {
     ucl: number,
 }
 
-// Sum matrix by row or col
+/* Sum matrix by row or col
+*/
 function sum(matrix: number[][], by: string): number[] {
     const sums: number[] = new Array(matrix.length).fill(0);
     if (by === "row") {
@@ -106,6 +157,9 @@ function sum(matrix: number[][], by: string): number[] {
     return sums;
 }
 
+/*
+* Create labeled and formatted contingency table for output
+*/
 function formatContingencyTable(values: number[][], xLabels: string[], yLabels: string[]): (string | number)[][] {
     const rowSums = sum(values, "row");
     const colSums = sum(values, "col");
@@ -130,20 +184,23 @@ function formatContingencyTable(values: number[][], xLabels: string[], yLabels: 
 
     // Add row sums
     table[0][table[0].length - 1] = "Total";
-    for (let row = 1; row < table.length-1; row++) {
-        table[row][table[row].length-1] = rowSums[row-1];
+    for (let row = 1; row < table.length - 1; row++) {
+        table[row][table[row].length - 1] = rowSums[row - 1];
     }
     // Add column sums
-    table[table.length-1][0] = "Total";
-    for (let col = 1; col < table[0].length-1; col++) {
-        table[table.length-1][col] = colSums[col-1];
+    table[table.length - 1][0] = "Total";
+    for (let col = 1; col < table[0].length - 1; col++) {
+        table[table.length - 1][col] = colSums[col - 1];
     }
     // Add total
-    table[table.length-1][table[table.length-1].length-1] = colSums.reduce((sum, val) => sum + val, 0);
+    table[table.length - 1][table[table.length - 1].length - 1] = colSums.reduce((sum, val) => sum + val, 0);
     return table;
 }
 
-
+/*
+* Calculate concordance and Cohen's Kappa. Default alpha for
+* calculating the confidence limits is 5% or 0.05
+*/
 class ConcordanceCalculator {
     private table: ContingencyTable;
     private alpha: number;
@@ -155,6 +212,8 @@ class ConcordanceCalculator {
     }
 
     calculate(): ConcordanceResults {
+        // calculate the grand total. This should be equal to number of
+        // rows in the original column data
         const n = this.table.values.reduce((sum, row) => sum + row.reduce((rowSum, val) => rowSum + val, 0), 0);
         if (n === 0) {
             return {
@@ -168,22 +227,27 @@ class ConcordanceCalculator {
         }
 
         // Calculate proportions
-        const p = [...(this.table.values)];
+        const p = [...(this.table.values)]; //clone the array
+        // for each row
         for (let i = 0; i < p.length; i++) {
-            p[i] = [...this.table.values[i]]
+            p[i] = [...this.table.values[i]]; //clone the array
+            // for each column
             for (let j = 0; j < p[i].length; j++) {
+                // proportion equals value / n
                 p[i][j] /= n;
             }
         }
         // console.log(p);
         // console.log(this.table.values);
 
+        // Calculate observed agreement by summing on the diagonal
         let observedAgreement = 0;
         for (let i = 0; i < this.table.values.length; i++) {
             observedAgreement += this.table.values[i][i];
         }
         const overallAgreement = observedAgreement / n;
 
+        // Calculate expected agreement
         let expectedAgreement = 0;
         const rowSums: number[] = new Array(this.table.values.length).fill(0);
         const colSums: number[] = new Array(this.table.values[0].length).fill(0);
@@ -192,8 +256,11 @@ class ConcordanceCalculator {
 
         for (let i = 0; i < this.table.values.length; i++) {
             for (let j = 0; j < this.table.values[i].length; j++) {
+                //calculate row sums and column sums
                 rowSums[i] += this.table.values[i][j];
                 colSums[j] += this.table.values[i][j];
+                // row and column sums of proportions is needed later 
+                // to calculate the standard error
                 p_i[i] += p[i][j];
                 p_j[j] += p[i][j];
             }
@@ -225,7 +292,7 @@ class ConcordanceCalculator {
             Math.pow(overallAgreement * expectedAgreement - 2 * expectedAgreement + overallAgreement, 2)));
         let seKappa = sdKappa / Math.sqrt(n);
 
-        let zCrit = normal.inv(1 - this.alpha / 2, 0, 1);
+        let zCrit = normal.inv(1 - this.alpha / 2, 0, 1); // two tail
 
         return {
             overallAgreement: overallAgreement,
@@ -237,6 +304,9 @@ class ConcordanceCalculator {
         };
     }
 
+    /*
+    * Format concordance results for output
+    */
     formatResultsAsArray(results: ConcordanceResults): (string | number)[][] {
         let arr = [
             ["Overall Agreement", results.overallAgreement],
@@ -251,6 +321,14 @@ class ConcordanceCalculator {
 
 }
 
+/*
+* Class to build the contingency table from data in two arrays.
+* The arrays are assumed to represent two columns of results from the
+* qualitative measurement of each sample (rows) by two different 
+* methods and producing categorical data. Data may be numeric or string
+* values. If numeric, they are assumed to represent categories and
+* not have any intrinsic order.
+*/
 class QualitativeContengencyTableBuilder {
     build(x: (string | number)[], y: (string | number)[]): ContingencyTable {
         const categories = this.getCategories(x, y);
@@ -279,6 +357,10 @@ class QualitativeContengencyTableBuilder {
         }
     }
 
+    /*
+    * Get categories from the supplied data by creating a set
+    * and return this as an array.
+    */
     getCategories(x: (string | number)[], y: (string | number)[]): string[] {
         const categories = new Set<string>();
         for (let i = 0; i < x.length; i++) {
@@ -291,6 +373,7 @@ class QualitativeContengencyTableBuilder {
     }
 }
 
+// Module exports
 export {
     ContingencyTableBuilder,
     QualitativeContengencyTableBuilder,

@@ -1,8 +1,23 @@
+/*
+* Concordance thresholds panel.
+*
+* Fields are available in 4 rows and 2 columns to enter
+* the diagnostic thresholds when comparing two quantitative 
+* methods.
+* 
+* Author: Douglas Chesher
+*
+* Created: October 2025.
+*/
 import * as React from "react";
 
 import { Input, makeStyles } from "@fluentui/react-components";
 import { tokens } from "@fluentui/react-components"
 
+/* Properties for the field values and for updating these values
+* External properties are used so the values can be read and
+* used elsewhere.
+*/
 interface ConcordanceThresholdProps {
     xThreshold0: string;
     setXThreshold0: React.Dispatch<React.SetStateAction<string>>;
@@ -47,6 +62,7 @@ const useStyles = makeStyles({
     }
 });
 
+/* Default function for this component */
 export default function ConcordanceThreshold(props: ConcordanceThresholdProps) {
     const styles = useStyles();
 
@@ -128,4 +144,4 @@ export default function ConcordanceThreshold(props: ConcordanceThresholdProps) {
         </div>
 
     );
-}
+}// ConcordanceThreshold

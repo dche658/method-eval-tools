@@ -1,10 +1,15 @@
 /*
  * ExcelBlandAltmanChart and ExcelRegressionChart classes for creating 
  * charts in Excel using Office.js
- * Requires jStat library for statistical calculations
+ * Requires jStat library for statistical functions
+ * 
+ * Author: Douglas Chesher
+ *
+ * Created: September 2025.
  */
 
 import { mean, stdev } from 'jstat-esm';
+
 
 class ExcelBlandAltmanChart {
     private x: number[]; // Array of numbers
@@ -116,7 +121,7 @@ class ExcelBlandAltmanChart {
         lowerLimitXValues: number[][],
         lowerLimitYValues: number[][]
     } {
-        // This function returns the data for the Limits of Agreemen Line Series
+        // This function returns the data for the 95% Limits of Agreemen Line Series
         const upperLimitXValues = [[minX], [maxX]]; //2 rows, 1 column
         const upperLimitYValues = [[meanDiff + sdDiff * 1.96], [meanDiff + sdDiff * 1.96]]; //2 rows, 1 column
         const lowerLimitXValues = [[minX], [maxX]]; //2 rows, 1 column
@@ -669,4 +674,5 @@ class ExcelRegressionChart {
   }
 } //ExcelRegressionChart
 
+// module exports
 export { ExcelBlandAltmanChart, ExcelRegressionChart };

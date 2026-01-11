@@ -1,10 +1,17 @@
+/*
+* Panel for analysing concordance of qualitative data
+*
+* Author: Douglas Chesher
+*
+* Created: October 2025.
+*/
 import * as React from "react";
 
 import { makeStyles, Button } from "@fluentui/react-components";
 import RangeInput from "./RangeInput";
 
 import {
-    ContingencyTableBuilder, QualitativeContengencyTableBuilder,
+    QualitativeContengencyTableBuilder,
     ConcordanceCalculator
 } from "../../concordance";
 
