@@ -23,11 +23,13 @@ import {
   Accordion, AccordionItem, AccordionHeader, AccordionPanel,
   Select, Button, Checkbox, CheckboxProps,
   Field, Input,
+  Link,
   Card,
   Toaster,
   useToastController,
   ToastTitle,
   Toast,
+  ToastTrigger,
   ToastBody,
   Tooltip,
 } from "@fluentui/react-components";
@@ -413,7 +415,13 @@ const App: React.FC<AppProps> = () => {
       case "error":
         dispatchToast(
           <Toast appearance="inverted">
-            <ToastTitle>Error</ToastTitle>
+            <ToastTitle
+              action={
+                <ToastTrigger>
+                  <Link>Dismiss</Link>
+                </ToastTrigger>
+              }
+            >Error</ToastTitle>
             <ToastBody>{message}</ToastBody>
           </Toast>,
           { intent: "error" }
@@ -422,7 +430,13 @@ const App: React.FC<AppProps> = () => {
       case "warning":
         dispatchToast(
           <Toast appearance="inverted">
-            <ToastTitle>Warning</ToastTitle>
+            <ToastTitle
+              action={
+                <ToastTrigger>
+                  <Link>Dismiss</Link>
+                </ToastTrigger>
+              }
+            >Warning</ToastTitle>
             <ToastBody>{message}</ToastBody>
           </Toast>,
           { intent: "warning" }
@@ -431,7 +445,13 @@ const App: React.FC<AppProps> = () => {
       default:
         dispatchToast(
           <Toast appearance="inverted">
-            <ToastTitle>Info</ToastTitle>
+            <ToastTitle
+              action={
+                <ToastTrigger>
+                  <Link>Dismiss</Link>
+                </ToastTrigger>
+              }
+            >Info</ToastTitle>
             <ToastBody>{message}</ToastBody>
           </Toast>,
           { intent: "info" }
@@ -535,6 +555,14 @@ const App: React.FC<AppProps> = () => {
             apsRel = -1; // Default value if not provided
           }
         }
+        // Check if the worksheet is protected
+        currentWorksheet.load("protection/protected")
+        await context.sync();
+        //console.log(currentWorksheet.protection.protected)
+        if (currentWorksheet.protection.protected) {
+          throw new Error("The worksheet is protected. Please remove the protection before running the regression.")
+        }
+        
         //console.log(`APS absolute: ${apsAbs}`);
         //console.log(`APS relative: ${apsRel}`);
         // Load the ranges
@@ -543,7 +571,9 @@ const App: React.FC<AppProps> = () => {
         let outputRng = currentWorksheet.getRange(compOutRangeValue);
         xRange.load(["rowCount", "columnCount", "values"]);
         yRange.load(["rowCount", "columnCount", "values"]);
+        
         await context.sync();
+        
         // Read data and process
         let xData = processRangeData(xRange);
         let yData = processRangeData(yRange);
@@ -919,7 +949,7 @@ const App: React.FC<AppProps> = () => {
                   </p>
                   <Button appearance="primary"
                     onClick={setDefaultValues}>Load Defaults</Button>
-                  
+
                   <p>
                     Alternatively, the defaults for a user defined template can defined in a worksheet
                     and loaded from that page. The definitions need to be supplied in two columns from
@@ -1050,12 +1080,12 @@ const App: React.FC<AppProps> = () => {
                   statistical analysis tool. The current interation allows the user to perform linear
                   regression techniques including Passing-Bablok, Deming, and Weighted Deming.
                   Procedures are also provided to allow users to analyse variance components as described
-                  in CLSI EP15 and EP05. <span className={styles.label}>Instructions for use</span> can be found <a 
-                  href="https://metools.chesher.id.au/help/index.html" target="help">here</a>.
+                  in CLSI EP15 and EP05. <span className={styles.label}>Instructions for use</span> can be found <a
+                    href="https://metools.chesher.id.au/help/index.html" target="help">here</a>.
                 </p>
                 <p>
                   Source code is available on GitHub at <a
-                  href="https://github.com/dche658/method-eval-tools">
+                    href="https://github.com/dche658/method-eval-tools">
                     https://github.com/dche658/method-eval-tools </a
                   >.
                 </p>
