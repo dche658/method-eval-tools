@@ -555,13 +555,6 @@ const App: React.FC<AppProps> = () => {
             apsRel = -1; // Default value if not provided
           }
         }
-        // Check if the worksheet is protected
-        currentWorksheet.load("protection/protected")
-        await context.sync();
-        //console.log(currentWorksheet.protection.protected)
-        if (currentWorksheet.protection.protected) {
-          throw new Error("The worksheet is protected. Please remove the protection before running the regression.")
-        }
         
         //console.log(`APS absolute: ${apsAbs}`);
         //console.log(`APS relative: ${apsRel}`);
@@ -667,14 +660,6 @@ const App: React.FC<AppProps> = () => {
             ];
           }
           outputRng.values = data;
-          // Create Bland-Altman chart if requested
-          if (baRangeValue !== "") {
-            createBlandAltmanChart(xData, yData, apsAbs, apsRel);
-          }
-          // Create regression chart if requested
-          if (scRangeValue !== "") {
-            createRegressionChart(xData, yData, res, apsAbs, apsRel);
-          }
 
           // Process concordance assessment if thresholds have been specified
           const concordanceThresholds = loadThresholds();
@@ -697,11 +682,29 @@ const App: React.FC<AppProps> = () => {
               await context.sync();
             }
           }
+
+          // Check if the worksheet is protected
+          currentWorksheet.load("protection/protected")
+          await context.sync();
+          //console.log(currentWorksheet.protection.protected)
+          if (currentWorksheet.protection.protected) {
+            throw new Error("The worksheet is protected. The charts will not display if the worksheet is protected.")
+          }
+          // Create Bland-Altman chart if requested
+          if (baRangeValue !== "") {
+            createBlandAltmanChart(xData, yData, apsAbs, apsRel);
+          }
+          // Create regression chart if requested
+          if (scRangeValue !== "") {
+            createRegressionChart(xData, yData, res, apsAbs, apsRel);
+          }
+
         } else {
           throw new RangeError("Insufficient data");
         } // if size > 0
         await context.sync();
       } catch (error) {
+        console.log(error);
         notify("error", error.message);
       }
     });

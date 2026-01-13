@@ -1,9 +1,10 @@
 = Method Evaluation Tools Excel Add-in
 :imagesdir: ./images
-:stylesdir: ./style
+:stylesdir: ./styles
 :toc: left
 :toclevels: 3
 :stem:
+:stylesheet: custom.css
 
 The purpose of this add-in is to provide some statistical procedures that are
 necessary for verifying or validating clinical laboratory methods but are not easy to implement
@@ -223,6 +224,33 @@ specifying the days, runs, and values are copied to the Analyse Precision form.
 
 .Copied cell ranges
 image::analyse-precision-cells.png[]
+
+=== Errors and Warnings
+
+[discrete]
+===== You cannot perform the requested operation
+
+This error message usually arises if the add-in is attempting to write to a write
+protected cell or series of cells. The easiest way of avoiding this is to 
+unprotect the sheet. Protection can be reapplied once the add-in operation has
+been completed.
+
+Alternatively, if you are preparing a template, the cells that the add-in will
+write to can be unlocked in advanced. First, highlight the relevant cells in 
+Excel and right click to display the context menu.
+
+image::format-cell.png[]
+
+Choose the "Format Cells" item, which will display the Format Cells dialog.
+
+image::unlock-cell.png[]
+
+Select the *Protection* tab and then uncheck the *Locked" option. Select OK to 
+save the changes. The worksheet protection may then be applied in the usual way
+and the add-in will still be able to write to the cells.
+
+Note, however, that charts can only be created and displayed by the add-in if 
+the active worksheet is unprotected.
 
 == Installing the Add-in
 
