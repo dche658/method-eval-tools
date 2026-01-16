@@ -1,4 +1,7 @@
-import { LeastSquaresRegression, LeastSquaresConfidenceInterval } from "../src/lsregression";
+import {
+    LeastSquaresRegression,
+    LeastSquaresConfidenceInterval
+} from "../src/lsregression";
 import { expect, test } from '@jest/globals';
 import { BootstrapConfidenceInterval } from "../src/regression";
 
@@ -7,7 +10,7 @@ import { BootstrapConfidenceInterval } from "../src/regression";
 const x = [1, 2, 3, 4, 5];
 const y = [1, 1, 2, 2, 4];
 
-test("LeastSquaresRegression", ()=>{
+test("LeastSquaresRegression", () => {
     const regression = new LeastSquaresRegression();
     const reg = regression.calculate(x, y);
     //console.log(reg);
@@ -17,7 +20,7 @@ test("LeastSquaresRegression", ()=>{
 
 //Consistent with Figure 10.10 in Mendenhall 2016, showing output
 //for SAS
-test("LeastSquaresConfidenceInterval", ()=>{
+test("LeastSquaresConfidenceInterval", () => {
     const ci = new LeastSquaresConfidenceInterval();
     const ciRes = ci.calculate(x, y);
     //console.log(ciRes);
@@ -31,7 +34,7 @@ test("LeastSquaresConfidenceInterval", ()=>{
     expect(ciRes.interceptUCL).toBeCloseTo(1.92112485);
 });
 
-test("LS BootstrapConfidenceInterval", ()=>{
+test("LS BootstrapConfidenceInterval", () => {
     const regression = new LeastSquaresRegression();
     const ci = new BootstrapConfidenceInterval(x, y, regression);
     const ciRes = ci.calculate();
