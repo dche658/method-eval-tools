@@ -808,4 +808,5 @@ export {
   MethodCompRegression,
   RegressionModel,
   ConfidenceIntervalModel,
+  Regression,
 };

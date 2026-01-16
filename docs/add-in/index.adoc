@@ -228,7 +228,7 @@ image::analyse-precision-cells.png[]
 === Errors and Warnings
 
 [discrete]
-===== You cannot perform the requested operation
+===== Error: You cannot perform the requested operation
 
 This error message usually arises if the add-in is attempting to write to a write
 protected cell or series of cells. The easiest way of avoiding this is to 
@@ -245,7 +245,7 @@ Choose the "Format Cells" item, which will display the Format Cells dialog.
 
 image::unlock-cell.png[]
 
-Select the *Protection* tab and then uncheck the *Locked" option. Select OK to 
+Select the *Protection* tab and then uncheck the *Locked* option. Select OK to 
 save the changes. The worksheet protection may then be applied in the usual way
 and the add-in will still be able to write to the cells.
 

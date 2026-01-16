@@ -1,15 +1,16 @@
-/* This file is just used for debugging functions without having to 
+/* This file is just used for debugging functions without having to
  * bootstrap the whole add-in.
  */
-import { stdev, studentt } from 'jstat-esm';
+import { stdev, studentt } from "jstat-esm";
 
+import { LeastSquaresConfidenceInterval } from "../src/lsregression";
 
 function grubbsTest(data, alpha = 0.01) {
-  const outlier = {outlier: undefined, outlierIndex: undefined, g: undefined, gCrit: undefined}
+  const outlier = { outlier: undefined, outlierIndex: undefined, g: undefined, gCrit: undefined };
   const n = data.length;
   const mean = data.reduce((a, b) => a + b, 0) / n;
   const t = studentt.inv(1 - alpha / (2 * n), n - 2);
-  const gCrit = ((n - 1)/Math.sqrt(n))*Math.sqrt(Math.pow(t,2)/(n-2+Math.pow(t,2)));
+  const gCrit = ((n - 1) / Math.sqrt(n)) * Math.sqrt(Math.pow(t, 2) / (n - 2 + Math.pow(t, 2)));
 
   let maxDeltaIndex = 0;
   let maxDelta = 0;
@@ -30,7 +31,20 @@ function grubbsTest(data, alpha = 0.01) {
   return outlier;
 }
 
-const data = [242,246,245,246,243,242,238,238,247,239,241,240,249,241,250,245,246,242,243,240,244,245,270,247,241];
+const data = [
+  242, 246, 245, 246, 243, 242, 238, 238, 247, 239, 241, 240, 249, 241, 250, 245, 246, 242, 243,
+  240, 244, 245, 270, 247, 241,
+];
 
-const outlier = grubbsTest(data);
-console.log(outlier);
+// const outlier = grubbsTest(data);
+// console.log(outlier);
+
+function run_regression() {
+  const x = [1, 2, 3, 4, 5];
+  const y = [1, 1, 2, 2, 4];
+  const ci = new LeastSquaresConfidenceInterval();
+  const ciRes = ci.calculate(x, y);
+  console.log(ciRes);
+}
+
+run_regression();
