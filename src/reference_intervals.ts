@@ -164,6 +164,8 @@ function bootstrap_confidence_interval(data: number[], alpha: number = 0.05, con
  * Journal of the American Statistical Association, 83(401), 249–256. 
  * https://doi.org/10.1080/01621459.1988.10478593
  * 
+ * Calculation of the C2 tuning factor
+ * 
  * @param alpha 
  * @returns c2
  */
