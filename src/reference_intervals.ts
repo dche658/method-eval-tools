@@ -1,36 +1,25 @@
 /**
-* Robust algorithm for calculating reference intervals for
-* small data sets.
-* 
-* Based on the R implementation in the referenceIntervals 
-* package by Daniel Finnegan.
-* 
-* Horn PS, Pesce AJ, Copeland BE. A robust approach to 
-* reference interval estimation and evaluation. Clinical Chemistry.
-* 1998. 44(3):622-631.
-* 
-* This method is applicable to symmetric distributions. If data
-* is skewed then two approaches can be taken. One is transform
-* the data using a Box-Cox or log transformation. The second
-* is to calculate the upper reference limit by reflecting the
-* data above the median. For example, suppose we have the following
-* data set.
-* [21, 26, 34, 41, 50, 55, 56, 61, 70]. Median is 50, so the
-* reflected data set is [33, 39, 44, 45, 50, 56, 61, 70]. 
-* Where reflected value = 2*median - x. eg. For 55 the
-* reflected value = 100 - 55 = 45. For the a skewed population
-* Horn recommends using the non-parametric estimator.
-* 
-* Horn, Paul S and Pesce, Amadeo J. 2005. Reference Intervals: A
-* User's Guide. AACC Press, Washington DC.
-* https://archive.org/details/referenceinterva0000horn/mode/2up
-* 
-*/
+ * Reference intervals
+ * 
+ * @author Douglas Chesher
+ */
 
-import { studentt, jStat } from 'jstat-esm';
+import { studentt, normal } from 'jstat-esm';
+import jStat from 'jstat-esm';
 
 import * as shapiro_wilk from './shapiro-wilk.js'
 
+import { quantile } from './regression'
+
+const NP = "np"; //non parametric
+const ROBUST = "robust";
+
+/**
+ * Calculate MAD for robust algorithm
+ * @param data 
+ * @param median 
+ * @returns 
+ */
 function median_absolute_deviation(data: number[], median: number): number {
     let dev = [data.length]
     for (let i = 0; i < data.length; i++) {
@@ -39,6 +28,38 @@ function median_absolute_deviation(data: number[], median: number): number {
     return jStat.median(dev);
 }
 
+/**
+ * Robust algorithm for calculating reference intervals for
+ * small data sets.
+ * 
+ * Based on the R implementation in the referenceIntervals 
+ * package by Daniel Finnegan.
+ * 
+ * Horn PS, Pesce AJ, Copeland BE. A robust approach to 
+ * reference interval estimation and evaluation. Clinical Chemistry.
+ * 1998. 44(3):622-631.
+ * 
+ * This method is applicable to symmetric distributions. If data
+ * is skewed then two approaches can be taken. One is transform
+ * the data using a Box-Cox or log transformation. The second
+ * is to calculate the upper reference limit by reflecting the
+ * data above the median. For example, suppose we have the following
+ * data set.
+ * [21, 26, 34, 41, 50, 55, 56, 61, 70]. Median is 50, so the
+ * reflected data set is [33, 39, 44, 45, 50, 56, 61, 70]. 
+ * Where reflected value = 2*median - x. eg. For 55 the
+ * reflected value = 100 - 55 = 45. For the a skewed population
+ * Horn recommends using the non-parametric estimator.
+ * 
+ * Horn, Paul S and Pesce, Amadeo J. 2005. Reference Intervals: A
+ * User's Guide. AACC Press, Washington DC.
+ * https://archive.org/details/referenceinterva0000horn/mode/2up
+ * 
+ * 
+ * @param data array of values
+ * @param alpha Default 0.05 for 95% confidence interval.
+ * @returns reference limits and their confidence intervals
+ */
 function robust(data: number[], alpha: number = 0.05): number[] {
     const n = data.length;
     data.sort((a, b) => a - b);
@@ -128,6 +149,11 @@ function st(ui: number[], mad: number, c: number): number {
     return st;
 }
 
+/**
+ * Take a random sample with replacement
+ * @param data array of values
+ * @returns results of sampling as an array with the same length as the original data.
+ */
 function sample_with_replacement(data: number[]): number[] {
     const indexes = Array.from({ length: data.length }, () => {
         return Math.floor(Math.random() * data.length);
@@ -139,6 +165,14 @@ function sample_with_replacement(data: number[]): number[] {
     return sample;
 }
 
+/**
+ * Calculate the bootstrap confidence interval for the robust method
+ * @param data array of values
+ * @param alpha Default 0.05 for 95% confidence interval. 
+ * @param confAlpha Alpha for the confidence limits for the reference limit. Default is 0.1 for 90% confidence
+ * @param n number of bootstrap samples. Default is 5000.
+ * @returns 
+ */
 function bootstrap_confidence_interval(data: number[], alpha: number = 0.05, confAlpha = 0.1, n: number = 5000): [number[], number[]] {
     const lowerLimit: number[] = [n];
     const upperLimit: number[] = [n];
@@ -160,6 +194,129 @@ function bootstrap_confidence_interval(data: number[], alpha: number = 0.05, con
     ];
     return [lower_limit_ci, upper_limit_ci];
 }
+
+/**
+ * Reference Interval results object
+ */
+interface ReferenceInterval {
+    lowerLimit: number;
+    upperLimit: number;
+    lowerLimitCI: number[];
+    upperLimitCI: number[];
+}
+
+/**
+ * Calculate the reference interval based on the supplied univariate data.
+ * 
+ * @param data an array of values
+ * @param alpha Default 0.05 for 95% confidence interval.
+ * @param confAlpha Alpha for the confidence limits for the reference limit. Default is 0.1 for 90% confidence
+ * @param method "robust" or "np" only
+ * @param bootstrap_n. Number of bootstrap samples. Only used by robust method at present but could be used for the non-parametric method. 
+ * @returns reference limits and their confidence intervals
+ */
+function ref_limit(data: number[], alpha: number = 0.05, confAlpha = 0.1, method=ROBUST, bootstrap_n: number = 5000): ReferenceInterval {
+    let refint:ReferenceInterval;
+    if (method === ROBUST) {
+        const ri = robust(data, alpha);
+        const ci = bootstrap_confidence_interval(data, alpha, confAlpha, bootstrap_n);
+        refint = {
+            lowerLimit: ri[0],
+            upperLimit: ri[1],
+            lowerLimitCI: ci[0],
+            upperLimitCI: ci[1]
+        }
+    } else if (method === NP) {
+        refint = non_parametric(data, alpha, confAlpha);
+    } else {
+        throw new Error("Unknown method: " + method);
+    }
+    return refint;
+}
+
+/**
+ * Non-parametric method for determining reference intervals.
+ * The method used for calculating the confidence limits for the reference intervals is different to that
+ * used by CLSI. CLSI C28-A3 references Reed AH, Henry RJ, Mason WB. Influence of statistical method used 
+ * on the resulting estimate of normal range. Clin Chem. 1971 Apr;17(4):275-84. PMID: 5552364. However,
+ * this paper provides an inequality to determine the upper and lower ranks and then lists the values in 
+ * Table 3. In contrast Campbell and Gardner provide an alternative approch for their numerical derivation,
+ * which is used below.
+ * 
+ * @param data population data
+ * @param alpha proportion in confidence limit. Default is 0.05 for 95%
+ * @param confAlpha level of significance for the reference limit confidence intervals. Default is 0.1 for 90%.
+ * @returns reference limits and confidence intervals.
+ */
+function non_parametric(data: number[], alpha: number = 0.05, confAlpha = 0.1): ReferenceInterval {
+    const n = data.length;
+    data.sort((a, b) => a - b);
+    if (confAlpha <= 0.05 && n < 153) {
+        throw new Error("At least 153 subjects are required to calculate 95% confidence intervals using a non-parametric method.");
+    }
+    if (confAlpha <= 0.05 && n < 120) {
+        throw new Error("At least 120 subjects are required to calculate 90% confidence intervals using a non-parametric method.")
+    }
+    const lowerLimitRank = Math.round(n * alpha / 2);
+    const lowerLimitIndex = lowerLimitRank < 1 ? 0 : lowerLimitRank - 1;
+    const lowerLimit = data[lowerLimitIndex];
+    const upperLimitRank = Math.round(n * (1 - alpha / 2));
+    const upperLimitIndex = upperLimitRank > n ? n - 1 : upperLimitRank - 1;
+    const upperLimit = data[upperLimitIndex];
+
+    const lowerLimitLCLRank = lower_confidence_limit_rank(n, alpha/2, confAlpha);
+    const lowerLimitLCLIndex = lowerLimitLCLRank < 1 ? 0 : lowerLimitLCLRank - 1;
+    const lowerLimitLCL = data[lowerLimitLCLIndex];
+    const lowerLimitUCLRank = upper_confidence_limit_rank(n, alpha/2, confAlpha);
+    const lowerLimitUCLIndex = lowerLimitUCLRank > n ? n - 1 : lowerLimitUCLRank - 1;
+    const lowerLimitUCL = data[lowerLimitUCLIndex];
+
+    const upperLimitLCLRank = lower_confidence_limit_rank(n, 1 - alpha/2, confAlpha);
+    const upperLimitLCLIndex = upperLimitLCLRank < 1 ? 0 : upperLimitLCLRank - 1;
+    const upperLimitLCL = data[upperLimitLCLIndex];
+    const upperLimitUCLRank = upper_confidence_limit_rank(n, 1 - alpha/2, confAlpha);
+    const upperLimitUCLIndex = upperLimitUCLRank > n ? n - 1 : upperLimitUCLRank - 1;
+    const upperLimitUCL = data[upperLimitUCLIndex];
+
+    return {
+        lowerLimit: lowerLimit,
+        upperLimit: upperLimit,
+        lowerLimitCI: [lowerLimitLCL, lowerLimitUCL],
+        upperLimitCI: [upperLimitLCL, upperLimitUCL]
+    };
+
+}
+
+/**
+ * Campbell MJ, Gardner MJ. Calculating confidence intervals for some non-parametric analyses. 
+ * Br Med J (Clin Res Ed). 1988 May 21;296(6634):1454-6. doi: 10.1136/bmj.296.6634.1454. 
+ * PMID: 3132290; PMCID: PMC2545906.
+ * 
+ * @param n 
+ * @param q 
+ * @param alpha 
+ */
+function lower_confidence_limit_rank(n: number, q: number = 0.025, alpha = 0.1): number {
+    let r = (n*q)-(normal.inv(1-alpha/2, 0, 1)*Math.sqrt(n*q*(1-q)));
+    r = Math.round(r);
+    return r;
+}
+
+/**
+ * Campbell MJ, Gardner MJ. Calculating confidence intervals for some non-parametric analyses. 
+ * Br Med J (Clin Res Ed). 1988 May 21;296(6634):1454-6. doi: 10.1136/bmj.296.6634.1454. 
+ * PMID: 3132290; PMCID: PMC2545906.
+ * 
+ * @param n 
+ * @param q 
+ * @param alpha 
+ */
+function upper_confidence_limit_rank(n: number, q: number = 0.975, alpha = 0.1): number {
+    let s = 1 + (n*q) + normal.inv(1-alpha/2, 0, 1)*Math.sqrt(n*q*(1-q));
+    s = Math.round(s);
+    return s;
+}
+
 
 /**
  * Horn, P. S. (1988). A Biweight Prediction Interval for Random Samples. 
@@ -289,7 +446,7 @@ function estimateBoxCoxLambda(
 interface BoxCoxTransform {
     lambda: number;
     transformedData: number[];
-    shapiroWilkValue: number;
+    shapiroWilkValue: {w: number, p: number};
     maximumLikelihoodValue: number;
 }
 
@@ -310,6 +467,7 @@ function boxcoxsw(x: number[], lambda = [-2, 2, 0.01]): BoxCoxTransform {
     const n = lambda_arr.length;
     const store2: number[][] = [];
     const store3: number[] = [];
+    const store4: {w: number, p: number}[] = [];
     for (let i = 0; i < n; i++) {
         let t: number[] = []
         for (let j = 0; j < x.length; j++) {
@@ -319,13 +477,15 @@ function boxcoxsw(x: number[], lambda = [-2, 2, 0.01]): BoxCoxTransform {
             // t.push(v);
         }
         store2.push(t);
-        store3.push(shapiro_wilk.ShapiroWilkW(t));
+        const sw = shapiro_wilk.ShapiroWilkW(t);
+        store3.push(sw.w);
+        store4.push(sw);
     }
     let k = store3.indexOf(Math.max(...store3));
     return {
         lambda: lambda_arr[k], 
         transformedData: store2[k],
-        shapiroWilkValue: store3[k],
+        shapiroWilkValue: store4[k],
         maximumLikelihoodValue: NaN
     };
 }
@@ -356,7 +516,7 @@ function boxcoxfit(x: number[], lambda = [-2, 2, 0.01], method="sw"): BoxCoxTran
         return {
             lambda: res.lambda,
             transformedData: transformed,
-            shapiroWilkValue: NaN,
+            shapiroWilkValue: {w: NaN, p: NaN},
             maximumLikelihoodValue: res.logLikelihood
         };
     } else {
@@ -364,23 +524,70 @@ function boxcoxfit(x: number[], lambda = [-2, 2, 0.01], method="sw"): BoxCoxTran
     }
 }
 
-/** Inverse Box-Cox transformation.
+
+/** Adjusted Fisher Pearson Coefficient of Skewness.
  * 
- * @param x data to be transformed
- * @param lambda 
- * @returns an array containing the transformed data which is the same length as x.
+ * G1 > 0 Skewed to the right
+ * G1 < 0 Skewed to the left
+ * G1 = 0 Symmetric 
+ * 
+ * Equation for G1 taken from
+ * 1.3.5.11 Measures of Skewness and Kurtosis. In
+ * NIST/SEMATECH e-Handbook of Statistical Methods.
+ * https://www.itl.nist.gov/div898/handbook/eda/section3/eda35b.htm
+ * Accessed 2/2/2026
+ *  
+ * 
+ * @param data 
+ * @returns G1
  */
-function boxcoxinv(x: number[], lambda: number): number[] {
-    const n = x.length;
-    const y: number[] = [n];
+function adjusted_fisher_pearson_coefficient(data: number[]): number {
+    const n = data.length;
+    const mean = jStat.mean(data);
+    const s = jStat.stdev(data);
+    let sumDevX = 0;
     for (let i = 0; i < n; i++) {
-        if (lambda != 0) {
-            y[i] = Math.pow((lambda * x[i]) + 1, lambda);
-        } else {
-            y[i] = Math.exp(x[i]);
-        }
+        sumDevX += Math.pow(data[i] - mean, 3)/n;
     }
-    return y;
+    const g1 = Math.sqrt(n*(n-1))/(n-2) * sumDevX / Math.pow(s, 3);
+    return g1;
+}
+
+/**
+ * Variance of G1 assuming a normal population
+ * 
+ * Equation from Wikipedia https://en.wikipedia.org/wiki/Skewness
+ * Accessed 2/2/2026
+ * 
+ * 
+ * @param n sample size
+ * @returns var(G1)
+ */
+function var_g1(n:number): number {
+    return 6*n*(n-1)/((n-2)*(n+1)*(n+3))
+}
+
+/**
+ * Assess whether G1 is close to zero and consistent with
+ * a normal population without any significant skew.
+ * 
+ * Significance at 90% level by default.
+ * 
+ * @param n sample size
+ * @param g1 statistic
+ * @param alpha significance, default 0.1 for 90%
+ * @returns 
+ */
+function is_consistent_with_normal(n: number, g1: number, alpha: number = 0.1): boolean {
+    const z = normal.inv(1-alpha/2, 0, 1);
+    const varg1 = var_g1(n);
+    const cl = z * Math.sqrt(varg1);
+    //console.log(`g1 ci= ${cl}`);
+    if (Math.abs(g1) < z * Math.sqrt(varg1)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 
@@ -391,5 +598,11 @@ export {
     bootstrap_confidence_interval,
     c2,
     boxcoxfit,
-    boxcoxinv
+    BoxCoxTransform,
+    ref_limit,
+    NP,
+    ROBUST,
+    ReferenceInterval,
+    adjusted_fisher_pearson_coefficient,
+    is_consistent_with_normal
 }

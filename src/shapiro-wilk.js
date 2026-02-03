@@ -2,6 +2,7 @@
  * https://github.com/rniwa/js-shapiro-wilk
  * 25/1/2026
  * 
+ * Modified to use normal.cdf function of jstat to calculate pw
  */
 
 /*
@@ -28,6 +29,8 @@
  *  http://www.r-project.org/Licenses/
  * 
  */
+
+import { normal } from 'jstat-esm';
 
 // The inverse of cdf.
 function normalQuantile(p, mu, sigma)
@@ -275,8 +278,14 @@ function ShapiroWilkW(x)
 
     // Oops, we don't have pnorm
     // pw = pnorm(y, m, s, 0/* upper tail */, 0);
+    //console.log(`y=${y}, m=${m}, s=${s}`)
+    pw = 1 - normal.cdf(y, m, s);
+    //console.log(`pw=${pw}`)
 
-    return w;
+    return {
+        w: w,
+        p: pw
+    };
 }
 
 export { ShapiroWilkW }

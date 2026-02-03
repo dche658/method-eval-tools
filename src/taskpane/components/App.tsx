@@ -17,6 +17,8 @@ import RangeInput from "./RangeInput";
 import ConcordanceThreshold from "./ConcordanceThreshold";
 import PrecisionLayout from "./PrecisionLayout";
 import Qualitative from "./Qualitative";
+import BoxCox from "./BoxCox";
+import RefInt from "./RefInt";
 
 import {
   makeStyles, useId,
@@ -750,7 +752,7 @@ const App: React.FC<AppProps> = () => {
   return (
     <div className={styles.root}>
       <Toaster toasterId={toasterId} position="top" timeout={5000} pauseOnHover />
-      <Accordion defaultOpenItems="8">
+      <Accordion defaultOpenItems="10">
         <AccordionItem value="1">
           <AccordionHeader>Performance Specifications</AccordionHeader>
           <AccordionPanel>
@@ -1072,6 +1074,23 @@ const App: React.FC<AppProps> = () => {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem value="8">
+          <AccordionHeader>Reference Interval</AccordionHeader>
+          <AccordionPanel>
+            <Card>
+              <RefInt notify={notify} />
+
+            </Card>
+          </AccordionPanel>
+        </AccordionItem>
+        <AccordionItem value="9">
+          <AccordionHeader>Box Cox Transformation</AccordionHeader>
+          <AccordionPanel>
+            <Card>
+              <BoxCox notify={notify} />
+            </Card>
+          </AccordionPanel>
+        </AccordionItem>
+        <AccordionItem value="10">
           <AccordionHeader>About</AccordionHeader>
           <AccordionPanel>
             <Card>

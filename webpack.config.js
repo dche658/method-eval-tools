@@ -2,6 +2,7 @@
 
 const devCerts = require("office-addin-dev-certs");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CustomFunctionsMetadataPlugin = require("custom-functions-metadata-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
 
@@ -25,6 +26,7 @@ module.exports = async (env, options) => {
         dependOn: "react",
       },
       commands: "./src/commands/commands.ts",
+      functions: "./src/functions/functions.ts",
     },
     output: {
       clean: true,
@@ -61,10 +63,19 @@ module.exports = async (env, options) => {
       ],
     },
     plugins: [
+      new CustomFunctionsMetadataPlugin({
+        output: "functions.json",
+        input: "./src/functions/functions.ts",
+      }),
       new HtmlWebpackPlugin({
         filename: "taskpane.html",
         template: "./src/taskpane/taskpane.html",
-        chunks: ["polyfill", "taskpane", "react"],
+        chunks: ["polyfill", "taskpane", "functions", "react"],
+      }),
+      new HtmlWebpackPlugin({
+        filename: "commands.html",
+        template: "./src/commands/commands.html",
+        chunks: ["polyfill", "commands"],
       }),
       new CopyWebpackPlugin({
         patterns: [
@@ -84,11 +95,6 @@ module.exports = async (env, options) => {
             },
           },
         ],
-      }),
-      new HtmlWebpackPlugin({
-        filename: "commands.html",
-        template: "./src/commands/commands.html",
-        chunks: ["polyfill", "commands"],
       }),
       new webpack.ProvidePlugin({
         Promise: ["es6-promise", "Promise"],

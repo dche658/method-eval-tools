@@ -809,4 +809,5 @@ export {
   RegressionModel,
   ConfidenceIntervalModel,
   Regression,
+  quantile
 };
