@@ -599,6 +599,7 @@ export {
     c2,
     boxcoxfit,
     BoxCoxTransform,
+    boxCox,
     ref_limit,
     NP,
     ROBUST,
