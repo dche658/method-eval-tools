@@ -125,7 +125,7 @@ export default function BoxCox(props: BoxCoxProps) {
                         }
                     }
                 }
-
+                console.log(data);
                 // Do Box Cox transform and format for copying to excel
                 let boxCoxResults: BoxCoxTransform;
                 const lambda = [parseFloat(lambdaStartValue), parseFloat(lambdaStopValue), parseFloat(lambdaStepValue)];

@@ -468,16 +468,19 @@ function boxcoxsw(x: number[], lambda = [-2, 2, 0.01]): BoxCoxTransform {
     const store2: number[][] = [];
     const store3: number[] = [];
     const store4: {w: number, p: number}[] = [];
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i < n; i++) {//for each lambda
         let t: number[] = []
-        for (let j = 0; j < x.length; j++) {
+        //perform box-cox transformation for each element in supplied data with the current lambda
+        for (let j = 0; j < x.length; j++) { 
             let v = boxCox(x[j], lambda_arr[i]);
             t.push(v);
             // let v = (lambda_arr[i] != 0) ? (Math.pow(x[j], lambda_arr[i]) - 1) / lambda_arr[i] : Math.log(x[j]);
             // t.push(v);
         }
         store2.push(t);
-        const sw = shapiro_wilk.ShapiroWilkW(t);
+        //clone t so values are not sorted in ShapiroWilkW
+        const t2 = [...t];
+        const sw = shapiro_wilk.ShapiroWilkW(t2);
         store3.push(sw.w);
         store4.push(sw);
     }

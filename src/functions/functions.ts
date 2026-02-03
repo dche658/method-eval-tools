@@ -1,8 +1,8 @@
 /**
  * Custom Functions
  */
-import {boxCox} from '../reference_intervals.js'
-import {ShapiroWilkW} from '../shapiro-wilk.js'
+import { boxCox } from '../reference_intervals'
+import { ShapiroWilkW } from '../shapiro-wilk'
 
 /**
  * Inverse of the Box-Cox transformation.
@@ -38,10 +38,16 @@ export function boxcox(x: number, lambda: number): number {
  * Shapiro-Wilk W statistic for normality.
  * 
  * @customfunction SHAPIROWILKW
- * @param {number[]} x array of values
- * @returns {number[]} Shapiro-Wilk w and associated p value.
+ * @param {number[][]} x array of values
+ * @returns {number[][]} Shapiro-Wilk w and associated p value.
  */
-export function shapirowilkw(x: number[]): number[] {
-    const sw = ShapiroWilkW(x);
-    return [sw.w, sw.p];
+export function shapirowilkw(x: number[][]): number[][] {
+    const arr = [];
+    x.forEach((row) => {
+        row.forEach((value) => {
+            arr.push(value);
+        });
+    });
+    const sw = ShapiroWilkW(arr);
+    return [[sw.w], [sw.p]];
 }

@@ -113,6 +113,11 @@ function sign(x) {
     return x > 0 ? 1 : -1;
 }
 
+/**
+ * Shapiro-Wilk W
+ * @param {number[]} x 
+ * @returns {w:number, p: number}
+ */
 function ShapiroWilkW(x)
 {
     function poly(cc, nord, x)
