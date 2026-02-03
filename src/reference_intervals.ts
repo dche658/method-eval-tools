@@ -410,11 +410,11 @@ function boxCoxLogLikelihood(data: number[], lambda: number): number {
  * reference population, the results will almost certainly have a single 
  * mode.
  * 
- * @param {number[]} data - positive univariate data
- * @param {number} minLambda
- * @param {number} maxLambda
- * @param {number} step
- * @returns {{lambda: number, logLikelihood: number}}
+ * @param data - positive univariate data
+ * @param minLambda
+ * @param maxLambda
+ * @param step
+ * @returns lambda and its associated log likelihood value.
  */
 function estimateBoxCoxLambda(
   data: number[],
