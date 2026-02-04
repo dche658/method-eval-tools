@@ -10,20 +10,20 @@
  * The class TwoFactorVarianceAnalysis is for a two factor design typically used for
  * validation studies and calculates confidence limits instead of a verification
  * limit.
- * 
+ *
  * Author: Douglas Chesher
  *
  * Created: August 2025.
  */
 
-import { mean, stdev, chisquare, studentt } from 'jstat-esm';
+import { mean, stdev, chisquare, studentt } from "jstat-esm";
 
 /* Class to perform one factor anova
  * Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
  * and the Sciences 6th ed. CRC Press, Boca Raton. p752.
  */
 export class OneFactorAnova {
-  private dict: { [key: string]: number[]; };
+  private dict: { [key: string]: number[] };
   private factorA: (string | number)[];
   private values: number[];
   constructor(factorA: (string | number)[], values: number[]) {
@@ -44,19 +44,19 @@ export class OneFactorAnova {
   }
 
   calculate(): {
-    mean: number,
-    ssTotal: number,
-    sst: number,
-    sse: number,
-    dfTotal: number,
-    dfE: number,
-    dfT: number,
-    mst: number,
-    mse: number,
-    f: number,
-    n: number,
-    p: number,
-    sn2: number,
+    mean: number;
+    ssTotal: number;
+    sst: number;
+    sse: number;
+    dfTotal: number;
+    dfE: number;
+    dfT: number;
+    mst: number;
+    mse: number;
+    f: number;
+    n: number;
+    p: number;
+    sn2: number;
   } {
     const numGroups = Object.keys(this.dict).length;
     const totalObservations = this.values.length;
@@ -103,32 +103,32 @@ export class OneFactorAnova {
 } //End OneFactorAnova
 
 export interface OneFactorVariance {
-  mean: number,
-  ssTotal: number,
-  sst: number,
-  sse: number,
-  dfTotal: number,
-  dfE: number,
-  dfT: number,
-  mst: number,
-  mse: number,
-  f: number,
-  n: number,
-  p: number,
-  sn2: number,
-  vE: number,
-  vB: number,
-  sE: number,
-  cvE: number,
-  sB: number,
-  cvB: number,
-  s_WL: number,
-  cv_WL: number,
-  dfWL: number,
-  chisqRepeatability: number,
-  chisqWL: number,
-  fRepeatability: number,
-  fWL: number
+  mean: number;
+  ssTotal: number;
+  sst: number;
+  sse: number;
+  dfTotal: number;
+  dfE: number;
+  dfT: number;
+  mst: number;
+  mse: number;
+  f: number;
+  n: number;
+  p: number;
+  sn2: number;
+  vE: number;
+  vB: number;
+  sE: number;
+  cvE: number;
+  sB: number;
+  cvB: number;
+  s_WL: number;
+  cv_WL: number;
+  dfWL: number;
+  chisqRepeatability: number;
+  chisqWL: number;
+  fRepeatability: number;
+  fWL: number;
 }
 
 export class OneFactorVarianceAnalysis {
@@ -217,7 +217,7 @@ export class OneFactorVarianceAnalysis {
 
 /* Class to perform two factor crossed anova
  * Nested ANOVA needs to be used for lab precision data which uses a nested desing.
- * This procedure was written before I understood the difference, and like the 
+ * This procedure was written before I understood the difference, and like the
  * Nested procedure, only works for balanced data.
  *
  */
@@ -360,28 +360,28 @@ export class TwoFactorAnova {
   }
 
   calculate(): {
-    mean: number,
-    sst: number,
-    ssa: number,
-    ssb: number,
-    sse: number,
-    ssab: number,
-    dfT: number,
-    dfA: number,
-    dfB: number,
-    dfAB: number,
-    dfE: number,
-    msa: number,
-    msb: number,
-    msab: number,
-    mse: number,
-    fAB: number,
-    fA: number,
-    fB: number,
-    n: number,
-    nA: number,
-    nB: number,
-    nE: number,
+    mean: number;
+    sst: number;
+    ssa: number;
+    ssb: number;
+    sse: number;
+    ssab: number;
+    dfT: number;
+    dfA: number;
+    dfB: number;
+    dfAB: number;
+    dfE: number;
+    msa: number;
+    msb: number;
+    msab: number;
+    mse: number;
+    fAB: number;
+    fA: number;
+    fB: number;
+    n: number;
+    nA: number;
+    nB: number;
+    nE: number;
   } {
     let sst = this.calculateSST();
 
@@ -431,24 +431,24 @@ export class TwoFactorAnova {
 } //End TwoFactorAnova
 
 interface TwoFactorNestedAnovaTable {
-  mean: number,
-  sst: number,
-  ssa: number,
-  ssb: number,
-  sse: number,
-  dfT: number,
-  dfA: number,
-  dfB: number,
-  dfE: number,
-  msa: number,
-  msb: number,
-  mse: number,
-  fA: number,
-  fB: number,
-  n: number,
-  nA: number,
-  nB: number,
-  nE: number,
+  mean: number;
+  sst: number;
+  ssa: number;
+  ssb: number;
+  sse: number;
+  dfT: number;
+  dfA: number;
+  dfB: number;
+  dfE: number;
+  msa: number;
+  msb: number;
+  mse: number;
+  fA: number;
+  fB: number;
+  n: number;
+  nA: number;
+  nB: number;
+  nE: number;
 }
 /* Class to perform two factor anova
  * For the CLSI EP protocol of
@@ -473,7 +473,6 @@ export class TwoFactorNestedAnova {
   private dfB: number;
   private dfE: number;
 
-
   constructor(factorA: (string | number)[], factorB: (string | number)[], values: number[]) {
     this.factorA = factorA;
     this.factorB = factorB;
@@ -494,7 +493,6 @@ export class TwoFactorNestedAnova {
     this.dfA = 0; //degrees of freedom for factor A
     this.dfB = 0; //degrees of freedom for factor B in A
     this.dfE = 0; //degrees of freedom for error
-
 
     //Add values to dictionary by factor
     for (let i = 0; i < factorA.length; i++) {
@@ -542,7 +540,7 @@ export class TwoFactorNestedAnova {
    */
   calculateSSE(): void {
     this.sse = 0;
-    this.dfE = 0
+    this.dfE = 0;
     for (let key in this.dictA) {
       let group = this.dictA[key]; //get factor A group
       for (let key2 in group) {
@@ -574,12 +572,12 @@ export class TwoFactorNestedAnova {
   /* Sum of squares for factor B within A
    * sum (Mean of replicates - Mean of factor A)^2 multiply by number
    * of replicate means in each factor A
-   * 
+   *
    * SSB calculation here done as an alternative for development purposes
    * based on the NIST Engineering Statistical Handbook. It does not
    * give the same results as the more simple calculation where
    * SSB(in A) = SST - SSA - SSE.
-   * 
+   *
    * I do not know why it is the case but the process is necessary for
    * calculating the degrees of freedom if the data is unbalanced.
    */
@@ -599,7 +597,7 @@ export class TwoFactorNestedAnova {
         let replicatesMean = mean(replicates);
         countRepMeans++;
         sumDevsq += Math.pow(replicatesMean - groupMean, 2);
-        ssb = ssb + (sumDevsq);
+        ssb = ssb + sumDevsq;
       }
       this.dfB = this.dfB + (countRepMeans > 0 ? countRepMeans - 1 : 0);
     }
@@ -607,7 +605,9 @@ export class TwoFactorNestedAnova {
 
   calculate(): TwoFactorNestedAnovaTable {
     if (this.numFactorA * this.numFactorB * this.numReps !== this.values.length) {
-      throw new Error("Data must be balanced (equal number of replicates per run per day) for this nested ANOVA calculation to produce accurate results. More sophisticated statistical techniques are required to process unbalanced data.");
+      throw new Error(
+        "Data must be balanced (equal number of replicates per run per day) for this nested ANOVA calculation to produce accurate results. More sophisticated statistical techniques are required to process unbalanced data."
+      );
     }
     this.calculateSST();
     this.calculateSSA();
@@ -640,49 +640,49 @@ export class TwoFactorNestedAnova {
       nB: this.numFactorB,
       nE: this.numReps,
     };
-  }//calculate
-}//TwoFactorNestedAnova
+  } //calculate
+} //TwoFactorNestedAnova
 
 export interface TwoFactorVariance {
-  mean: number,
-  sst: number,
-  ssa: number,
-  ssb: number,
-  sse: number,
-  dfT: number,
-  dfA: number,
-  dfB: number,
-  dfE: number,
-  msa: number,
-  msb: number,
-  mse: number,
-  fA: number,
-  fB: number,
-  n: number,
-  nA: number,
-  nB: number,
-  nE: number,
-  vT: number,
-  vA: number,
-  vB: number,
-  vE: number,
-  sWL: number,
-  sA: number,
-  sB: number,
-  sE: number,
-  cvWL: number,
-  cvA: number,
-  cvB: number,
-  cvE: number,
-  dfWL: number,
-  sWL_LCL: number,
-  sWL_UCL: number,
-  sE_LCL: number,
-  sE_UCL: number,
-  cvWL_LCL: number,
-  cvWL_UCL: number,
-  cvE_LCL: number,
-  cvE_UCL: number,
+  mean: number;
+  sst: number;
+  ssa: number;
+  ssb: number;
+  sse: number;
+  dfT: number;
+  dfA: number;
+  dfB: number;
+  dfE: number;
+  msa: number;
+  msb: number;
+  mse: number;
+  fA: number;
+  fB: number;
+  n: number;
+  nA: number;
+  nB: number;
+  nE: number;
+  vT: number;
+  vA: number;
+  vB: number;
+  vE: number;
+  sWL: number;
+  sA: number;
+  sB: number;
+  sE: number;
+  cvWL: number;
+  cvA: number;
+  cvB: number;
+  cvE: number;
+  dfWL: number;
+  sWL_LCL: number;
+  sWL_UCL: number;
+  sE_LCL: number;
+  sE_UCL: number;
+  cvWL_LCL: number;
+  cvWL_UCL: number;
+  cvE_LCL: number;
+  cvE_UCL: number;
 }
 
 export class TwoFactorVarianceAnalysis {
@@ -700,7 +700,12 @@ export class TwoFactorVarianceAnalysis {
    * values as an Array
    * alpha for calculation of confidence limits. Default is 0.05
    */
-  constructor(factorA: (string | number)[], factorB: (string | number)[], values: number[], alpha = 0.05) {
+  constructor(
+    factorA: (string | number)[],
+    factorB: (string | number)[],
+    values: number[],
+    alpha = 0.05
+  ) {
     this.factorA = factorA;
     this.factorB = factorB;
     this.values = values;
@@ -753,9 +758,9 @@ export class TwoFactorVarianceAnalysis {
     //Calculations for Satterswaithe estimate of the degrees of freedom
     // alpha weightings based on degrees of freedom for pooled variance. Probably
     // not right but seems to produce similar results to VCA and CLSI EP05
-    const alphaA = anova.nA / (anova.n - 1);//=1 / (anova.nB * anova.nE);
-    const alphaAB = (anova.nB - 1) * anova.nA / (anova.n - 1); //(anova.nE - 1) / (anova.nE * anova.nB);
-    const alphaE = (anova.n - (anova.nA * anova.nB)) / (anova.n - 1); //(anova.nE - 1) / anova.nE;
+    const alphaA = anova.nA / (anova.n - 1); //=1 / (anova.nB * anova.nE);
+    const alphaAB = ((anova.nB - 1) * anova.nA) / (anova.n - 1); //(anova.nE - 1) / (anova.nE * anova.nB);
+    const alphaE = (anova.n - anova.nA * anova.nB) / (anova.n - 1); //(anova.nE - 1) / anova.nE;
     const numerator = Math.pow(alphaA * anova.msa + alphaAB * anova.msb + alphaE * anova.mse, 2);
     const denominator1 = Math.pow(alphaA * anova.msa, 2) / anova.dfA;
     const denominator2 = Math.pow(alphaAB * anova.msb, 2) / anova.dfB;
@@ -816,17 +821,16 @@ export class TwoFactorVarianceAnalysis {
   }
 } //TwoFactorVarianceAnalysis
 
-
 export interface Outlier {
-  outlier: number | undefined,
-  index: number | undefined,
-  g: number | undefined,
-  gCrit: number | undefined
+  outlier: number | undefined;
+  index: number | undefined;
+  g: number | undefined;
+  gCrit: number | undefined;
 }
 
 // Function from Wikipedia https://en.wikipedia.org/wiki/Grubbs%27s_test
 export function grubbsTest(data: number[], alpha = 0.01): Outlier {
-  const outlier = { outlier: undefined, index: undefined, g: undefined, gCrit: undefined }
+  const outlier = { outlier: undefined, index: undefined, g: undefined, gCrit: undefined };
   const n = data.length;
   const mean = data.reduce((a, b) => a + b, 0) / n;
   const t = studentt.inv(1 - alpha / (2 * n), n - 2);

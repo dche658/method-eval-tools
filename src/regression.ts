@@ -15,7 +15,7 @@
  * Created: August 2025.
  */
 
-import { normal, studentt, mean, stdev } from 'jstat-esm';
+import { normal, studentt, mean, stdev } from "jstat-esm";
 
 const CI_METHOD_JACKKNIFE = "jackknife";
 const CI_METHOD_BOOTSTRAP = "bootstrap";
@@ -33,11 +33,12 @@ const DEFAULT_BOOTSTRAP_N = 10000;
 
 const PI4 = Math.PI / 4;
 
-
-/*
+/**
  * Sum of the sqaured deviations.
  *
  * Sum of (x_i - mean(x))^2
+ * @param arr array of values
+ * @returns sum of deviations from the mean squared
  */
 function devsq(arr: number[]): number {
   const avg = mean(arr);
@@ -46,7 +47,7 @@ function devsq(arr: number[]): number {
     sum += (arr[i] - avg) * (arr[i] - avg);
   }
   return sum;
-}//devsq
+} //devsq
 
 /* Calculate the q th quantile for the given probabilities.
  *
@@ -100,17 +101,17 @@ function quantile(arr: number[], probs: number[]): number[] | undefined {
 
 /* Object returned by calculate method of a Regression instance */
 interface RegressionModel {
-  slope: number,
-  intercept: number,
-  slopeLCL: number,
-  slopeUCL: number,
-  interceptLCL: number,
-  interceptUCL: number
+  slope: number;
+  intercept: number;
+  slopeLCL: number;
+  slopeUCL: number;
+  interceptLCL: number;
+  interceptUCL: number;
 }
 
 /* Base class for performing regression analysis */
 interface Regression {
-  calculate(x: number[], y: number[]): RegressionModel
+  calculate(x: number[], y: number[]): RegressionModel;
 }
 
 /* Ordinary Deming Regression
@@ -166,13 +167,16 @@ class DemingRegression implements Regression {
     };
   }
 
-  calculate(x: number[], y: number[]): {
-    slope: number,
-    intercept: number,
-    slopeLCL: number,
-    slopeUCL: number,
-    interceptLCL: number,
-    interceptUCL: number
+  calculate(
+    x: number[],
+    y: number[]
+  ): {
+    slope: number;
+    intercept: number;
+    slopeLCL: number;
+    slopeUCL: number;
+    interceptLCL: number;
+    interceptUCL: number;
   } {
     return this.calculateDeming(x, y);
   }
@@ -313,12 +317,12 @@ class WeightedDemingRegression implements Regression {
 } //WeightedDeming
 
 interface AngleMatrixModel {
-  matrix: number[],
-  nAllItems: number,
-  nNeg: number,
-  nNeg2: number,
-  nPos: number,
-  nPos2: number
+  matrix: number[];
+  nAllItems: number;
+  nNeg: number;
+  nNeg2: number;
+  nPos: number;
+  nPos2: number;
 }
 
 class PassingBablokRegression implements Regression {
@@ -515,14 +519,14 @@ class PassingBablokRegression implements Regression {
 } //PassingBablokRegression
 
 interface ConfidenceIntervalModel {
-  slope: number,
-  intercept: number,
-  slopeSE: number,
-  interceptSE: number,
-  slopeLCL: number,
-  slopeUCL: number,
-  interceptLCL: number,
-  interceptUCL: number
+  slope: number;
+  intercept: number;
+  slopeSE: number;
+  interceptSE: number;
+  slopeLCL: number;
+  slopeUCL: number;
+  interceptLCL: number;
+  interceptUCL: number;
 }
 
 /* Calculate a confidence interval using a jackknife procedure.
@@ -589,8 +593,8 @@ class JackknifeConfidenceInterval {
   }
 
   /*
-  * Calculate the standard error using the procedure of Linnet
-  */
+   * Calculate the standard error using the procedure of Linnet
+   */
   linnetSE(b_jack: number[], b_global: number): number {
     let n = b_jack.length; //number of data points
     let d_b = new Array<number>(n); //deviations for estimating the standard error
@@ -612,7 +616,13 @@ class BootstrapConfidenceInterval {
   private alpha: number;
   private bootstrapN: number;
 
-  constructor(x: number[], y: number[], regression: Regression, bootstrapN = DEFAULT_BOOTSTRAP_N, alpha = DEFAULT_ALPHA) {
+  constructor(
+    x: number[],
+    y: number[],
+    regression: Regression,
+    bootstrapN = DEFAULT_BOOTSTRAP_N,
+    alpha = DEFAULT_ALPHA
+  ) {
     this.x = x;
     this.y = y;
     this.regression = regression;
@@ -641,7 +651,11 @@ class BootstrapConfidenceInterval {
 
   //Calculate regression on each of the bootstrap samples
   //and return arrays containing the slopes (b1) and intercepts (b0)
-  calculateBootstrapRegression(x: number[], y: number[], bootstrapN: number): { b1: number[], b0: number[] } {
+  calculateBootstrapRegression(
+    x: number[],
+    y: number[],
+    bootstrapN: number
+  ): { b1: number[]; b0: number[] } {
     const b1 = new Array<number>(bootstrapN);
     const b0 = new Array<number>(bootstrapN);
     for (let i = 0; i < bootstrapN; i++) {
@@ -659,7 +673,7 @@ class BootstrapConfidenceInterval {
   }
 
   //Sample with replacement
-  getBootstrapSamples(x: number[], y: number[]): { x: number[], y: number[] } {
+  getBootstrapSamples(x: number[], y: number[]): { x: number[]; y: number[] } {
     const sx = new Array<number>(x.length);
     const sy = new Array<number>(y.length);
     for (let i = 0; i < x.length; i++) {
@@ -809,5 +823,5 @@ export {
   RegressionModel,
   ConfidenceIntervalModel,
   Regression,
-  quantile
+  quantile,
 };

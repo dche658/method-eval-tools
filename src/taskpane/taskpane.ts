@@ -1,5 +1,4 @@
 /*
-* Global functions used by taskpane
-*
-*/
-
+ * Global functions used by taskpane
+ *
+ */
