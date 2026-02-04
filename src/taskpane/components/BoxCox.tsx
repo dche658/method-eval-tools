@@ -12,10 +12,10 @@ import {
     Select,
 } from "@fluentui/react-components";
 
-import { 
+import {
     boxcoxfit,
     BoxCoxTransform
- } from "../../reference_intervals";
+} from "../../reference_intervals";
 
 import RangeInput from "./RangeInput";
 
@@ -40,9 +40,17 @@ const useStyles = makeStyles({
     },
     inputfield: {
         width: "70px",
-        marginLeft: "4px",
         marginRight: "4px",
         marginTop: "4px",
+    },
+    grid1x3: {
+        display: "grid",
+        gridTemplateColumns: " 1fr 1fr 1fr",
+        gridTemplateRows: "1fr",
+        gridGap: "4px",
+    },
+    box: {
+        padding: "4px",
     }
 });
 
@@ -80,7 +88,7 @@ export default function BoxCox(props: BoxCoxProps) {
                 arr[i] = [3];
             }
             arr[i][0] = results.transformedData[i];
-            if (i===0) {
+            if (i === 0) {
                 arr[i][1] = results.lambda;
                 if (method === "sw") {
                     arr[i][2] = results.shapiroWilkValue.w;
@@ -96,9 +104,9 @@ export default function BoxCox(props: BoxCoxProps) {
         }
         //Add column headers
         if (method === "sw") {
-            arr.splice(0,0,["Transformed", "Lambda", "Shapiro-Wilk W", "p-value"])
+            arr.splice(0, 0, ["Transformed", "Lambda", "Shapiro-Wilk W", "p-value"])
         } else if (method === "mle") {
-            arr.splice(0,0,["Transformed", "Lambda", "MLE Value"])
+            arr.splice(0, 0, ["Transformed", "Lambda", "MLE Value"])
         }
         console.log(arr);
         return arr;
@@ -157,13 +165,13 @@ export default function BoxCox(props: BoxCoxProps) {
         <div className="container">
             <div>
                 <p>
-                    Estimate the optimal value for lambda by defining a search space 
+                    Estimate the optimal value for lambda by defining a search space
                     of possible values. The default is from -2 to +2 in steps of 0.01.
-                    For each lambda in the search space a Box-Cox transformation of 
-                    the supplied data is performed. The value of lambda associdated 
-                    with the best fit is selected. 
+                    For each lambda in the search space a Box-Cox transformation of
+                    the supplied data is performed. The value of lambda associdated
+                    with the best fit is selected.
                     Two methods for assessing the optimal lambda are
-                    available. The default method performs a Shapiro-Wilk test for 
+                    available. The default method performs a Shapiro-Wilk test for
                     normality, and the second calculates the log likelihood value.
                 </p>
             </div>
@@ -188,25 +196,30 @@ export default function BoxCox(props: BoxCoxProps) {
                     <option value="mle">Maximum Likelihood Est</option>
                 </Select>
             </div>
-            <div>
+
+            <div className={styles.box}>
                 <span>Lambda Search Space</span>
-                <div>
-                    <label htmlFor="lambda-start">Start:</label>
-                    <Input type="number" value={lambdaStartValue} id="lambda-start"
-                        className={styles.inputfield} onChange={handleLambdaStartChange} />
-                </div>
-                <div>
-                    <label htmlFor="lambda-stop">Stop:</label>
-                    <Input type="number" value={lambdaStopValue} id="lambda-stop"
-                        className={styles.inputfield} onChange={handleLambdaStopChange} />
-                </div>
-                <div>
-                    <label htmlFor="lambda-step">Step:</label>
-                    <Input type="number" value={lambdaStepValue} id="lambda-step"
-                        className={styles.inputfield} onChange={handleLambdaStepChange} />
+                <div className={styles.grid1x3}>
+
+                    <div className={styles.field}>
+                        <label htmlFor="lambda-start">Start:</label>
+                        <Input type="number" value={lambdaStartValue} id="lambda-start"
+                            className={styles.inputfield} onChange={handleLambdaStartChange} />
+                    </div>
+
+                    <div className={styles.field}>
+                        <label htmlFor="lambda-stop">Stop:</label>
+                        <Input type="number" value={lambdaStopValue} id="lambda-stop"
+                            className={styles.inputfield} onChange={handleLambdaStopChange} />
+                    </div>
+
+                    <div className={styles.field}>
+                        <label htmlFor="lambda-step">Step:</label>
+                        <Input type="number" value={lambdaStepValue} id="lambda-step"
+                            className={styles.inputfield} onChange={handleLambdaStepChange} />
+                    </div>
                 </div>
             </div>
-
             <div className={styles.field}>
                 <Button appearance="primary" onClick={boxCoxTransform}>Transform</Button>
             </div>
