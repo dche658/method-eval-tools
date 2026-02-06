@@ -1083,7 +1083,7 @@ const App: React.FC<AppProps> = () => {
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem value="9">
-          <AccordionHeader>Box Cox Transformation</AccordionHeader>
+          <AccordionHeader>Box Cox</AccordionHeader>
           <AccordionPanel>
             <Card>
               <BoxCox notify={notify} />

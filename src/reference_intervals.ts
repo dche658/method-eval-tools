@@ -62,11 +62,15 @@ function robust(data: number[], alpha: number = 0.05): number[] {
   const n = data.length;
   data.sort((a, b) => a - b);
   const median = jStat.median(data);
+
+  //Biweight location estimator initially set to the median
   let tbi = median;
   let tbi_new = 10000;
+
+  //Tuning constant
   const c = 3.7;
   let mad = median_absolute_deviation(data, median);
-  mad = mad / 0.6745;
+  mad = mad / 0.6744898; //constant calculated in R as qnorm(3/4, 0, 1) - Horn rounded to 0.6745
   let ui = [n];
   let wi = [n];
   let bi = [n];
@@ -86,11 +90,11 @@ function robust(data: number[], alpha: number = 0.05): number[] {
   } while (diff > 0.000001);
 
   //console.log(`tbi = ${tbi}`);
-
+  const _c2 = c2(alpha);
   for (let i = 0; i < n; i++) {
-    ui[i] = (data[i] - median) / (205.6 * mad);
+    ui[i] = (data[i] - median) / (_c2 * mad);
   }
-  const sbi205_6 = sbi(ui, mad, 205.6);
+  const sbi205_6 = sbi(ui, mad, _c2);
   //console.log(`sbi205.6 = ${sbi205_6}`);
   for (let i = 0; i < n; i++) {
     ui[i] = (data[i] - median) / (3.7 * mad);
@@ -110,6 +114,13 @@ function robust(data: number[], alpha: number = 0.05): number[] {
   return [robustLower, robustUpper];
 }
 
+/** Biweight estimator of the spread
+ * 
+ * @param ui standardized deviation
+ * @param mad median absolute deviation
+ * @param c tuning constant
+ * @returns 
+ */
 function sbi(ui: number[], mad: number, c: number): number {
   let ai = [];
   let bi = [];
@@ -127,6 +138,13 @@ function sbi(ui: number[], mad: number, c: number): number {
   return sbi;
 }
 
+/** Biweight estimator of the variation in T_bu
+ * 
+ * @param ui standardized deviations
+ * @param mad median absolute deviation
+ * @param c tuning constant
+ * @returns 
+ */
 function st(ui: number[], mad: number, c: number): number {
   let ai = [];
   let bi = [];

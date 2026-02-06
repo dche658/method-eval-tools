@@ -225,6 +225,97 @@ specifying the days, runs, and values are copied to the Analyse Precision form.
 .Copied cell ranges
 image::analyse-precision-cells.png[]
 
+=== Reference Intervals
+
+The reference interval tool enables the user to calculate a reference interval
+on population data using one of two methods.
+
+The first method uses Horn's biweight quantile approach, also known as the robust
+method. It is useful for smaller data sets and is resistent to outliers. However,
+the data needs to be distributed symmetrically. For populations with a skewed 
+distribution the data can be transformed prior to analysis. Alternatively, data
+below the median can be removed, and data above the median can be reflected where
+the reflected value v = median - (x - median). Suppose the median is 100 and 
+subsequent values for x are [105, 124, 135, ...]. The reflected values would be
+[95, 76, 65, ...]. The combined data set can then be used as a symmetric pseudo-sample
+to calculate the upper reference limit. If this approach is used, Horn suggests using
+the non-parametric approach to define the lower reference limit of the reference
+interval.
+
+Horn PS, Pesce AJ, Copeland BE. A robust approach to reference interval estimation 
+and evaluation. Clinical Chemistry. 1998. 44(3):622-631.
+
+The second method is the non-parametric approach outlined in CLSI EP28-A3c 2010: 
+Defining, Establishing, and Verifying ReferenceIntervals in the Clinical Laboratory, 
+3rd Edition. To calculate
+the confidence intervals for each of the reference limits, CLSI EP28-A3 recommends
+a table of indexes that varies with the sample sizes. This is based on Reed AH, 
+Henry RJ, Mason WB. Influence of statistical method used on the resulting estimate
+of normal range. Clin Chem. 1971 Apr;17(4):275-84. PMID: 5552364.
+In contrast this add-in uses the numerical approach described by Campbell and 
+Gardner 1988 and will sometimes give results that are a little different to CLSI 
+EP28-A3.
+
+Campbell MJ, Gardner MJ. Calculating confidence intervals for some non-parametric analyses.
+Br Med J (Clin Res Ed). 1988 May 21;296(6634):1454-6. doi: 10.1136/bmj.296.6634.1454.
+PMID: 3132290;
+
+image::refint-tool.png[]
+
+* The reference interval data should be in a single column in Excel. Select the range
+of cells containing the data and use the button to copy the range to the taskpane.
+* Select the method you wish to use for calculating the reference interval. 
+* You may use different reference interval limits if you wish. The default is for the 
+reference interval to include 95% of the population (alpha = 0.05), and the confidence
+limits to cover 90% (alpha = 0.10).
+* Select the top left cell where you would like the reference interval to be 
+saved and copy the cell reference to the add-in taskpane.
+* Click the "Calculate" button to perform the analysis and copy the results to the
+Excel worksheet.
+
+=== Box Cox Transformations
+
+The Box Cox power transformation is often suggested for transforming reference
+interval data having a skewed distribution to one having a normal distribution.
+The reference interval tools can then be applied to the transformed data to derive
+a reference interval and the reference limits can be back calculated using the 
+inverse of the transformation.
+
+The transformation is given by:
+
+stem:[y={(\frac{x^{\lambda} - 1}{\lambda}, \lambda \ne 0),( ln(x), \lambda = 0):}]
+
+This tool provides a couple of methods for estimating lambda using a simple grid
+search. In both cases a search space must be defined by setting the start of the
+range, the end of the range, and the step size. The tool performs a Box-Cox
+transform on the population data and assesses the goodness of fit using a Shapiro-
+Wilk test or a log likelihood function for every possible lambda in the search
+space. The lambda having the best Shapiro-Wilk W or maximum likelihood is then
+selected.
+
+The algorithm is not guaranteed to determine the optimal value of lambda but should
+return something close for data that is typically used to define reference intervals.
+If the returned value of lambda is at the start or end of the search space you selected, 
+you will need to extend the search space and try again.
+
+image::boxcox-tool.png[]
+
+* As for the reference interval tool, the data should be in a single column in
+Excel. Select the range of cells containing the data and use the button to 
+copy the input range to the taskpane.
+* Select the top left cell where you would like the transformed data to be 
+saved and copy the cell reference to the add-in taskpane.
+* Choose the method for assessing the best lambda value. The default is a
+Shapiro-Wilk test.
+* Define the search space for lambda. The default is -2 to +2 in steps of 0.01.
+* Click on the Transform button to run the analysis.
+
+To back calculate the reference limits and confidence intervals from the transformed
+data, use the METOOLS.BOXCOXINV(x, lambda) custom function in Excel. This function
+will be available when the add-in taskpane is active.
+
+image::boxcoxinv-function.png[]
+
 === Errors and Warnings
 
 [discrete]
