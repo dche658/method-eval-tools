@@ -27,6 +27,7 @@ import {
   Field, Input,
   Link,
   Card,
+  Tab, TabList,
   Toaster,
   useToastController,
   ToastTitle,
@@ -34,6 +35,12 @@ import {
   ToastTrigger,
   ToastBody,
   Tooltip,
+} from "@fluentui/react-components";
+
+import type {
+  SelectTabData,
+  SelectTabEvent,
+  TabValue,
 } from "@fluentui/react-components";
 
 import {
@@ -76,6 +83,13 @@ const useStyles = makeStyles({
     marginLeft: "4px",
     marginBottom: "4px",
     display: "none",
+  },
+  panels: {
+    padding: "0 10px",
+    "& th": {
+      textAlign: "left",
+      padding: "0 30px 0 0",
+    },
   },
   selection: {
     maxWidth: "220px",
@@ -267,6 +281,7 @@ const App: React.FC<AppProps> = () => {
   const [layoutSheet, setLayoutSheet] = React.useState<string>("Layout");
   const [importLayoutChecked, setImportLayoutChecked] = React.useState<CheckboxProps["checked"]>(false);
 
+  const [selectedTabValue, setSelectedTabValue] = React.useState<TabValue>("evaluation");
 
   const regressionTypeId = useId("regression-type");
   const toasterId = useId("toaster");
@@ -274,6 +289,11 @@ const App: React.FC<AppProps> = () => {
 
   const styles = useStyles();
 
+  const onTabSelect = (event: SelectTabEvent, data: SelectTabData) => {
+    if (event.isTrusted) {
+      setSelectedTabValue(data.value);
+    }
+  };
 
   /* Configure default values for the input fields */
   const setDefaultValues = () => {
@@ -557,7 +577,7 @@ const App: React.FC<AppProps> = () => {
             apsRel = -1; // Default value if not provided
           }
         }
-        
+
         //console.log(`APS absolute: ${apsAbs}`);
         //console.log(`APS relative: ${apsRel}`);
         // Load the ranges
@@ -566,9 +586,9 @@ const App: React.FC<AppProps> = () => {
         let outputRng = currentWorksheet.getRange(compOutRangeValue);
         xRange.load(["rowCount", "columnCount", "values"]);
         yRange.load(["rowCount", "columnCount", "values"]);
-        
+
         await context.sync();
-        
+
         // Read data and process
         let xData = processRangeData(xRange);
         let yData = processRangeData(yRange);
@@ -749,362 +769,378 @@ const App: React.FC<AppProps> = () => {
     setErrorRatio(event.target.value);
   }
 
-  return (
-    <div className={styles.root}>
-      <Toaster toasterId={toasterId} position="top" timeout={5000} pauseOnHover />
-      <Accordion defaultOpenItems="10">
-        <AccordionItem value="1">
-          <AccordionHeader>Performance Specifications</AccordionHeader>
-          <AccordionPanel>
-            <Card>
-              <Checkbox
-                label="Import APS settings from worksheet"
-                checked={importApsSettings}
-                onChange={toggleImportApsSettings}
-                className={styles.field}
-              />
-              <RangeInput label="APS Absolute"
-                rangeValue={apsAbsValue}
-                setRangeValue={setApsAbsValue}
-                validationMessage="Must be a number or valid Excel cell reference. e.g., D1"
-                tooltipContent="Excel cell reference or APS absolute value"
-                allowNumbers={true} />
-              <RangeInput label="APS Relative"
-                rangeValue={apsRelValue}
-                setRangeValue={setApsRelValue}
-                validationMessage="Must be a number or valid Excel cell reference. e.g., D2"
-                tooltipContent="Excel cell reference or APS relative value as a fraction. e.g., enter 0.1 for 10%"
-                allowNumbers={true} />
-            </Card>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="2">
-          <AccordionHeader>Comparison</AccordionHeader>
-          <AccordionPanel>
-
-            <Card>
-              <RangeInput label="X Range"
-                rangeValue={xRangeValue}
-                setRangeValue={setXRangeValue}
-                validationMessage="Must be a valid Excel range. e.g., A2:A21" />
-              <RangeInput label="Y Range"
-                rangeValue={yRangeValue}
-                setRangeValue={setYRangeValue}
-                validationMessage="Must be a valid Excel range. e.g., B2:B21" />
-              <RangeInput label="Output Range"
-                rangeValue={compOutRangeValue}
-                setRangeValue={setCompOutRangeValue}
-                validationMessage="Must be a valid Excel cell reference. e.g., E1"
-                tooltipContent="Top left cell where the regression statistics are to be saved." />
-              <div className={styles.field}>
-                <label htmlFor={regressionTypeId}>Regression Method:</label>
-                <Select value={regressionType} id={regressionTypeId}
-                  className={styles.selection} onChange={selectRegressionType} >
-                  <option value="paba">Passing-Bablok</option>
-                  <option value="deming">Deming</option>
-                  <option value="wdeming">Weighted Deming</option>
-                </Select>
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="ci-method">Confidence Interval Method:</label>
-                <Select value={ciMethod} id="ci-method"
-                  className={styles.selection} onChange={selectCiMethod} >
-                  <option value="default">Default</option>
-                  <option value="bootstrap">Bootstrap</option>
-                </Select>
-              </div>
-              <div id="errorRatioCard" className={styles.mvwhidden}>
+  const Evaluation = React.memo(() => {
+    return (
+      <div role="tabpanel" aria-labelledby="Evaluation">
+        <Accordion defaultOpenItems="2">
+          <AccordionItem value="1">
+            <AccordionHeader>Performance Specifications</AccordionHeader>
+            <AccordionPanel>
+              <Card>
                 <Checkbox
-                  label="Use Calculated Error Ratio"
-                  checked={useCalcErrorRatio}
-                  onChange={toggleUseCalcErrorRatio}
+                  label="Import APS settings from worksheet"
+                  checked={importApsSettings}
+                  onChange={toggleImportApsSettings}
+                  className={styles.field}
                 />
-                <Field label="Error Ratio" className={styles.field}>
-                  <Input value={errorRatio} type="number" onChange={handleErrorRatioChange} />
-                </Field>
-              </div>
-              <div className={styles.field}>
-                <label htmlFor="lbl-output">Output Labels:</label>
-                <Checkbox
-                  id="lbl-output"
-                  checked={labelOutput}
-                  onChange={toggleLabelOutput}
-                />
-              </div>
-              <RangeInput label="Bland-Altman Output Range"
-                rangeValue={baRangeValue}
-                setRangeValue={setBaRangeValue}
-                validationMessage="Must be a valid Excel range. e.g., C2:I15"
-                tooltipContent="Cell range over which the Bland-Altman chart will be displayed" />
-              <div className={styles.field}>
-                <label htmlFor="difference-type">Difference Plot Type:</label>
-                <Select value={differencePlotType} id="difference-type"
-                  className={styles.selection} onChange={selectDiffferencePlotType} >
-                  <option value="abs">Absolute</option>
-                  <option value="rel">Relative</option>
-                </Select>
-              </div>
-              <RangeInput label="Scatter Chart Output Range"
-                rangeValue={scRangeValue}
-                setRangeValue={setScRangeValue}
-                validationMessage="Must be a valid Excel range. e.g., C16:I19"
-                tooltipContent="Cell range over which the scatter chart will be displayed" />
-              <RangeInput label="Chart Data Output Range"
-                rangeValue={cdRangeValue}
-                setRangeValue={setCdRangeValue}
-                validationMessage="Must be a valid Excel cell reference. e.g., H1"
-                tooltipContent="Top left cell where data used to construct the charts is to be saved." />
-              <div className={styles.field}>
-                <Button appearance="primary"
-                  onClick={runRegression}>Run Regression</Button>
-              </div>
-              <Accordion collapsible={true}>
-                <AccordionItem value="3">
-                  <AccordionHeader>Cohen's Kappa/</AccordionHeader>
-                  <AccordionPanel>
-                    <div className={styles.field}>
-                      <div>
-                        Specify cutoffs for each method to assess concordance. Each method must have
-                        the same number of cutoffs.
-                      </div>
-                      <ConcordanceThreshold
-                        xThreshold0={xThreshold0}
-                        setXThreshold0={setXThreshold0}
-                        xThreshold1={xThreshold1}
-                        setXThreshold1={setXThreshold1}
-                        xThreshold2={xThreshold2}
-                        setXThreshold2={setXThreshold2}
-                        xThreshold3={xThreshold3}
-                        setXThreshold3={setXThreshold3}
-                        yThreshold0={yThreshold0}
-                        setYThreshold0={setYThreshold0}
-                        yThreshold1={yThreshold1}
-                        setYThreshold1={setYThreshold1}
-                        yThreshold2={yThreshold2}
-                        setYThreshold2={setYThreshold2}
-                        yThreshold3={yThreshold3}
-                        setYThreshold3={setYThreshold3} />
-                    </div>
+                <RangeInput label="APS Absolute"
+                  rangeValue={apsAbsValue}
+                  setRangeValue={setApsAbsValue}
+                  validationMessage="Must be a number or valid Excel cell reference. e.g., D1"
+                  tooltipContent="Excel cell reference or APS absolute value"
+                  allowNumbers={true} />
+                <RangeInput label="APS Relative"
+                  rangeValue={apsRelValue}
+                  setRangeValue={setApsRelValue}
+                  validationMessage="Must be a number or valid Excel cell reference. e.g., D2"
+                  tooltipContent="Excel cell reference or APS relative value as a fraction. e.g., enter 0.1 for 10%"
+                  allowNumbers={true} />
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem value="2">
+            <AccordionHeader>Comparison</AccordionHeader>
+            <AccordionPanel>
 
-                    <RangeInput label="Concordance Output Range"
-                      rangeValue={concordanceOutputRange}
-                      setRangeValue={setConcordanceOutputRange}
-                      tooltipContent="Top left cell where the concordance metrics will be saved." />
-                  </AccordionPanel>
-                </AccordionItem>
-              </Accordion>
-            </Card>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="4">
-          <AccordionHeader>Precision</AccordionHeader>
-          <AccordionPanel>
-            <Card>
-              <Precision
-                notify={notify}
-                factorARangeValue={factorARangeValue}
-                factorBRangeValue={factorBRangeValue}
-                resultsRangeValue={resultsRangeValue}
-                precOutRangeValue={precOutRangeValue}
-                setFactorARangeValue={setFactorARangeValue}
-                setFactorBRangeValue={setFactorBRangeValue}
-                setResultsRangeValue={setResultsRangeValue}
-                setPrecOutRangeValue={setPrecOutRangeValue}
-              />
-            </Card>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="5">
-          <AccordionHeader>Precision Layout</AccordionHeader>
-          <AccordionPanel>
-            <Card>
-              <PrecisionLayout
-                notify={notify}
-                factorARangeValue={factorARangeValue} setFactorARangeValue={setFactorARangeValue}
-                factorBRangeValue={factorBRangeValue} setFactorBRangeValue={setFactorBRangeValue}
-                resultsRangeValue={resultsRangeValue} setResultsRangeValue={setResultsRangeValue}
-              />
-            </Card>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="6">
-          <AccordionHeader>Qualitative Comparison</AccordionHeader>
-          <AccordionPanel>
-            <Card>
-              <Qualitative notify={notify}
-                qualXRangeValue={qualXRangeValue}
-                qualYRangeValue={qualYRangeValue}
-                qualOutputRangeValue={qualOutputRangeValue}
-                setQualXRangeValue={setQualXRangeValue}
-                setQualYRangeValue={setQualYRangeValue}
-                setQualOutputRangeValue={setQualOutputRangeValue} />
-            </Card>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="7">
-          <AccordionHeader>Load Range Defaults</AccordionHeader>
-          <AccordionPanel>
-            <Card>
-              <div className={styles.container}>
+              <Card>
+                <RangeInput label="X Range"
+                  rangeValue={xRangeValue}
+                  setRangeValue={setXRangeValue}
+                  validationMessage="Must be a valid Excel range. e.g., A2:A21" />
+                <RangeInput label="Y Range"
+                  rangeValue={yRangeValue}
+                  setRangeValue={setYRangeValue}
+                  validationMessage="Must be a valid Excel range. e.g., B2:B21" />
+                <RangeInput label="Output Range"
+                  rangeValue={compOutRangeValue}
+                  setRangeValue={setCompOutRangeValue}
+                  validationMessage="Must be a valid Excel cell reference. e.g., E1"
+                  tooltipContent="Top left cell where the regression statistics are to be saved." />
                 <div className={styles.field}>
-                  <p>
-                    This add in was developed for use with the associated Method Verification Workbook.
-                    The default cell ranges used by the workbook can be populated by clicking the button
-                    below.
-                  </p>
-                  <Button appearance="primary"
-                    onClick={setDefaultValues}>Load Defaults</Button>
-
-                  <p>
-                    Alternatively, the defaults for a user defined template can defined in a worksheet
-                    and loaded from that page. The definitions need to be supplied in two columns from
-                    cells A2:B20. The first column should give the name of the attribute as it appears
-                    below. The second column must contain the values to be copied. A1 and B1 can be
-                    column headers but they are not read.
-                  </p>
-                  <Checkbox label={"Import from worksheet"} checked={importLayoutChecked} onChange={(_ev, data) => setImportLayoutChecked(data.checked)} />
-                  <Field label="Layout Sheet" className={styles.field}>
-                    <Tooltip relationship="description" content="Name of the worksheet specifying the default values.">
-                      <Input value={layoutSheet} onChange={(ev) => setLayoutSheet(ev.target.value)} type="text" />
-                    </Tooltip>
+                  <label htmlFor={regressionTypeId}>Regression Method:</label>
+                  <Select value={regressionType} id={regressionTypeId}
+                    className={styles.selection} onChange={selectRegressionType} >
+                    <option value="paba">Passing-Bablok</option>
+                    <option value="deming">Deming</option>
+                    <option value="wdeming">Weighted Deming</option>
+                  </Select>
+                </div>
+                <div className={styles.field}>
+                  <label htmlFor="ci-method">Confidence Interval Method:</label>
+                  <Select value={ciMethod} id="ci-method"
+                    className={styles.selection} onChange={selectCiMethod} >
+                    <option value="default">Default</option>
+                    <option value="bootstrap">Bootstrap</option>
+                  </Select>
+                </div>
+                <div id="errorRatioCard" className={styles.mvwhidden}>
+                  <Checkbox
+                    label="Use Calculated Error Ratio"
+                    checked={useCalcErrorRatio}
+                    onChange={toggleUseCalcErrorRatio}
+                  />
+                  <Field label="Error Ratio" className={styles.field}>
+                    <Input value={errorRatio} type="number" onChange={handleErrorRatioChange} />
                   </Field>
+                </div>
+                <div className={styles.field}>
+                  <label htmlFor="lbl-output">Output Labels:</label>
+                  <Checkbox
+                    id="lbl-output"
+                    checked={labelOutput}
+                    onChange={toggleLabelOutput}
+                  />
+                </div>
+                <RangeInput label="Bland-Altman Output Range"
+                  rangeValue={baRangeValue}
+                  setRangeValue={setBaRangeValue}
+                  validationMessage="Must be a valid Excel range. e.g., C2:I15"
+                  tooltipContent="Cell range over which the Bland-Altman chart will be displayed" />
+                <div className={styles.field}>
+                  <label htmlFor="difference-type">Difference Plot Type:</label>
+                  <Select value={differencePlotType} id="difference-type"
+                    className={styles.selection} onChange={selectDiffferencePlotType} >
+                    <option value="abs">Absolute</option>
+                    <option value="rel">Relative</option>
+                  </Select>
+                </div>
+                <RangeInput label="Scatter Chart Output Range"
+                  rangeValue={scRangeValue}
+                  setRangeValue={setScRangeValue}
+                  validationMessage="Must be a valid Excel range. e.g., C16:I19"
+                  tooltipContent="Cell range over which the scatter chart will be displayed" />
+                <RangeInput label="Chart Data Output Range"
+                  rangeValue={cdRangeValue}
+                  setRangeValue={setCdRangeValue}
+                  validationMessage="Must be a valid Excel cell reference. e.g., H1"
+                  tooltipContent="Top left cell where data used to construct the charts is to be saved." />
+                <div className={styles.field}>
+                  <Button appearance="primary"
+                    onClick={runRegression}>Run Regression</Button>
+                </div>
+                <Accordion collapsible={true}>
+                  <AccordionItem value="3">
+                    <AccordionHeader>Cohen's Kappa/</AccordionHeader>
+                    <AccordionPanel>
+                      <div className={styles.field}>
+                        <div>
+                          Specify cutoffs for each method to assess concordance. Each method must have
+                          the same number of cutoffs.
+                        </div>
+                        <ConcordanceThreshold
+                          xThreshold0={xThreshold0}
+                          setXThreshold0={setXThreshold0}
+                          xThreshold1={xThreshold1}
+                          setXThreshold1={setXThreshold1}
+                          xThreshold2={xThreshold2}
+                          setXThreshold2={setXThreshold2}
+                          xThreshold3={xThreshold3}
+                          setXThreshold3={setXThreshold3}
+                          yThreshold0={yThreshold0}
+                          setYThreshold0={setYThreshold0}
+                          yThreshold1={yThreshold1}
+                          setYThreshold1={setYThreshold1}
+                          yThreshold2={yThreshold2}
+                          setYThreshold2={setYThreshold2}
+                          yThreshold3={yThreshold3}
+                          setYThreshold3={setYThreshold3} />
+                      </div>
+
+                      <RangeInput label="Concordance Output Range"
+                        rangeValue={concordanceOutputRange}
+                        setRangeValue={setConcordanceOutputRange}
+                        tooltipContent="Top left cell where the concordance metrics will be saved." />
+                    </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem value="4">
+            <AccordionHeader>Precision</AccordionHeader>
+            <AccordionPanel>
+              <Card>
+                <Precision
+                  notify={notify}
+                  factorARangeValue={factorARangeValue}
+                  factorBRangeValue={factorBRangeValue}
+                  resultsRangeValue={resultsRangeValue}
+                  precOutRangeValue={precOutRangeValue}
+                  setFactorARangeValue={setFactorARangeValue}
+                  setFactorBRangeValue={setFactorBRangeValue}
+                  setResultsRangeValue={setResultsRangeValue}
+                  setPrecOutRangeValue={setPrecOutRangeValue}
+                />
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem value="5">
+            <AccordionHeader>Precision Layout</AccordionHeader>
+            <AccordionPanel>
+              <Card>
+                <PrecisionLayout
+                  notify={notify}
+                  factorARangeValue={factorARangeValue} setFactorARangeValue={setFactorARangeValue}
+                  factorBRangeValue={factorBRangeValue} setFactorBRangeValue={setFactorBRangeValue}
+                  resultsRangeValue={resultsRangeValue} setResultsRangeValue={setResultsRangeValue}
+                />
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem value="6">
+            <AccordionHeader>Qualitative Comparison</AccordionHeader>
+            <AccordionPanel>
+              <Card>
+                <Qualitative notify={notify}
+                  qualXRangeValue={qualXRangeValue}
+                  qualYRangeValue={qualYRangeValue}
+                  qualOutputRangeValue={qualOutputRangeValue}
+                  setQualXRangeValue={setQualXRangeValue}
+                  setQualYRangeValue={setQualYRangeValue}
+                  setQualOutputRangeValue={setQualOutputRangeValue} />
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem value="7">
+            <AccordionHeader>Load Range Defaults</AccordionHeader>
+            <AccordionPanel>
+              <Card>
+                <div className={styles.container}>
                   <div className={styles.field}>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Attribute</th>
-                          <th>Value</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>import-aps</td>
-                          <td>TRUE</td>
-                        </tr>
-                        <tr>
-                          <td>aps-abs</td>
-                          <td>J4</td>
-                        </tr>
-                        <tr>
-                          <td>aps-rel</td>
-                          <td>J6</td>
-                        </tr>
-                        <tr>
-                          <td>x-range</td>
-                          <td>O61:P160</td>
-                        </tr>
-                        <tr>
-                          <td>y-range</td>
-                          <td>R61:S160</td>
-                        </tr>
-                        <tr>
-                          <td>output-range</td>
-                          <td>C167</td>
-                        </tr>
-                        <tr>
-                          <td>regression-method</td>
-                          <td>paba, deming, or wdeming</td>
-                        </tr>
-                        <tr>
-                          <td>confidence-interval-method</td>
-                          <td>default or bootstrap</td>
-                        </tr>
-                        <tr>
-                          <td>use-calculated-error-ratio</td>
-                          <td>FALSE</td>
-                        </tr>
-                        <tr>
-                          <td>error-ratio</td>
-                          <td>1.0</td>
-                        </tr>
-                        <tr>
-                          <td>bland-altman-range</td>
-                          <td>N162:U175</td>
-                        </tr>
-                        <tr>
-                          <td>scatter-plot-range</td>
-                          <td>N177:U190</td>
-                        </tr>
-                        <tr>
-                          <td>output-labels</td>
-                          <td>TRUE</td>
-                        </tr>
-                        <tr>
-                          <td>chart-data-range</td>
-                          <td>AP61</td>
-                        </tr>
-                        <tr>
-                          <td>p-days-range</td>
-                          <td>B300:B324</td>
-                        </tr>
-                        <tr>
-                          <td>p-runs-range</td>
-                          <td>C300:C324</td>
-                        </tr>
-                        <tr>
-                          <td>p-results-range</td>
-                          <td>D300:G324</td>
-                        </tr>
-                        <tr>
-                          <td>p-output-range</td>
-                          <td>W299</td>
-                        </tr>
-                        <tr>
-                          <td>concordance-output</td>
-                          <td>C176</td>
-                        </tr>
-                        <tr>
-                          <td>qx-range</td>
-                          <td>E61:E160</td>
-                        </tr>
-                        <tr>
-                          <td>qy-range</td>
-                          <td>H61:H160</td>
-                        </tr>
-                        <tr>
-                          <td>q-output-range</td>
-                          <td>C176</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <p>
+                      This add in was developed for use with the associated Method Verification Workbook.
+                      The default cell ranges used by the workbook can be populated by clicking the button
+                      below.
+                    </p>
+                    <Button appearance="primary"
+                      onClick={setDefaultValues}>Load Defaults</Button>
+
+                    <p>
+                      Alternatively, the defaults for a user defined template can defined in a worksheet
+                      and loaded from that page. The definitions need to be supplied in two columns from
+                      cells A2:B20. The first column should give the name of the attribute as it appears
+                      below. The second column must contain the values to be copied. A1 and B1 can be
+                      column headers but they are not read.
+                    </p>
+                    <Checkbox label={"Import from worksheet"} checked={importLayoutChecked} onChange={(_ev, data) => setImportLayoutChecked(data.checked)} />
+                    <Field label="Layout Sheet" className={styles.field}>
+                      <Tooltip relationship="description" content="Name of the worksheet specifying the default values.">
+                        <Input value={layoutSheet} onChange={(ev) => setLayoutSheet(ev.target.value)} type="text" />
+                      </Tooltip>
+                    </Field>
+                    <div className={styles.field}>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>import-aps</td>
+                            <td>TRUE</td>
+                          </tr>
+                          <tr>
+                            <td>aps-abs</td>
+                            <td>J4</td>
+                          </tr>
+                          <tr>
+                            <td>aps-rel</td>
+                            <td>J6</td>
+                          </tr>
+                          <tr>
+                            <td>x-range</td>
+                            <td>O61:P160</td>
+                          </tr>
+                          <tr>
+                            <td>y-range</td>
+                            <td>R61:S160</td>
+                          </tr>
+                          <tr>
+                            <td>output-range</td>
+                            <td>C167</td>
+                          </tr>
+                          <tr>
+                            <td>regression-method</td>
+                            <td>paba, deming, or wdeming</td>
+                          </tr>
+                          <tr>
+                            <td>confidence-interval-method</td>
+                            <td>default or bootstrap</td>
+                          </tr>
+                          <tr>
+                            <td>use-calculated-error-ratio</td>
+                            <td>FALSE</td>
+                          </tr>
+                          <tr>
+                            <td>error-ratio</td>
+                            <td>1.0</td>
+                          </tr>
+                          <tr>
+                            <td>bland-altman-range</td>
+                            <td>N162:U175</td>
+                          </tr>
+                          <tr>
+                            <td>scatter-plot-range</td>
+                            <td>N177:U190</td>
+                          </tr>
+                          <tr>
+                            <td>output-labels</td>
+                            <td>TRUE</td>
+                          </tr>
+                          <tr>
+                            <td>chart-data-range</td>
+                            <td>AP61</td>
+                          </tr>
+                          <tr>
+                            <td>p-days-range</td>
+                            <td>B300:B324</td>
+                          </tr>
+                          <tr>
+                            <td>p-runs-range</td>
+                            <td>C300:C324</td>
+                          </tr>
+                          <tr>
+                            <td>p-results-range</td>
+                            <td>D300:G324</td>
+                          </tr>
+                          <tr>
+                            <td>p-output-range</td>
+                            <td>W299</td>
+                          </tr>
+                          <tr>
+                            <td>concordance-output</td>
+                            <td>C176</td>
+                          </tr>
+                          <tr>
+                            <td>qx-range</td>
+                            <td>E61:E160</td>
+                          </tr>
+                          <tr>
+                            <td>qy-range</td>
+                            <td>H61:H160</td>
+                          </tr>
+                          <tr>
+                            <td>q-output-range</td>
+                            <td>C176</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </Card>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="8">
-          <AccordionHeader>Reference Interval</AccordionHeader>
-          <AccordionPanel>
-            <Card>
-              <RefInt notify={notify} />
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    );
+  });
 
-            </Card>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="9">
-          <AccordionHeader>Box Cox</AccordionHeader>
-          <AccordionPanel>
-            <Card>
-              <BoxCox notify={notify} />
-            </Card>
-          </AccordionPanel>
-        </AccordionItem>
-        <AccordionItem value="10">
-          <AccordionHeader>About</AccordionHeader>
-          <AccordionPanel>
-            <Card>
-              <div className={styles.field}>
-                <p>
-                  The purpose of this add-in is to provide some statistical procedures that are
-                  necessary for assessing clinical laboratory methods but are not easy to implement
-                  using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
-                  statistical analysis tool. The current interation allows the user to perform linear
-                  regression techniques including Passing-Bablok, Deming, and Weighted Deming.
-                  Procedures are also provided to allow users to analyse variance components as described
-                  in CLSI EP15 and EP05. <span className={styles.label}>Instructions for use</span> can be found <a
-                    href="https://metools.chesher.id.au/help/index.html" target="help">here</a>.
-                </p>
+  const Referenceint = React.memo(() => {
+    return (
+      <div role="tabpanel" aria-labelledby="Refint">
+        <Accordion defaultOpenItems="1">
+          <AccordionItem value="1">
+            <AccordionHeader>Reference Interval</AccordionHeader>
+            <AccordionPanel>
+              <Card>
+                <RefInt notify={notify} />
+
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem value="2">
+            <AccordionHeader>Box Cox</AccordionHeader>
+            <AccordionPanel>
+              <Card>
+                <BoxCox notify={notify} />
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      </div>
+    );
+  });
+
+  const Help = React.memo(() => {
+    return (
+      <div role="tabpanel" aria-labelledby="Help">
+        <Card>
+          <h3>About</h3><p>The purpose of this add-in is to provide some statistical procedures that are
+            necessary for assessing clinical laboratory methods but are not easy to implement
+            using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
+            statistical analysis tool. The current interation allows the user to perform linear
+            regression techniques including Passing-Bablok, Deming, and Weighted Deming.
+            Procedures are also provided to allow users to analyse variance components as described
+            in CLSI EP15 and EP05. <span className={styles.label}>Instructions for use</span> can be found <a
+              href="https://metools.chesher.id.au/help/index.html" target="help">here</a>.
+          </p>
+          <Accordion>
+            <AccordionItem value="1">
+              <AccordionHeader>Source</AccordionHeader>
+              <AccordionPanel>
                 <p>
                   Source code is available on GitHub at <a
                     href="https://github.com/dche658/method-eval-tools">
@@ -1116,12 +1152,33 @@ const App: React.FC<AppProps> = () => {
                   IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE,
                   MERCHANTABILITY, OR NON-INFRINGEMENT.
                 </p>
-              </div>
-            </Card>
+              </AccordionPanel>
+            </AccordionItem>
+          </Accordion>
+        </Card>
+      </div>
+    );
+  });
 
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
+  return (
+    <div className={styles.root}>
+      <Toaster toasterId={toasterId} position="top" timeout={5000} pauseOnHover />
+      <TabList selectedValue={selectedTabValue} onTabSelect={onTabSelect}>
+        <Tab id="Evaluation" value="evaluation">
+          Evaluation
+        </Tab>
+        <Tab id="Refint" value="refint">
+          Refint
+        </Tab>
+        <Tab id="Help" value="help">
+          Help
+        </Tab>
+      </TabList>
+      <div className={styles.panels}>
+        {selectedTabValue === "evaluation" && <Evaluation />}
+        {selectedTabValue === "refint" && <Referenceint />}
+        {selectedTabValue === "help" && <Help />}
+      </div>
 
     </div>
   );
