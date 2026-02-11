@@ -1098,9 +1098,9 @@ const App: React.FC<AppProps> = () => {
     );
   });
 
-  const Referenceint = React.memo(() => {
+  const Utilities = React.memo(() => {
     return (
-      <div role="tabpanel" aria-labelledby="Refint">
+      <div role="tabpanel" aria-labelledby="Utilities">
         <Accordion defaultOpenItems="1">
           <AccordionItem value="1">
             <AccordionHeader>Reference Interval</AccordionHeader>
@@ -1167,8 +1167,8 @@ const App: React.FC<AppProps> = () => {
         <Tab id="Evaluation" value="evaluation">
           Evaluation
         </Tab>
-        <Tab id="Refint" value="refint">
-          Refint
+        <Tab id="Utilities" value="utilities">
+          Utilities
         </Tab>
         <Tab id="Help" value="help">
           Help
@@ -1176,7 +1176,7 @@ const App: React.FC<AppProps> = () => {
       </TabList>
       <div className={styles.panels}>
         {selectedTabValue === "evaluation" && <Evaluation />}
-        {selectedTabValue === "refint" && <Referenceint />}
+        {selectedTabValue === "utilities" && <Utilities />}
         {selectedTabValue === "help" && <Help />}
       </div>
 
