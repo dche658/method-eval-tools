@@ -1127,20 +1127,29 @@ const App: React.FC<AppProps> = () => {
   const Help = React.memo(() => {
     return (
       <div role="tabpanel" aria-labelledby="Help">
-        <Card>
-          <h3>About</h3><p>The purpose of this add-in is to provide some statistical procedures that are
-            necessary for assessing clinical laboratory methods but are not easy to implement
-            using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
-            statistical analysis tool. The current interation allows the user to perform linear
-            regression techniques including Passing-Bablok, Deming, and Weighted Deming.
-            Procedures are also provided to allow users to analyse variance components as described
-            in CLSI EP15 and EP05. <span className={styles.label}>Instructions for use</span> can be found <a
-              href="https://metools.chesher.id.au/help/index.html" target="help">here</a>.
-          </p>
-          <Accordion>
-            <AccordionItem value="1">
-              <AccordionHeader>Source</AccordionHeader>
-              <AccordionPanel>
+
+        <Accordion defaultOpenItems="1">
+          <AccordionItem value="1">
+            <AccordionHeader>About</AccordionHeader>
+            <AccordionPanel>
+              <Card>
+                <p>
+                  The purpose of this add-in is to provide some statistical procedures that are
+                  necessary for assessing clinical laboratory methods but are not easy to implement
+                  using builtin Excel spreadsheet functions. It is not meant to be a comprehensive
+                  statistical analysis tool. The current interation allows the user to perform linear
+                  regression techniques including Passing-Bablok, Deming, and Weighted Deming.
+                  Procedures are also provided to allow users to analyse variance components as described
+                  in CLSI EP15 and EP05. <span className={styles.label}>Instructions for use</span> can be found <a
+                    href="https://metools.chesher.id.au/help/index.html" target="help">here</a>.
+                </p>
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem value="2">
+            <AccordionHeader>Source</AccordionHeader>
+            <AccordionPanel>
+              <Card>
                 <p>
                   Source code is available on GitHub at <a
                     href="https://github.com/dche658/method-eval-tools">
@@ -1152,10 +1161,10 @@ const App: React.FC<AppProps> = () => {
                   IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE,
                   MERCHANTABILITY, OR NON-INFRINGEMENT.
                 </p>
-              </AccordionPanel>
-            </AccordionItem>
-          </Accordion>
-        </Card>
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </div>
     );
   });

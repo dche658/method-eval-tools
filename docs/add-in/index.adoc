@@ -617,18 +617,28 @@ the active worksheet is unprotected.
 == Developers and Contributors
 
 During development and testing, the add-in should be "side-loaded". This can be
-involved. Doing this from behind corporate firewalls adds an extra level of
+involved. Side-loading from behind corporate firewalls adds an extra level of
 complexity.
 
-Office add-ins are developedusing standard web technologies such as HTML, CSS,
-and Javascript. Excel runs these as a web page within Excel. To sideload an
-application it must be run using nodejs, which is a powerful tool for developing
-server-side and client-side applications by running javascript outside a web
-browser.
+Office add-ins are developed using standard web technologies such as HTML, CSS,
+and Javascript. Excel runs these as a web page within Excel. To side-load an
+application it must be run using nodejs, which is a powerful tool that allows 
+javascript to be run outside a web browser.
 
 === Side-loading the add-in
 
-Follow these steps to sideload the add-in:
+Node.js must be installed on your computer. Rather than installing a particular
+version of Node.js directly, installing via a node version manager is recommended.
+
+. Download nvm-setup.exe for windows from https://github.com/coreybutler/nvm-windows/releases
+. Install nvm-setup.exe
+. Open a command prompt and run the following commands (update the version number
+as needed). Note, lts is an abbreviation for long-term-support.
++
+----
+nvm install lts
+nvm use 24.6.0
+----
 
 . If you are familiar with Git, clone the repository
 +
@@ -641,15 +651,6 @@ https://github.com/dche658/method-eval-tools
     "Download ZIP". 
     b. Extract the contents of the ZIP file to a directory on
     your computer.
-. Download nvm-setup.exe for windows from https://github.com/coreybutler/nvm-windows/releases
-. Install nvm-setup.exe
-. Open a command prompt and run the following commands (update the version number
-as needed). Note, lts just stands for long-term-support.
-+
-----
-nvm install lts
-nvm use 24.6.0
-----
 . Navigate to the directory where you extracted the downloaded repository 
 and run:
 +
