@@ -20,7 +20,7 @@ import {
     is_consistent_with_normal
 } from "../../reference_intervals";
 
-import RangeInput from "../../taskpane/components/RangeInput";
+import RangeInput from "./RangeInput";
 
 // Properties for this component
 interface RefIntProps {
