@@ -18,13 +18,18 @@
 
 import { normal, studentt, mean, stdev } from "jstat-esm";
 
-const CI_METHOD_JACKKNIFE = "jackknife";
-const CI_METHOD_BOOTSTRAP = "bootstrap";
-const CI_METHOD_NONPARAMETRIC = "np";
-const CI_METHOD_DEFAULT = "default";
-const REG_METHOD_DEMING = "Deming";
-const REG_METHOD_WDEMING = "WDeming";
-const REG_METHOD_PABA = "PaBa";
+enum CI_METHOD {
+  JACKKNIFE = "jackknife",
+  BOOTSTRAP = "bootstrap",
+  NONPARAMETRIC = "np",
+  DEFAULT = "default",
+}
+
+enum REG_METHOD {
+  DEMING = "Deming",
+  WDEMING = "WDeming",
+  PABA = "PaBa",
+}
 
 const DEFAULT_ERROR_RATIO = 1;
 const DEFAULT_ITER_MAX = 30;
@@ -50,10 +55,14 @@ function devsq(arr: number[]): number {
   return sum;
 } //devsq
 
-/* Calculate the q th quantile for the given probabilities.
+/**
+ * Calculate the q th quantile for the given probabilities.
+ * Performs linear interpolation if quantiles occur between
+ * ranked values
  *
- * arr must be an array of numeric values
- * probs is an array of probabilities ranging from 0 to 1
+ * @param arr must be an array of numeric values
+ * @param probs is an array of probabilities ranging from 0 to 1
+ * @returns array of quantiles
  */
 function quantile(arr: number[], probs: number[]): number[] | undefined {
   if (!Array.isArray(arr) || arr.length === 0) {
@@ -318,6 +327,9 @@ class WeightedDemingRegression implements Regression {
   }
 } //WeightedDeming
 
+/**
+ * Angle Matrix and associated parameters
+ */
 interface AngleMatrixModel {
   matrix: number[];
   nAllItems: number;
@@ -327,15 +339,18 @@ interface AngleMatrixModel {
   nPos2: number;
 }
 
+/**
+ * Initially based on mcr package for R by Sergej Potapov 2021
+ * but only implemented for positively correlated data and to always
+ * calculate the non-parametric confidence intervals using the method of Passing and Bablock
+ * 
+ * Passing H, Bablock W. A new biometrical procedure for testing the equality of measurements
+ * from two different analytical methods. Applications of linear regression procedures for
+ * method comparison studies in clinical chemistry, part I.
+ * J Clin Chem Clin Biochem. 1983;21:709-720.
+ */
 class PassingBablokRegression implements Regression {
-  // Initially based on mcr package for R by Sergej Potapov 2021
-  // but only implemented for positively correlated data and to always
-  // calculate the non-parametric confidence intervals using the method of Passing and Bablock
-  //
-  // Passing H, Bablock W. A new biometrical procedure for testing the equality of measurements
-  // from two different analytical methods. Applications of linear regression procedures for
-  // method comparison studies in clinical chemistry, part I.
-  // J Clin Chem Clin Biochem. 1983;21:709-720.
+  
   private alpha: number;
   private positiveCorrelated: boolean;
 
@@ -344,6 +359,12 @@ class PassingBablokRegression implements Regression {
     this.positiveCorrelated = positiveCorrelated;
   }
 
+  /**
+   * @private
+   * @param x 
+   * @param y 
+   * @returns 
+   */
   calculatePaBa(x: number[], y: number[]): RegressionModel {
     let slope = 0;
     let slopeL = 0;
@@ -440,6 +461,12 @@ class PassingBablokRegression implements Regression {
     };
   }
 
+  /**
+   * @private
+   * @param x 
+   * @param y 
+   * @returns 
+   */
   calcAngleMatrix(x: number[], y: number[]): AngleMatrixModel {
     let nrows = x.length;
     let ncols = y.length;
@@ -503,10 +530,19 @@ class PassingBablokRegression implements Regression {
     };
   }
 
+  /**
+   * Calculate difference between two numeric values that
+   * gives exactly zero for very small relative differences.
+   * Copied from mcr package for R by Sergej Potapov 2021
+   * 
+   * @private
+   * @param a 
+   * @param b 
+   * @param eps 
+   * @returns 
+   */
   calcDiff(a: number, b: number, eps = 0.000000000001): number {
-    //Calculate difference between two numeric values that
-    //gives exactly zero for very small relative differences.
-    //Copied from mcr package for R by Sergej Potapov 2021
+    
     let delta = a - b;
     if (Math.abs(delta) < eps * ((Math.abs(a) + Math.abs(b)) / 2)) {
       return 0;
@@ -594,8 +630,12 @@ class JackknifeConfidenceInterval {
     };
   }
 
-  /*
+  /**
    * Calculate the standard error using the procedure of Linnet
+   * 
+   * @param b_jack array containing coefficient calculated for each jackknife sample
+   * @param b_global array containing the coefficient calculated from all the data
+   * @returns standard error for the coefficient.
    */
   linnetSE(b_jack: number[], b_global: number): number {
     let n = b_jack.length; //number of data points
@@ -705,7 +745,7 @@ class MethodCompRegression implements Regression {
     iterMax: number = DEFAULT_ITER_MAX,
     threshold: number = DEFAULT_THRESHOLD,
     alpha: number = DEFAULT_ALPHA,
-    ciMethod: string = CI_METHOD_DEFAULT,
+    ciMethod: string = CI_METHOD.DEFAULT,
     bootstrapN: number = DEFAULT_BOOTSTRAP_N
   ) {
     this.regressionMethod = regressionMethod;
@@ -728,10 +768,10 @@ class MethodCompRegression implements Regression {
       slopeSE: NaN,
       interceptSE: NaN,
     };
-    if (this.regressionMethod === REG_METHOD_DEMING) {
+    if (this.regressionMethod === REG_METHOD.DEMING) {
       let regression = new DemingRegression(this.errorRatio);
       let reg = regression.calculate(x, y);
-      if (this.ciMethod === CI_METHOD_JACKKNIFE || this.ciMethod === CI_METHOD_DEFAULT) {
+      if (this.ciMethod === CI_METHOD.JACKKNIFE || this.ciMethod === CI_METHOD.DEFAULT) {
         let ci = new JackknifeConfidenceInterval(x, y, regression, this.alpha);
         let ciRes = ci.calculate();
         res.slope = reg.slope;
@@ -742,7 +782,7 @@ class MethodCompRegression implements Regression {
         res.interceptUCL = ciRes.interceptUCL;
         res.slopeSE = ciRes.slopeSE;
         res.interceptSE = ciRes.interceptSE;
-      } else if (this.ciMethod === CI_METHOD_BOOTSTRAP) {
+      } else if (this.ciMethod === CI_METHOD.BOOTSTRAP) {
         let ci = new BootstrapConfidenceInterval(x, y, regression, this.bootstrapN, this.alpha);
         let ciRes = ci.calculate();
         res.slope = reg.slope;
@@ -752,10 +792,10 @@ class MethodCompRegression implements Regression {
         res.interceptLCL = ciRes.interceptLCL;
         res.interceptUCL = ciRes.interceptUCL;
       }
-    } else if (this.regressionMethod === REG_METHOD_WDEMING) {
+    } else if (this.regressionMethod === REG_METHOD.WDEMING) {
       let regression = new WeightedDemingRegression(this.errorRatio, this.iterMax, this.threshold);
       let reg = regression.calculate(x, y);
-      if (this.ciMethod === CI_METHOD_JACKKNIFE || this.ciMethod === CI_METHOD_DEFAULT) {
+      if (this.ciMethod === CI_METHOD.JACKKNIFE || this.ciMethod === CI_METHOD.DEFAULT) {
         let ci = new JackknifeConfidenceInterval(x, y, regression, this.alpha);
         let ciRes = ci.calculate();
         res.slope = reg.slope;
@@ -766,7 +806,7 @@ class MethodCompRegression implements Regression {
         res.interceptUCL = ciRes.interceptUCL;
         res.slopeSE = ciRes.slopeSE;
         res.interceptSE = ciRes.interceptSE;
-      } else if (this.ciMethod === CI_METHOD_BOOTSTRAP) {
+      } else if (this.ciMethod === CI_METHOD.BOOTSTRAP) {
         let ci = new BootstrapConfidenceInterval(x, y, regression, this.bootstrapN, this.alpha);
         let ciRes = ci.calculate();
         res.slope = reg.slope;
@@ -776,17 +816,17 @@ class MethodCompRegression implements Regression {
         res.interceptLCL = ciRes.interceptLCL;
         res.interceptUCL = ciRes.interceptUCL;
       }
-    } else if (this.regressionMethod === REG_METHOD_PABA) {
+    } else if (this.regressionMethod === REG_METHOD.PABA) {
       let regression = new PassingBablokRegression(this.alpha);
       let reg = regression.calculate(x, y);
-      if (this.ciMethod === CI_METHOD_DEFAULT) {
+      if (this.ciMethod === CI_METHOD.DEFAULT) {
         res.slope = reg.slope;
         res.intercept = reg.intercept;
         res.slopeLCL = reg.slopeLCL;
         res.slopeUCL = reg.slopeUCL;
         res.interceptLCL = reg.interceptLCL;
         res.interceptUCL = reg.interceptUCL;
-      } else if (this.ciMethod === CI_METHOD_BOOTSTRAP) {
+      } else if (this.ciMethod === CI_METHOD.BOOTSTRAP) {
         let ci = new BootstrapConfidenceInterval(x, y, regression, this.bootstrapN, this.alpha);
         let ciRes = ci.calculate();
         res.slope = reg.slope;
@@ -804,13 +844,8 @@ class MethodCompRegression implements Regression {
 } // MethodCompRegression
 
 export {
-  CI_METHOD_BOOTSTRAP,
-  CI_METHOD_JACKKNIFE,
-  CI_METHOD_NONPARAMETRIC,
-  CI_METHOD_DEFAULT,
-  REG_METHOD_DEMING,
-  REG_METHOD_WDEMING,
-  REG_METHOD_PABA,
+  CI_METHOD,
+  REG_METHOD,
   DEFAULT_ALPHA,
   DEFAULT_ERROR_RATIO,
   DEFAULT_ITER_MAX,
