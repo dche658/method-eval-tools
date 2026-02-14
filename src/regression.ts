@@ -1,4 +1,5 @@
-/* Small library for performing regression analysis on data from method
+/**
+ * Small library for performing regression analysis on data from method
  * comparison studies.
  *
  * It has routines for Deming, Weighted Deming, and Passing-Bablok regression.
@@ -10,7 +11,7 @@
  * Acknowledgement: A lot of the procedures are based on the algorithms
  * in the mcr package for R by Sergej Potapov 2021
  *
- * Author: Douglas Chesher
+ * @author Douglas Chesher
  *
  * Created: August 2025.
  */
@@ -114,7 +115,8 @@ interface Regression {
   calculate(x: number[], y: number[]): RegressionModel;
 }
 
-/* Ordinary Deming Regression
+/**
+ * Ordinary Deming Regression
  * Assumes a constant SD for the measuring range
  * Error ratio is the SD for comparison method to SD of
  * the reference method.
@@ -126,9 +128,9 @@ class DemingRegression implements Regression {
     this.errorRatio = errorRatio;
   }
 
-  /* Calculate regression
-   * x must be an array of numeric values
-   * y must be an array of numeric values
+  /** Calculate regression
+   * @param x must be an array of numeric values
+   * @param y must be an array of numeric values
    */
   calculateDeming(x: number[], y: number[]): RegressionModel {
     // Simple validation

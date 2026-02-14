@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Asciidoctor 2.0.22">
+<title>ME Tools: Method Evaluation Tools Excel Add-in</title>
+<style>
+@import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700";
+@import "https://cdn.jsdelivr.net/gh/asciidoctor/asciidoctor@2.0/data/stylesheets/asciidoctor-default.css";
+
+h5 {
+    font-weight: bold;
+    font-style: italic;
+    color: rgb(90, 90, 90);
+}
+table {
+    background-color: #FAFAFA;
+}
+
+</style>
+</head>
+<body class="article toc2 toc-left">
+<div id="header">
+<h1>ME Tools: Method Evaluation Tools Excel Add-in</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_user_guide">User Guide</a>
+<ul class="sectlevel2">
+<li><a href="#_getting_started">Getting Started</a></li>
+<li><a href="#_analytical_performance_specifications_aps">Analytical Performance Specifications (APS)</a></li>
+<li><a href="#_method_comparison_and_regression">Method Comparison and Regression</a>
+<ul class="sectlevel3">
+<li><a href="#_concordance">Concordance</a></li>
+</ul>
+</li>
+<li><a href="#_imprecision_analysis">Imprecision Analysis</a></li>
+<li><a href="#_imprecision_layout">Imprecision Layout</a></li>
+<li><a href="#_additional_utilities">Additional Utilities</a>
+<ul class="sectlevel3">
+<li><a href="#_reference_intervals">Reference Intervals</a></li>
+<li><a href="#_box_cox_transformation">Box-Cox Transformation</a></li>
+</ul>
+</li>
+<li><a href="#_errors_and_warnings">Errors and Warnings</a></li>
+</ul>
+</li>
+<li><a href="#_developers_and_contributors">Developers and Contributors</a>
+<ul class="sectlevel2">
+<li><a href="#_side_loading_the_add_in">Side-loading the add-in</a></li>
+<li><a href="#_option_install_on_a_portable_device">Option: Install on a Portable Device</a></li>
+<li><a href="#_option_set_a_proxy_for_npm">Option: Set a proxy for npm</a></li>
+</ul>
+</li>
+<li><a href="#_appendices">Appendices</a>
+<ul class="sectlevel2">
+<li><a href="#_license">License</a></li>
+<li><a href="#_calculations">Calculations</a>
+<ul class="sectlevel3">
+<li><a href="#_one_way_analysis_calculations">One Way Analysis Calculations</a></li>
+<li><a href="#_two_way_analysis_calculations">Two Way Analysis Calculations</a></li>
+<li><a href="#_cohens_kappa">Cohen&#8217;s Kappa</a></li>
+<li><a href="#_grubbs_test_for_outliers">Grubb&#8217;s Test for Outliers</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="content">
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Purpose: The ME Tools add-in provides specialized statistical procedures for the
+verification and validation of clinical laboratory methods. It focuses on
+essential calculations such as linear regression and variance component analysis
+that are not natively available in standard Excel functions.</p>
+</div>
+<div class="paragraph">
+<p>This tools has been designed for laboratory professionals to be used with the
+accompanying <a href="https://metools.chesher.id.au/assets/mvw.xlsx">method verification
+workbook</a>.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_user_guide">User Guide</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_getting_started">Getting Started</h3>
+<div class="paragraph">
+<p><strong>Accessing the Tools</strong></p>
+</div>
+<div class="paragraph">
+<p>Search for the add-in from the Add-ins menu item on the Home tab and select Add.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/addin-install.png" alt="addin install">
+</div>
+<div class="title">Figure 1. Adding an add-in</div>
+</div>
+<div class="paragraph">
+<p>Once the add-in is loaded, a new <strong>"ME Tools"</strong> group will appear in the Home tab
+of the Excel ribbon.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Launch Taskpane:</strong> Click the "Basic Tools" button to toggle the taskpane.</p>
+</li>
+<li>
+<p><strong>Navigation:</strong> Use the taskpane menu to select specific analytical modules</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/excel-with-taskpane.png" alt="excel with taskpane">
+</div>
+<div class="title">Figure 2. Taskpane</div>
+</div>
+<h5 id="_range_input_fields" class="discrete">Range Input Fields</h5>
+<div class="paragraph">
+<p>All modules in this tool require the user to enter the range of cells within the
+worksheet that contain the data to be analyzed or for reporting results. You may
+enter the range manually using the same notation found in Excel formulas: for
+example, C10 for a single cell or C5:C10 for a range of cells. Both relative
+(C10) and absolute ($C$10) addressing are supported.</p>
+</div>
+<div class="imageblock left">
+<div class="content">
+<img src="./images/select-icon.png" alt="select icon">
+</div>
+</div>
+<div class="paragraph">
+<p>Alternatively, the cells can be highlighted directly in the worksheet. Click the
+Range Copy button adjacent to the associated field to automatically fill it with
+the selected cell range. The range will be entered as an absolute address that
+includes the worksheet name (e.g., Sheet1!$C$5:$C$10).</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_analytical_performance_specifications_aps">Analytical Performance Specifications (APS)</h3>
+<div class="paragraph">
+<p>Before analysis, define your performance criteria (e.g., based on biological
+variation, clinical requirements, or other criteria). The APS are assumed to be
+total allowable error (TEa) specifications.</p>
+</div>
+<div class="paragraph">
+<div class="title">Setting Performance Specifications image::aps-entry.png[]</div>
+<p>The specifications can be entered directly into the taskpane or imported from the Excel
+worksheet.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>APS Absolute:</strong> Enter the reference to the Excel cell containing the value, or the raw values.</p>
+</li>
+<li>
+<p><strong>APS Relative:</strong> Enter the reference to the Excel cell containg the decimal fraction, or
+raw the decimal fraction (e.g. 0.1 for 10%).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_method_comparison_and_regression">Method Comparison and Regression</h3>
+<div class="imageblock right">
+<div class="content">
+<img src="./images/regression-tool.png" alt="regression tool">
+</div>
+<div class="title">Figure 3. Method Comparison Tool</div>
+</div>
+<div class="paragraph">
+<p>The Regression tool supports three primary models to evaluate how a test method compares to a reference.</p>
+</div>
+<table class="tableblock frame-none grid-none" style="width: 65%;">
+<colgroup>
+<col style="width: 12.5%;">
+<col style="width: 50%;">
+<col style="width: 37.5%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Regression Type</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Use Case</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Confidence Intervals</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Deming</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accounts for errors in both the x and y variables; assumes constant variance.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default = Jackknife; Alternative = Bootstrap.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Weighted Deming</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Accounts for errors in both the x and y variables; assumes constant coefficient of variation (CV).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default = Jackknife; Alternative = Bootstrap.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Passing-Bablok</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">A non-parametric model; does not assume a specific error distribution.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Default = Non-parametric; Alternative = Bootstrap.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Execution Steps</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Select Data:</strong> Highlight your reference method (X) and test method (Y) ranges.
+If using duplicates, reference data must occupy two columns.</p>
+</li>
+<li>
+<p><strong>Define Output:</strong> Specify the top left cell for displaying the results.</p>
+</li>
+<li>
+<p><strong>Regression Method:</strong> Select the regression method. Default is Passing-Bablok.</p>
+</li>
+<li>
+<p><strong>Confidence Interval Method:</strong> Select the method for calculating confidence intervals.</p>
+</li>
+<li>
+<p><strong>Difference Plot Type</strong>: Default displays a relative difference plot.</p>
+</li>
+<li>
+<p><strong>Define Chart Range:</strong> Specify a range over which the Bland-Altman and Scatter plots
+should be displayed.</p>
+</li>
+<li>
+<p><strong>Run:</strong> Click "Run" to generate statistical summaries and charts.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>If Deming or Weighted Deming regression is selected, an estimate of the ratio of the
+variances of the two methods must be provided. If measurements have been
+made in duplicate, this can be estimated from the replicate measurements. If not,
+an estimate can be based on prior knowledge, literature values, or an assumption that
+both methods have similar variance having a ratio of 1.0.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+If using the <strong>Method Verification Workbook</strong>, click "Load Defaults" to automatically
+populate required cell ranges.
+</td>
+</tr>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_concordance">Concordance</h4>
+<div class="paragraph">
+<p>Concordance can be assessed in one of two ways. If quantitative results are reported, diagnostic
+concordance is assessed by setting diagnostic thresholds for each method. The thresholds are
+used to define result categories for each method, which can then be used to calculate
+Cohen&#8217;s Kappa statistic.</p>
+</div>
+<div class="paragraph">
+<p>The number of diagostic thresholds for the two methods must be the same although the
+thresholds themselves may be different for the two methods. For example a reference
+assay may be regarded as reactive if a result is &ge; 50; not reactive if a result is &lt; 25
+and equivocal for values between 25 and 50. Where as the assay being compared may have
+thresholds of 32 and 64 respectively for the same diagnostic outcome.</p>
+</div>
+<div class="paragraph">
+<p>Again, it is necessary to select the top left cell in the worksheet where the contingency table
+and associated statistics will be reported.</p>
+</div>
+<div class="paragraph">
+<p>For qualitative or ordinal results, use the module for <strong>Qualitative Comparisons</strong>. Qualitative
+data must be listed in two columns and use the same labels.</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 30%;">
+<caption class="title">Table 1. Arrangement of Qualitative Data</caption>
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Method A</th>
+<th class="tableblock halign-left valign-top">Method B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Equivocal</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Positive</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Negative</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_imprecision_analysis">Imprecision Analysis</h3>
+<div class="paragraph">
+<p>Imprecision is assessed using the procedures described in CLSI EP05 and CLSI EP15, with a
+one way or two way ANOVA. It assumes samples have been analysed in replicate
+in one or more runs per day over a number of days.</p>
+</div>
+<div class="paragraph">
+<p>Data must be in "long format" (one column per level) with specific columns for Day and Run.</p>
+</div>
+<div class="paragraph">
+<p>An example of the recommended layout is shown in the table below where triplicate
+measurements have been made in each run with two runs per day over two days.
+Verification studies will generally only involve a single run each day. Results for
+each level must be in continguous columns.</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<caption class="title">Table 2. Arrangement of Imprecision Data</caption>
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+<col style="width: 25%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Day</th>
+<th class="tableblock halign-left valign-top">Run</th>
+<th class="tableblock halign-left valign-top">Level 1</th>
+<th class="tableblock halign-left valign-top">Level 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11.3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11.3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11.9</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11.3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11.5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">11.8</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">12.3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Day 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Run 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1.2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">10.4</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p><strong>Execution Steps</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Define Days:</strong> Enter the cell range containing the days over which the samples were analysed.</p>
+</li>
+<li>
+<p><strong>Define Runs:</strong> Enter the cell range containing the runs. Note if there is only a single run
+per day, this can be omitted.</p>
+</li>
+<li>
+<p><strong>Define Results:</strong> Enter the cell range contaning the results for each level and then click
+on the select icon for that field to copy the address to the form.</p>
+</li>
+<li>
+<p><strong>Check for outliers:</strong> Grubb&#8217;s test is used to detect a single outlier
+in univariate data that follows an approximately normal distribution. Other tests
+are recommended if you suspect more than one outlier may be present. If outliers are
+found in any of the results columns these will be displayed in an alert box. The
+background color of the specific cells will also be set to yellow. If an outlier is
+found it should be removed prior to running the analysis. It is recommended that the
+days data is excluded for that level and precision is assessed again for another day.</p>
+</li>
+<li>
+<p><strong>Run:</strong> Click the "Run" button to perform the analysis of imprecision.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock important">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Important</div>
+</td>
+<td class="content">
+For a verification study involving performing k replicates over i days, balanced
+data is preferred but the statistical procedures will tolerate small imbalances.
+That is, days with less than the full complement of replicates. In contrast, for a
+nested design with k replicates in each of j runs over  i days, the data must be balanced
+to calculate the pooled degrees of freedom from an ANOVA. If the the data is unbalanced,
+more sophisticated techniques are required to conduct a variance component analysis.
+Unbalanced data will cause the Add-in to report an error.
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_imprecision_layout">Imprecision Layout</h3>
+<div class="paragraph">
+<p>This module generates a template for an imprecision study that meets the formatting
+requirements of this addin. It is useful where precision is assessed over more
+than one day or in multiple runs.</p>
+</div>
+<div class="paragraph">
+<p>The default layout is the standard 5 replicates over 5 days used for assessing
+imprecision as outlined in CLSI EP15.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/precision-layout-2.png" alt="precision layout 2">
+</div>
+<div class="title">Figure 4. Default 5 x 5 layout</div>
+</div>
+<div class="paragraph">
+<p>Alternative layouts can be created by specifying the number of days, runs, and
+replicates; selecting the top left cell (Layout Range) for the layout
+to be written; and then clicking on "Setup".</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/precision-layout-3.png" alt="precision layout 3">
+</div>
+<div class="title">Figure 5. Alternative 20 x 2 x 2 Layout</div>
+</div>
+<div class="paragraph">
+<p>In the process of writing the layout to the worksheet, the cell ranges used for
+specifying the days, runs, and values are copied to the Precision Analysis section
+of the taskpane.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/analyse-precision-cells.png" alt="analyse precision cells">
+</div>
+<div class="title">Figure 6. Copied cell ranges</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_additional_utilities">Additional Utilities</h3>
+<div class="paragraph">
+<p>The clinical laboratory method evaluation Excel add-in comes with a couple of
+utilities that are provided in the hope that they will be helpful for users.</p>
+</div>
+<div class="paragraph">
+<p>However, there are risks and limitations associated with their use that
+users need to be aware of in order to avoid misuse or misinterpretation.</p>
+</div>
+<div class="sect3">
+<h4 id="_reference_intervals">Reference Intervals</h4>
+<div class="paragraph">
+<p>The reference interval tool enables the user to calculate a reference interval
+on population data using either the robust or non-parametric methods.</p>
+</div>
+<div class="paragraph">
+<p>The robust method uses Horn&#8217;s biweight quantile approach. It is useful for
+smaller data sets and is resistent to outliers. However, the data needs to be
+distributed symmetrically. For populations with a skewed distribution the data
+can be transformed prior to analysis. Alternatively, data below the median can
+be removed, and data above the median can be reflected where the reflected value
+v = median - (x - median), for each value x above the median. Suppose the median
+is 100 and subsequent values for x are [105, 124, 135, &#8230;&#8203;]. The reflected
+values would be [95, 76, 65, &#8230;&#8203;]. The combined data set can then be used as a
+symmetric pseudo-sample to calculate the upper reference limit. Horn suggests
+using the non-parametric approach to define the lower reference limit of the
+reference interval.</p>
+</div>
+<div class="paragraph">
+<p>Horn PS, Pesce AJ, Copeland BE. A robust approach to reference interval
+estimation and evaluation. Clinical Chemistry. 1998. 44(3):622-631.</p>
+</div>
+<div class="paragraph">
+<p>The non-parametric approach requires at least 120 individuals in order to
+estimate 90% confidence limits for lower and upper reference limits of the
+reference interval. This works well for normally distributed data but with
+skewed data the uncertainty about the upper reference limit can become quite
+large. Therefore, it is recommended that much larger data sets are used if data
+is heavily skewed.</p>
+</div>
+<div class="paragraph">
+<p>A Box-Cox transformation of the data can be undertaken to normalise skewed data
+prior to analysis with the robust approach. However, the selection of lambda,
+discussed below, can be problematic if the data set is not large enough. For
+this reason it is suggested that the robust approach only be used on smaller
+data sets, say 50 - 200 subjects if the data is symmetrically distributed.</p>
+</div>
+<div class="paragraph">
+<p>The simplest approach to assessing the distribution is to construct a histogram
+of the data. Excel has a built in histogram chart tool which is available under
+the Insert menu.</p>
+</div>
+<div class="paragraph">
+<p>Skewness can also be assess using the Excel SKEW function.</p>
+</div>
+<div class="paragraph">
+<p>A custom function METOOLS.SHAPIROWILKW(x) that calculates the Shapiro-Wilk W and
+returns this value with the level of significance is available when the taskpane
+is active. A p value &lt; 0.05 indicates the data is unlikely to follow a normal
+distribution.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/refint-tool.png" alt="refint tool">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Execution Steps</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Define Data:</strong> The reference interval data should be in a single column in Excel.
+Enter the cell range containing the data.</p>
+</li>
+<li>
+<p><strong>Select Method:</strong> Select the method for calculating the reference interval.</p>
+</li>
+<li>
+<p><strong>Define Reference Interval Quantiles:</strong> The default is for reference interval to
+include 95% of the population (alpha = 0.05).</p>
+</li>
+<li>
+<p><strong>Define the Confidence Interval Quantiles:</strong> The default is for 90% confidence
+limits (alpha = 0.10).</p>
+</li>
+<li>
+<p><strong>Define Output Range:</strong> Enter the top left cell of the cell range where results
+of analysis are to be reported.</p>
+</li>
+<li>
+<p><strong>Run:</strong> Click "Calculate" button to run the analysis and report results.</p>
+</li>
+</ol>
+</div>
+<div class="sect4">
+<h5 id="_confidence_limits_for_reference_intervals">Confidence Limits for Reference Intervals</h5>
+<div class="paragraph">
+<p>Confidence limits for the reference limits are calculated using the method
+of Campbell and Gardiner rather than using the tabulated values in CLSI EP28-A3c.</p>
+</div>
+<div class="paragraph">
+<p>Campbell MJ, Gardner MJ. Calculating confidence intervals for some non-parametric analyses.
+Br Med J (Clin Res Ed). 1988 May 21;296(6634):1454-6. doi: 10.1136/bmj.296.6634.1454.
+PMID: 3132290;</p>
+</div>
+<div class="paragraph">
+<p>CLSI EP28-A3c 2010:
+Defining, Establishing, and Verifying ReferenceIntervals in the Clinical Laboratory,
+3rd Edition.</p>
+</div>
+<div class="paragraph">
+<p>The tabulated values reproduced below are based on Reed AH,
+Henry RJ, Mason WB. Influence of statistical method used on the resulting estimate
+of normal range. Clin Chem. 1971 Apr;17(4):275-84. PMID: 5552364</p>
+</div>
+<div class="paragraph">
+<div class="title">Nonparametric Confidence Intervals of Reference Limits.</div>
+<p>From CLSI EP28-A3c</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Sample Size</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Lower</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Upper</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Sample Size</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Lower</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">Upper</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">119-132</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">566-574</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">22</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">133-160</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">575-598</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">161-187</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">599-624</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">188-189</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">625-631</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">190-218</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">632-665</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">4</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">219-248</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">666-674</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">249-249</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">675-698</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">250-279</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">699-724</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">11</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">6</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">280-307</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">13</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">725-732</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">6</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">308-309</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">13</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">733-765</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">7</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">310-340</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">14</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">766-773</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">12</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">8</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">341-363</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">774-799</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">13</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">8</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">364-372</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">800-822</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">13</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">9</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">373-403</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">16</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">823-833</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">14</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">9</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">404-417</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">17</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">834-867</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">14</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">418-435</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">17</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">868-871</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">14</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">436-468</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">18</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">872-901</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">469-470</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">19</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">902-919</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">15</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">471-500</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">19</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">920-935</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">16</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">501-522</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">20</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">936-967</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">16</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">523-533</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">20</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">968-970</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">17</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-center valign-top"><p class="tableblock">534-565</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">21</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">971-100</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">17</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">4</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>To obatain the corresponding rank numbers for the 0.975 quantile, subtract
+the rank numbers in the table from n+1, where n is the sample size.</p>
+</div>
+<div class="paragraph">
+<p>In contrast to the indices provided above, Campbell and Gardner calculate
+the rank indices using the following equations.</p>
+</div>
+<div class="paragraph">
+<p>\$r'=nq-(N_{1-\alpha/2} \times \sqrt{nq(1-q)})\$</p>
+</div>
+<div class="paragraph">
+<p>\$s'=1+nq+(N_{1-\alpha/2} \times \sqrt{nq(1-q)})\$</p>
+</div>
+<div class="paragraph">
+<p>where:<br>
+r' is the index of the lower confidence limit rounded to an integer.<br>
+s' is the index of the upper confidence limit rounded to an integer.<br>
+n is the sample size.<br>
+q is the reference interval quantile, usually 0.025 or 0.975.<br>
+alpha is the significance level of the confidence interval, typically 0.1 for 90%.<br>
+N is the inverse of the normal cumulative density function, which in Excel can be
+calculated with the function NORM.INV(1-alpha/2, 0, 1).</p>
+</div>
+<div class="paragraph">
+<p>Consider the sample size band 161-187 in the above table where the indices for
+the lower confidence limit are 1 and 9. For a sample size of 161, the upper
+confidence limit indices are there for 161+1-9 = 153, and 161+1-1 = 161. In contrast,
+for the sample size of 187, the upper confidence limit indices are 187+1-9=179 and
+187+1-1=187.</p>
+</div>
+<div class="paragraph">
+<p>As might be expected, by defining sample size bands, the ranks using the CLSI approach
+follow a step wise profile as illustrated below. Stepping also occurs with the Cambell
+and Gardner approach due to rounding to integers but it is less apparent than with the
+CLSI approach.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/clsi_vs_cg_lower.png" alt="clsi vs cg lower">
+</div>
+<div class="title">Figure 7. Rank Indices for Lower Reference Limit Confidence Interval using CLSI EP28-A3c versus Campbell and Gardner 1988 with increasing sample size.</div>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<caption class="title">Table 3. Ranks for calculating the confidence limits. LRL=Lower Reference Limit, URL=Upper Reference Limit, UCI Rank=Upper Confidence Interval Rank, LCI Rank=Lower Confidence Interval Rank</caption>
+<colgroup>
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1112%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">N</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CLSI LRL LCI Rank</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CLSI LRL UCI Rank</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CLSI URL LCI Rank</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CLSI URL UCI Rank</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C&amp;G LRL LCI Rank</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C&amp;G LRL UCI Rank</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C&amp;G URL LCI Rank</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">C&amp;G URL UCI Rank</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">119</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">113</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">119</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">113</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">120</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">132</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">126</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">132</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">126</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">133</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">133</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">126</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">133</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">127</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">134</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">160</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">153</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">160</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">153</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">160</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">161</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">153</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">161</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">154</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">161</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">187</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">179</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">187</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">179</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">187</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">188</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">180</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">187</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">180</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">188</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">189</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">181</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">188</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">181</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">189</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>The and edge case occurs for sample sizes 119 to 133, where the Campbell
+and Gardner equations round to ranks outside N, in these circumstances
+if the calculated rank is &lt; 1 then rank is set to 1, and if rank
+&gt; N, then rank is set to N, which aligns with the CLSI table.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_box_cox_transformation">Box-Cox Transformation</h4>
+<div class="paragraph">
+<p>The Box Cox power transformation is often suggested for transforming reference
+interval data having a skewed distribution to one having a normal distribution.
+Reference interval tools can then be applied to the transformed data to derive
+a reference interval and the reference limits back calculated using the
+inverse of the transformation.</p>
+</div>
+<div class="paragraph">
+<p>The Box-Cox transformation is given by:</p>
+</div>
+<div class="paragraph">
+<p>\$y={(\frac{x^{\lambda} - 1}{\lambda}, \lambda \ne 0),( ln(x), \lambda = 0):}\$</p>
+</div>
+<div class="paragraph">
+<p>This tool provides a couple of methods for estimating lambda using a simple grid
+search. In both cases a search space must be defined by setting the start of the
+range, the end of the range, and the step size. The tool performs a Box-Cox
+transform on the population data and assesses the goodness of fit using a Shapiro-
+Wilk test or a log likelihood function for every possible lambda in the search
+space. The lambda having the best Shapiro-Wilk W or maximum likelihood is then
+selected.</p>
+</div>
+<div class="paragraph">
+<p>The algorithm is not guaranteed to determine the optimal value of lambda but should
+return something close for data that is typically used to define reference intervals.
+If the returned value of lambda is at the start or end of the search space you selected,
+you will need to extend the search space and try again.</p>
+</div>
+<div class="paragraph">
+<p>The uncertainty in the estimated value for lambda can be very large if the sample
+is small. The charts of lambda versus the log likelihood below have been generated
+in R (version 4.5.2) using the boxcox algorithm in the MASS package (version 7.3-65).</p>
+</div>
+<div class="paragraph">
+<p>It is clear that as the sample size gets smaller, the 95% confidence interval for
+the value of lambda becomes very wide. For this reason it is suggested that samples
+used to estimate a value for lambda should contain at least 200 subjects but more
+may be required depending on the degree of skewness.</p>
+</div>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/hist_20000.png" alt="hist 20000">
+</div>
+<div class="title">Figure 8. Histogram N = 20000</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/boxcox_20000.png" alt="boxcox 20000">
+</div>
+<div class="title">Figure 9. Estimated lambda = -0.5</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/hist_300.png" alt="hist 300">
+</div>
+<div class="title">Figure 10. Histogram N = 300</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/boxcox_300.png" alt="boxcox 300">
+</div>
+<div class="title">Figure 11. Estimated lambda = -0.28</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/hist_100.png" alt="hist 100">
+</div>
+<div class="title">Figure 12. Histogram N = 100</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/boxcox_100.png" alt="boxcox 100">
+</div>
+<div class="title">Figure 13. Estimated lambda = -0.29</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/hist_50.png" alt="hist 50">
+</div>
+<div class="title">Figure 14. Histogram N = 50</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/boxcox_50.png" alt="boxcox 50">
+</div>
+<div class="title">Figure 15. Estimated lambda = -0.72</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<table class="tableblock frame-none grid-none stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/hist_30.png" alt="hist 30">
+</div>
+<div class="title">Figure 16. Histogram N = 30</div>
+</div></div></td>
+<td class="tableblock halign-left valign-top"><div class="content"><div class="imageblock">
+<div class="content">
+<img src="./images/boxcox_30.png" alt="boxcox 30">
+</div>
+<div class="title">Figure 17. Estimated lambda = 0.16</div>
+</div></div></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<img src="./images/boxcox-tool.png" alt="boxcox tool">
+</div>
+</div>
+<div class="paragraph">
+<p><strong>Execution Steps</strong></p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Define Data:</strong> As for the reference interval tool, the data should be in a
+single column. Enter the cell range containing the data.</p>
+</li>
+<li>
+<p><strong>Defint Output Range:</strong> Enter the top left cell of the range where you would
+like the transformed data to be reported.</p>
+</li>
+<li>
+<p><strong>Select Method:</strong> Choose the method for assessing the best lambda value. The
+default is a Shapiro-Wilk test.</p>
+</li>
+<li>
+<p><strong>Define Search Space:</strong> Enter the start, end, and step size of the search
+space. The default is -2 to +2 in steps of 0.01.</p>
+</li>
+<li>
+<p><strong>Run:</strong> Click on the Transform button to run the analysis.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>To back calculate the reference limits and confidence intervals from the
+transformed data, use the METOOLS.BOXCOXINV(x, lambda) custom function in Excel.
+This function is available when the add-in taskpane is active.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/boxcoxinv-function.png" alt="boxcoxinv function">
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_errors_and_warnings">Errors and Warnings</h3>
+<h5 id="_error_you_cannot_perform_the_requested_operation" class="discrete">Error: You cannot perform the requested operation</h5>
+<div class="paragraph">
+<p>This error message usually arises if the add-in is attempting to write to a write
+protected cell or series of cells. The easiest way of avoiding this is to
+unprotect the sheet. Protection can be reapplied once the add-in operation has
+been completed.</p>
+</div>
+<div class="paragraph">
+<p>Alternatively, if you are preparing a template, the cells that the add-in will
+write to can be unlocked in advanced. First, highlight the relevant cells in
+Excel and right click to display the context menu.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/format-cell.png" alt="format cell">
+</div>
+</div>
+<div class="paragraph">
+<p>Choose the "Format Cells" item, which will display the Format Cells dialog.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/unlock-cell.png" alt="unlock cell">
+</div>
+</div>
+<div class="paragraph">
+<p>Select the <strong>Protection</strong> tab and then uncheck the <strong>Locked</strong> option. Select OK to
+save the changes. The worksheet protection may then be applied in the usual way
+and the add-in will still be able to write to the cells.</p>
+</div>
+<div class="paragraph">
+<p>Note, however, that charts can only be created and displayed by the add-in if
+the active worksheet is unprotected.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_developers_and_contributors">Developers and Contributors</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>During development and testing, the add-in should be "side-loaded". This can be
+involved. Side-loading from behind corporate firewalls adds an extra level of
+complexity.</p>
+</div>
+<div class="paragraph">
+<p>Office add-ins are developed using standard web technologies such as HTML, CSS,
+and Javascript. Excel runs these as a web page within Excel. To side-load an
+application it must be run using nodejs, which is a powerful tool that allows
+javascript to be run outside a web browser.</p>
+</div>
+<div class="sect2">
+<h3 id="_side_loading_the_add_in">Side-loading the add-in</h3>
+<div class="paragraph">
+<p>Node.js must be installed on your computer. Rather than installing a particular
+version of Node.js directly, installing via a node version manager is recommended.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Download nvm-setup.exe for windows from <a href="https://github.com/coreybutler/nvm-windows/releases" class="bare">https://github.com/coreybutler/nvm-windows/releases</a></p>
+</li>
+<li>
+<p>Install nvm-setup.exe</p>
+</li>
+<li>
+<p>Open a command prompt and run the following commands (update the version number
+as needed). Note, lts is an abbreviation for long-term-support.</p>
+<div class="listingblock">
+<div class="content">
+<pre>nvm install lts
+nvm use 24.6.0</pre>
+</div>
+</div>
+</li>
+<li>
+<p>If you are familiar with Git, clone the repository</p>
+<div class="listingblock">
+<div class="content">
+<pre>git clone https://github.com/dche658/method-eval-tools.git</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Alternatively, download the add-in repository from
+<a href="https://github.com/dche658/method-eval-tools" class="bare">https://github.com/dche658/method-eval-tools</a></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>You can do this by clicking the green "Code" button and selecting
+"Download ZIP".</p>
+</li>
+<li>
+<p>Extract the contents of the ZIP file to a directory on
+your computer.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Navigate to the directory where you extracted the downloaded repository
+and run:</p>
+<div class="listingblock">
+<div class="content">
+<pre>npm install</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>This will take quite some time to complete as all the libraries used in
+development must be downloaded and installed, and there are a lot of them!</p>
+</div>
+</li>
+<li>
+<p>Finally, execute the add-in with:</p>
+<div class="listingblock">
+<div class="content">
+<pre>npm run start</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>A separate terminal window will open, after which Excel will be launched.
+Startup can take a few minutes to complete.</p>
+</div>
+<div class="paragraph">
+<p>When you have finished using Excel and the add-in, do not just close the
+terminal window. You must execute the stop command so the cache is cleared.
+Otherwise, problems can arise when you try to run the add-in again.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm run stop</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_option_install_on_a_portable_device">Option: Install on a Portable Device</h3>
+<div class="paragraph">
+<p>If you do not have administrator access then you can install the add-in on a
+portable device. A high speed external solid state drive will likely give
+you the best results.</p>
+</div>
+<div class="paragraph">
+<p>Instructions for installing nodejs as a portable application have been taken
+from <a href="https://dev.to/yougotwill/portable-nodejs-without-administrator-access-1elk">here</a>.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Install <a href="https://cmder.app/">Cmder</a> in your desired location on the portable drive.</p>
+</li>
+<li>
+<p>Download <a href="https://github.com/coreybutler/nvm-windows">nvm-noinstall.zip</a> from the latest release.</p>
+</li>
+<li>
+<p>Extract the contents of nvm-noinstall.zip into the bin folder inside of the portable Cmder folder.</p>
+</li>
+<li>
+<p>Navigate to the bin folder in Cmder and run install.cmd</p>
+</li>
+<li>
+<p>When asked to enter the absolute path use your Cmder bin folder.</p>
+</li>
+<li>
+<p>Install the version of node you want eg. nvm install latest (Make sure to still be inside of the bin folder in your terminal program).</p>
+</li>
+<li>
+<p>Wait until node and npm have finished installing.</p>
+</li>
+<li>
+<p>Inside the bin folder there should be a folder containing the latest node version e.g. v24.6.0 at the time of writing.</p>
+</li>
+<li>
+<p>Copy the absolute path to that folder. e.g. E:\PortableApps\CmderPortable\bin\v24.6.0.</p>
+</li>
+<li>
+<p>Add this to your existing path in Cmder&#8217;s environment settings. This can be done in a couple of ways. The first is by running the following command.</p>
+<div class="listingblock">
+<div class="content">
+<pre>set "PATH=E:\PortableApps\CmderPortable\bin\v24.6.0;%PATH%"</pre>
+</div>
+</div>
+</li>
+<li>
+<p>Alternatively edit the user profile e.g.  E:\PortableApps\CmderPortable\config\user_profile.cmd and add a line e.g. 'set "PATH=%CMDER_ROOT%\bin\v24.6.0;%PATH%"'</p>
+</li>
+<li>
+<p>Make sure you are still inside your bin folder. Run nvm use v24.6.0 or your chosen node version. You can close the username and password window both times without entering anything. It should tell you Now using node v24.6.0 (64-bit).</p>
+</li>
+<li>
+<p>Close and open Cmder and you should have access to node, npm and npx</p>
+</li>
+<li>
+<p>If you are behind a corporate firewall you will probably need to set the
+proxy configuration. Suggestions on how to do this a shown below.</p>
+</li>
+<li>
+<p>Download and extract the add-in repository as described above.</p>
+</li>
+<li>
+<p>Then run the following commands to install the add-in and then side-load
+it into Excel.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm install
+npm run start</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>If you have an Excel workbook on OneDrive you can copy a link to the document
+and use the following command to side-load the add-in into Excel.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm run start -- web --document https://1drv.ms/x/c/7ba37898bfb7e549/EdiktLds9p5MvIFWYzL0-QBSw?e=5BUXE7</pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_option_set_a_proxy_for_npm">Option: Set a proxy for npm</h3>
+<div class="paragraph">
+<p>Find the proxy settings for your network by opening Settings. Go to
+Network and Internet, and then Proxy.</p>
+</div>
+<div class="paragraph">
+<p>If a manual proxy has been configured, you can copy those details. If a script has
+been used, this is often located at <a href="https://your.domain/proxy.pac" class="bare">https://your.domain/proxy.pac</a>. You can generally
+see the content of the proxy.pac file by copying the url to you web browser and use
+your browser to display the file. Inspect the content of the file to find the
+appropriate proxy server url and port for your subnet (often the default).</p>
+</div>
+<div class="paragraph">
+<p>Run the following commands to set the proxy and https proxy.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config set proxy http://&lt;username&gt;:&lt;password&gt;@&lt;proxy-server-url&gt;:&lt;port&gt;
+npm config set https-proxy http://&lt;username&gt;:&lt;password&gt;@&lt;proxy-server-url&gt;:&lt;port&gt;</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Run the following command to confirm the npm settings</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config list</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>In many cases if you run 'npm install' at this point you will get an untrusted
+certificate error. This often occurs because your organisation uses its own
+Certificate Authority. To get around this you will need to either get root
+certificate from your IT department, export it from your web browser, or run
+the "Manage computer certificates" settings app and export it from there in pem format.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/trusted-certificates.png" alt="trusted certificates">
+</div>
+</div>
+<div class="paragraph">
+<p>Configure cafile with the command</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config set cafile /path/to/your/corporate/root/certificate.pem</pre>
+</div>
+</div>
+<div class="paragraph">
+<p>The alternative approach is to temporarily Bypass SSL Validation.
+This method disables strict SSL validation and is generally not recommended
+for long-term use due to security implications.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre>npm config set strict-ssl false
+npm config set registry="http://registry.npmjs.org/"</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_appendices">Appendices</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_license">License</h3>
+<div class="paragraph">
+<p>MIT License Copyright (c) 2025 Douglas Chesher</p>
+</div>
+<div class="paragraph">
+<p>Permission is hereby granted, free of
+charge, to any person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the Software without
+restriction, including without limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to the
+following conditions:</p>
+</div>
+<div class="paragraph">
+<p>The above copyright notice and this permission notice
+(including the next paragraph) shall be included in all copies or substantial
+portions of the Software.</p>
+</div>
+<div class="paragraph">
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO
+EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_calculations">Calculations</h3>
+<div class="sect3">
+<h4 id="_one_way_analysis_calculations">One Way Analysis Calculations</h4>
+<div class="paragraph">
+<p>These were sourced from:</p>
+</div>
+<div class="paragraph">
+<p>Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
+and the Sciences 6th ed. CRC Press, Boca Raton. p752.</p>
+</div>
+<div class="paragraph">
+<p>Clinical and Laboratory Standards Institute (CLSI). 2014.
+User Verification of Precision and Estimation of Bias;
+Approved Guideline - Third Edition. CLSI document EP15-A3.
+Clinical and Laboratory Standards Institute, Pennsylvania.</p>
+</div>
+<div class="paragraph">
+<p>They are used for the verification studies where only one run per day is performed.</p>
+</div>
+<div class="paragraph">
+<p>N : the total number of results (e.g. 25 if 5 replicates per day over 5 days).</p>
+</div>
+<div class="paragraph">
+<p>k : number of days (factor A)</p>
+</div>
+<div class="paragraph">
+<p>\$\bar{\bar{x}}=\frac{\sum_{i=1}^{N}x_{i}}{N}\$ : grand mean</p>
+</div>
+<div class="paragraph">
+<p>\$SS_{Total}=\sum_{i=1}^{N}(x_{i}-\bar{\bar{x}})^{2}=\sum_{i=1}^{N}x_{i}^{2}-\frac{(\sum_{i=1}^{N}x_{i})^{2}}{N}\$ : sum of squares total</p>
+</div>
+<div class="paragraph">
+<p>\$SS1=\sum_{i=1}^{k}n_{i}(\bar{x}_{i}-\bar{\bar{x}})^{2}=sum_{i=1}^{k}\frac{(\sum_{j=1}^{n}x_{ij})^2}{n_{i}}-\frac{(\sum_{i=1}^{N}x_{i})^{2}}{N}\$ : sum of squares between</p>
+</div>
+<div class="paragraph">
+<p>\$SS2=SS_{Total}-SS1 = \sum_{i=1}^{k}\sum_{j=1}^{n_{j}}(\bar{x}_{i}-x_{ij})^{2}\$ : sum of squares within</p>
+</div>
+<div class="paragraph">
+<p>\$DF_{Total}=N-1\$ : degrees of freedom total</p>
+</div>
+<div class="paragraph">
+<p>\$DF1=k-1\$ : degrees of freedom between</p>
+</div>
+<div class="paragraph">
+<p>\$DF2=N-k\$ : degrees of freedom within</p>
+</div>
+<div class="paragraph">
+<p>\$MS1=\frac{SS1}{DF1}\$ : mean square between</p>
+</div>
+<div class="paragraph">
+<p>\$MS2=\frac{SS2}{DF2}\$ : mean square within</p>
+</div>
+<div class="paragraph">
+<p>\$F=\frac{MS1}{MS2}\$ : F-statistic</p>
+</div>
+<div class="paragraph">
+<p>\$SN2=\sum_{i=1}^{k}n_{i}^2\$ : sum of n in each day squared</p>
+</div>
+<div class="paragraph">
+<p>\$n_{0}=\frac{N-\frac{SN2}{N}}{k-1}\$ : average number of replicates per day</p>
+</div>
+<div class="paragraph">
+<p>\$V_{W}=MS2\$ : Variance within (repeatability)</p>
+</div>
+<div class="paragraph">
+<p>\$V_{B}=\frac{MS1-MS2}{n_{0}}\$ : Variance between</p>
+</div>
+<div class="paragraph">
+<p>\$V_{WL}=V_{W}+V_{B}\$ : Variance within lab</p>
+</div>
+<div class="sect4">
+<h5 id="_satterthwaite_formula_for_approximating_the_pooled_degrees_of_freedom">Satterthwaite formula for approximating the pooled degrees of freedom.</h5>
+<div class="paragraph">
+<p>\$a_{1}=\frac{1}{n_{0}}\$</p>
+</div>
+<div class="paragraph">
+<p>\$a_{2}=\frac{1-n_{0}}{n_{0}}\$</p>
+</div>
+<div class="paragraph">
+<p>\$DF_{WL}=\frac{(a_{1}MS1+a_{2}MS2)^{2}}{\frac{(a_{1}MS1)^2}{DF1}+\frac{(a_{2}MS2)1^2}{DF2}}\$ : degrees of freedom within lab</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_upper_verification_limits">Upper Verification Limits</h5>
+<div class="paragraph">
+<p>\$n_{sam}\$ : number of samples or levels tested.</p>
+</div>
+<div class="paragraph">
+<p>\$\alpha\$ : false rejection rate (assumed to be 0.05)</p>
+</div>
+<div class="paragraph">
+<p>\$\frac{1-\alpha}{n_{sam}}\$ : confidence level with Bonferroni correction.</p>
+</div>
+<div class="paragraph">
+<p>\$F_{e}=\sqrt{\frac{\chi^{2}}{DF2}}\$ : upper verification limit factor for repeatability
+where \$\chi^{2}\$ is the quantile for the chi-squared distribution at the
+specified confidence level with DF2 degrees of freedom.</p>
+</div>
+<div class="paragraph">
+<p>\$F_{WL}=\sqrt{\frac{\chi^{2}}{DF_{WL}}\$ : upper verification limit factor for within
+laboratory imprecision where \$\chi^{2}\$ is the quantile for the chi-squared
+distribution at the specified confidence level with \$DF_{WL}\$ degrees of
+freedom.</p>
+</div>
+<div class="paragraph">
+<p>\$UVL=F\times\sigma\$ : upper verification limit expressed as SD.</p>
+</div>
+<div class="paragraph">
+<p>\$UVL=F\times%CV\$ : upper verification limit expressed as CV.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The add-in produces slightly different results to Excel when calculating
+the within laboratory verification limit factor F. Investigations suggest this
+occurs because the CHISQ.INV function in Excel rounds the degrees of freedom to
+an integer value. In contrast, the equivalent function in the jStat library
+used by this application is able to calculate the result with decimal values.
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_two_way_analysis_calculations">Two Way Analysis Calculations</h4>
+<div class="paragraph">
+<p>These were sourced from:</p>
+</div>
+<div class="paragraph">
+<p>Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
+and the Sciences 6th ed. CRC Press, Boca Raton.</p>
+</div>
+<div class="paragraph">
+<p>NIST/SEMATECH 3.2.3.3. Two-Way Nested ANOVA, <a href="https://www.itl.nist.gov/div898/handbook/ppc/section2/ppc233.htm" class="bare">https://www.itl.nist.gov/div898/handbook/ppc/section2/ppc233.htm</a>.
+In NIST/SEMATECH e-Handbook of Statistical Methods , 17 Sep 2025.</p>
+</div>
+<div class="paragraph">
+<p>Clinical and Laboratory Standards Institute (CLSI). 2014.
+Evaluation of Precision of Quantitative MeasurementProcedures;
+Approved Guideline - Third Edition. CLSI document EP05-A3.
+Clinical and Laboratory Standards Institute, Pennsylvania.</p>
+</div>
+<div class="paragraph">
+<p>a : number of levels of the first factor (factor A) (e.g. days 20)</p>
+</div>
+<div class="paragraph">
+<p>b : number of levels of the second factor (factor B) (e.g. runs 2)</p>
+</div>
+<div class="paragraph">
+<p>r : number of measurements of each pair of levels of independent
+variables A and B. That is, the number of replicates (e.g. 2)</p>
+</div>
+<div class="paragraph">
+<p>\$N=a\times b\times r\$ : the total number of results (e.g. 80 if 2 replicates per run with
+2 runs per day over 20 days).</p>
+</div>
+<div class="paragraph">
+<p>\$A_{i}\$ : total of all measurements of independent variable 1 at level i.
+(i = 1, 2, &#8230;&#8203;, a)</p>
+</div>
+<div class="paragraph">
+<p>\$B_{j}\$ : total of all measurements of independent variable 2 at level j.
+(j = 1, 2, &#8230;&#8203;, b)</p>
+</div>
+<div class="paragraph">
+<p>\$AB_{ij}\$ : total of all measurement at the ith level of variable 1 and jth
+level of variable 2. (i = 1, 2, &#8230;&#8203;, a; j = 1, 2, &#8230;&#8203;, b)</p>
+</div>
+<div class="paragraph">
+<p>\$CM=\frac{(\sum_{i=1}^{N}x_{i})^2}{N}\$ : correction for the mean</p>
+</div>
+<div class="paragraph">
+<p>\$SST=\sum_{i=0}^{a}\sum_{j=0}^{b}\sum_{k=0}^{r}(x_{ijk}-\bar{\bar{x}})=\sum_{i=0}^{N}x_{i}^{2}-CM\$ : total sum of squares</p>
+</div>
+<div class="paragraph">
+<p>\$SSA=br\sum_{i=0}^{a}(\bar{x}_{i}-\bar{\bar{x}})^2=\frac{\sum_{i=1}^{a}A_{i}^{2}}{br}-CM\$ : sum of squares of A</p>
+</div>
+<div class="paragraph">
+<p>\$SSE=\sum_{i=0}^{a}\sum_{j=0}^{b}\sum_{k=0}^{r}(\bar{x}_{ijk}-\bar{x}_{ij})^2\$</p>
+</div>
+<div class="paragraph">
+<p>\$SSB=r\sum_{i=0}^{a}\sum_{j=0}^{b}(\bar{x}_{ij}-\bar{x}_{i})^2=SST-SSA-SSE\$ : sum of squares of B in A</p>
+</div>
+<div class="paragraph">
+<p>\$DFA=a-1\$ : degrees of freedom of A</p>
+</div>
+<div class="paragraph">
+<p>\$DFB=a(b-1)\$ : degrees of freedom of B in A</p>
+</div>
+<div class="paragraph">
+<p>\$DFE=ab(r-1)\$ : degrees of freedom of error</p>
+</div>
+<div class="paragraph">
+<p>\$MSA=\frac{SSA}{DFA}\$ : mean square of A</p>
+</div>
+<div class="paragraph">
+<p>\$MSB=\frac{SSB}{DFB}\$ : mean square of B in A</p>
+</div>
+<div class="paragraph">
+<p>\$MSE=\frac{SSE}{DFE}\$ : mean square of error</p>
+</div>
+<div class="paragraph">
+<p>\$F_{A}=\frac{MSA}{MSE}\$ : F-statistic of A</p>
+</div>
+<div class="paragraph">
+<p>\$F_{B}=\frac{MSB}{MSE}\$ : F-statistic of B in A</p>
+</div>
+<div class="paragraph">
+<p>\$V_{E}=MSE\$ : variance of error</p>
+</div>
+<div class="paragraph">
+<p>\$V_{A}=\frac{MSA-MSB}{b\times r}\$ : variance of A (between day)</p>
+</div>
+<div class="paragraph">
+<p>\$V_{B}=\frac{MSB-MSE}{r}\$ : variance of B in A (between run)</p>
+</div>
+<div class="paragraph">
+<p>\$S_{R}=\sqrt{V_{E}}\$ : standard deviation of repeatability</p>
+</div>
+<div class="paragraph">
+<p>\$S_{WL}=\sqrt{V_{A}+V_{B}+V_{E}\$ : standard deviation within laboratory</p>
+</div>
+<div class="paragraph">
+<p>I need help here! The alpha coefficients may not be right. They were calculated
+based using the coefficients for calculating the pooled variance. It seems to
+work with data set provided in Table 1 of CLSI EP05 but the calculated value of
+df_WL is close but not the same when using Analyse-It or VCA (R package) on some
+other data sets.</p>
+</div>
+<div class="paragraph">
+<p>\$\alpha_{A}=\frac{a}{N-1}\$</p>
+</div>
+<div class="paragraph">
+<p>\$\alpha_{B}=\frac{a(b-1)}{N-1}\$</p>
+</div>
+<div class="paragraph">
+<p>\$\alpha_{E}=\frac{N-(ab)}{N-1}\$</p>
+</div>
+<div class="paragraph">
+<p>\$DF_{WL}=\frac{(\alpha_{A}MSA + \alpha_{B}MSB + \alpha_{E}MSE)^2}{\frac{(alpha_{A}MSA)^2}{DFA} + \frac{(\alpha_{B}MSB)^2}{DFB} + \frac{(\alpha_{E}MSE)^2}{DFE}}\$</p>
+</div>
+<div class="paragraph">
+<p>\$UCL=S\times \sqrt{\frac{DF}{\chi_{1-\frac{\alpha}{2}}^{2},DF}}\$ : upper confidence limit
+where \$\chi_{1-\frac{\alpha}{2}}^{2}\$ is the quantile corresponding to 1-alpha/2 confidence
+with DF degrees of freedom</p>
+</div>
+<div class="paragraph">
+<p>\$LCL=S\times \sqrt{\frac{DF}{\chi_{\frac{\alpha}{2}}^{2},DF}}\$ : lower confidence limit
+where \$\chi_{\frac{\alpha}{2}}^2\$ is the quantile corresponding to alpha/2 confidence
+with DF degrees of freedom</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_cohens_kappa">Cohen&#8217;s Kappa</h4>
+<div class="paragraph">
+<p>These were sourced from:</p>
+</div>
+<div class="paragraph">
+<p>Fleiss, J.L., Cohen, J., and Everitt, B.S. 1969. 'Large Sample Standard Errors of Kappa and Weighted Kappa'.
+Psychological Bulletin. Vol. 72, No. 5, 323-327.</p>
+</div>
+<div class="paragraph">
+<p>NSCC Statistical Software. PASS 2025 Documentation. Kappa Rater Agreement: Confidence Intervals for Kappa.
+<a href="https://www.ncss.com/software/pass/pass-documentation/" class="bare">https://www.ncss.com/software/pass/pass-documentation/</a>. Accessed: 14/10/2025.<br>
+<a href="https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Confidence_Intervals_for_Kappa.pdf" class="bare">https://www.ncss.com/wp-content/themes/ncss/pdf/Procedures/PASS/Confidence_Intervals_for_Kappa.pdf</a></p>
+</div>
+<div class="paragraph">
+<p>Consider the contingency table:</p>
+</div>
+<table class="tableblock frame-all grid-all" style="width: 50%;">
+<colgroup>
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.6666%;">
+<col style="width: 16.667%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-center valign-top" colspan="4"><p class="tableblock"><strong>Rater B</strong></p></td>
+<td class="tableblock halign-center valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Rater A</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>1</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>2</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>&#8230;&#8203;</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>k</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock"><strong>Total</strong></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>11</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>12</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>1k</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>1.</sub></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>2</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>21</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>22</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>2k</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>2.</sub></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>&#8230;&#8203;</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>k</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>k1</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>k2</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>kk</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>k.</sub></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Total</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>.1</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>.2</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">&#8230;&#8203;</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">p<sub>.k</sub></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Let \$p_{ij}\$ be the proportion of subjects placed in the <em>i,j</em>th cell, where the proportion is
+simply calculated as the tabulated value divided by the grand total. Let</p>
+</div>
+<div class="paragraph">
+<p>\$p_{i.}=\sum_{j=1}^{k}p_{ij}\$</p>
+</div>
+<div class="paragraph">
+<p>the proportion of subject placed in the <em>i</em>th row, and let</p>
+</div>
+<div class="paragraph">
+<p>\$p_{.j}=\sum_{i=1}^{k}p_{ij}\$</p>
+</div>
+<div class="paragraph">
+<p>the proportion of subjects placed in the <em>j</em>th column.</p>
+</div>
+<div class="paragraph">
+<p>The observed agreement is given by:</p>
+</div>
+<div class="paragraph">
+<p>\$p_{o}=\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}\$</p>
+</div>
+<div class="paragraph">
+<p>The expected agreement is given by:</p>
+</div>
+<div class="paragraph">
+<p>\$p_{e}=\sum_{i=1}^{k}\sum_{j=1}^{k}p_{i.}p_{.j}\$</p>
+</div>
+<div class="paragraph">
+<p>Kappa is defined as:</p>
+</div>
+<div class="paragraph">
+<p>\$\kappa=\frac{p_{o}-p_{e}}{1-p_{e}}\$</p>
+</div>
+<div class="paragraph">
+<p>The estimated sample variance is given by:</p>
+</div>
+<div class="paragraph">
+<p>\$Var(\kappa)=\frac{1}{N(1-p_{e})^{4}}\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}\$</p>
+</div>
+<div class="paragraph">
+<p>therefore the estimated standard error is:</p>
+</div>
+<div class="paragraph">
+<p>\$SE(\kappa)=\frac{\sqrt{Var(\kappa)}}{\sqrt{N}}=\frac{1}{(1-p_{e})^{2}}\sqrt{\{(\sum_{i=1}^{k}p_{ii}\times((1-p_{e})-(p_{.i}+p_{i.})(1-p_{o}))^{2}) + (1-p_{o})^{2}\sum_{i=1}^{k}\sum_{j=1}^{k}p_{ij}(p_{.i}+p_{j.})^{2}-(p_{o}p_{e}-2p_{e}+p_{o})^{2}\}}\$</p>
+</div>
+<div class="paragraph">
+<p>The confidence intervals are then calculated as</p>
+</div>
+<div class="paragraph">
+<p>\$\kappa \pm z_{\alpha/2}SE(\kappa)\$</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_grubbs_test_for_outliers">Grubb&#8217;s Test for Outliers</h4>
+<div class="paragraph">
+<p>NIST/SEMATECH 1.3.5.17.1. Grubbs' Test for Outliers, <a href="https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h1.htm" class="bare">https://www.itl.nist.gov/div898/handbook/eda/section3/eda35h1.htm</a>.
+In NIST/SEMATECH e-Handbook of Statistical Methods , 16/10/2025.</p>
+</div>
+<div class="paragraph">
+<p><a href="https://en.wikipedia.org/wiki/Grubbs%27s_test" class="bare">https://en.wikipedia.org/wiki/Grubbs%27s_test</a></p>
+</div>
+<div class="paragraph">
+<p>H<sub>0</sub>:	There are no outliers in the data set<br>
+H<sub>a</sub>:	There is exactly one outlier in the data set</p>
+</div>
+<div class="paragraph">
+<p>Test Statistic:	The Grubbs' test statistic is defined as:</p>
+</div>
+<div class="paragraph">
+<p>\$G=\frac{max|Y_{i} - \bar{Y}|}{s}\$</p>
+</div>
+<div class="paragraph">
+<p>where \$\bar{Y}\$ and s are the mean and sample standard deviation respectively.</p>
+</div>
+<div class="paragraph">
+<p>This is the two-sided test, for which the hypothesis of no outliers is rejected at significance level α if</p>
+</div>
+<div class="paragraph">
+<p>\$G &gt; \frac{N - 1}{\sqrt{N}}\sqrt{\frac{(t_{\alpha/(2N),N-2})^{2}}{N - 2 + (t_{\alpha/(2N),N-2})^{2}}\$</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="footer">
+<div id="footer-text">
+Last updated 2026-02-14 16:42:30 01000
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
+</body>
+</html>
