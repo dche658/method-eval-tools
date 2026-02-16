@@ -1,4 +1,4 @@
-/* Statistical procedures for evaluating imprecision
+/** Statistical procedures for evaluating imprecision
  *
  * Two classes have been implemented to perform a either a one way or
  * two way ANOVA. These classes are in turn used by the OneFactorVarianceAnalysis
@@ -11,14 +11,13 @@
  * validation studies and calculates confidence limits instead of a verification
  * limit.
  *
- * Author: Douglas Chesher
+ * @author Douglas Chesher
  *
- * Created: August 2025.
  */
 
 import { mean, stdev, chisquare, studentt } from "jstat-esm";
 
-/* Class to perform one factor anova
+/** Class to perform one factor anova
  * Algorithm from Mendenhall WM, Sincich TL. 2016. Statistics for Engineering
  * and the Sciences 6th ed. CRC Press, Boca Raton. p752.
  */
@@ -26,6 +25,12 @@ export class OneFactorAnova {
   private dict: { [key: string]: number[] };
   private factorA: (string | number)[];
   private values: number[];
+
+  /**
+   * 
+   * @param factorA 
+   * @param values 
+   */
   constructor(factorA: (string | number)[], values: number[]) {
     this.dict = {};
     this.factorA = factorA;
@@ -131,6 +136,9 @@ export interface OneFactorVariance {
   fWL: number;
 }
 
+/**
+ * One Factor Variance Component Analysis
+ */
 export class OneFactorVarianceAnalysis {
   private factorA: (string | number)[];
   private values: number[];
@@ -140,6 +148,13 @@ export class OneFactorVarianceAnalysis {
   private fWL: number;
   private isCalculated: boolean;
 
+  /**
+   * 
+   * @param factorA 
+   * @param values 
+   * @param numLevels 
+   * @param alpha default is 0.05
+   */
   constructor(factorA: (string | number)[], values: number[], numLevels: number, alpha = 0.05) {
     this.factorA = factorA;
     this.values = values;
@@ -150,6 +165,10 @@ export class OneFactorVarianceAnalysis {
     this.isCalculated = false;
   }
 
+  /**
+   * Main method for performing the calculations
+   * @returns VCA
+   */
   calculate(): OneFactorVariance {
     const oneFactorAnova = new OneFactorAnova(this.factorA, this.values);
     const anova = oneFactorAnova.calculate();
@@ -196,7 +215,10 @@ export class OneFactorVarianceAnalysis {
     };
   }
 
-  /* Get upper verification limit for repeatability
+  /** Get upper verification limit for repeatability
+   * 
+   * @param cvClaim Claimed repeatability CV
+   * 
    */
   getUVLRepeatability(cvClaim: number): number {
     if (this.isCalculated === false) {
@@ -205,7 +227,9 @@ export class OneFactorVarianceAnalysis {
     return cvClaim * this.fRepeatability;
   }
 
-  /* Get upper verification limit for within lab imprecision
+  /** Get upper verification limit for within lab imprecision
+   * 
+   * @param cvClaim Claimed within laboratory imprecision CV
    */
   getUVLWL(cvClaim: number): number {
     if (this.isCalculated === false) {
@@ -215,7 +239,7 @@ export class OneFactorVarianceAnalysis {
   }
 } //OneFactorVarianceAnalysis
 
-/* Class to perform two factor crossed anova
+/** Class to perform two factor crossed anova
  * Nested ANOVA needs to be used for lab precision data which uses a nested desing.
  * This procedure was written before I understood the difference, and like the
  * Nested procedure, only works for balanced data.
@@ -232,6 +256,12 @@ export class TwoFactorAnova {
   private dictB: { [key: string]: number[] };
   private grandMean: number;
 
+  /**
+   * 
+   * @param factorA 
+   * @param factorB 
+   * @param values 
+   */
   constructor(factorA: (string | number)[], factorB: (string | number)[], values: number[]) {
     this.factorA = factorA;
     this.factorB = factorB;
@@ -274,9 +304,12 @@ export class TwoFactorAnova {
     this.grandMean = mean(values);
   }
 
-  /* Total Sum of Squares (SST):
+  /** 
+   * Total Sum of Squares (SST).
    * Measures the total variability in the data. Calculated by summing the squared
    * differences between each data point and the grand mean.
+   * 
+   * @internal
    */
   calculateSST(): number {
     let sst = 0;
@@ -286,10 +319,13 @@ export class TwoFactorAnova {
     return sst;
   }
 
-  /* Sum of squares for factor B
+  /** 
+   * Sum of squares for factor B.
    * Measures the variability due to Factor B. Calculated by summing the squared
    * differences between the means of each level of Factor B and the grand mean,
    * weighted by the number of observations in each level.
+   * 
+   * @internal
    */
   calculateSSB(): number {
     let ssb = 0;
@@ -301,10 +337,12 @@ export class TwoFactorAnova {
     return ssb;
   }
 
-  /* Sum of squares for factor A
+  /** Sum of squares for factor A
    * Calculated by summing the squared differences between the means of each
    * level of Factor A and the grand mean, weighted by the number of observations
    * in each level.
+   * 
+   * @internal
    */
   calculateSSA(): number {
     let ssa = 0;
@@ -317,15 +355,21 @@ export class TwoFactorAnova {
     return ssa;
   }
 
-  /* Sum of squares of the interaction between factor A and factor B
+  /** 
+   * Sum of squares of the interaction between factor A and factor B
+   * 
+   * @internal
    */
   calculateSSAB(sst: number, ssa: number, ssb: number, sse: number): number {
     return sst - ssa - ssb - sse;
   }
 
-  /* Sum of squares for the error components
+  /**
+   * Sum of squares for the error components
    * For each cell corresponding to factorA and factorB, calculate the sum of the squared difference
    * between each value in the cell and the mean for that cell.
+   * 
+   * @internal
    */
   calculateSSE(): number {
     let sse = 0;
@@ -341,24 +385,60 @@ export class TwoFactorAnova {
     return sse;
   }
 
+  /**
+   * 
+   * @returns degrees of freedom total
+   * 
+   * @internal
+   */
   calculateDfT(): number {
     return this.values.length - 1;
   }
 
+  /**
+   * 
+   * @returns degrees of freedom factor A
+   * 
+   * @internal
+   */
   calculateDfA(): number {
     return this.numFactorA - 1;
   }
 
+  /**
+   * 
+   * @returns degrees of freedom factor B
+   * 
+   * @internal
+   */
   calculateDfB(): number {
     return this.numFactorB - 1;
   }
+
+  /**
+   * 
+   * @returns degrees of freedom for factor A and factor B interaction
+   * 
+   * @internal
+   */
   calculateDfAB(): number {
     return (this.numFactorA - 1) * (this.numFactorB - 1);
   }
+
+  /**
+   * 
+   * @returns degrees of freedom for error
+   * 
+   * @internal
+   */
   calculateDfE(): number {
     return this.values.length - this.numFactorA * this.numFactorB;
   }
 
+  /**
+   * Main method for performing variance component analysis
+   * @returns VCA
+   */
   calculate(): {
     mean: number;
     sst: number;
@@ -450,7 +530,8 @@ interface TwoFactorNestedAnovaTable {
   nB: number;
   nE: number;
 }
-/* Class to perform two factor anova
+/** 
+ * Class to perform two factor anova
  * For the CLSI EP protocol of
  * n replicates per run x r runs per day x d days
  */
@@ -473,6 +554,12 @@ export class TwoFactorNestedAnova {
   private dfB: number;
   private dfE: number;
 
+  /**
+   * 
+   * @param factorA 
+   * @param factorB 
+   * @param values 
+   */
   constructor(factorA: (string | number)[], factorB: (string | number)[], values: number[]) {
     this.factorA = factorA;
     this.factorB = factorB;
@@ -523,8 +610,10 @@ export class TwoFactorNestedAnova {
     this.grandMean = mean(values);
   }
 
-  /* Calculate the Total Sum of Squares (SST) and the degrees of
+  /** Calculate the Total Sum of Squares (SST) and the degrees of
    * freedom dfT
+   * 
+   * @internal
    */
   calculateSST(): void {
     this.sst = 0;
@@ -534,9 +623,12 @@ export class TwoFactorNestedAnova {
     this.dfT = this.values.length - 1;
   }
 
-  /* Sum of squares for the error components
+  /** 
+   * Sum of squares for the error components
    * For each cell corresponding to factorA and factorB, calculate the sum of the squared difference
    * between each value in the cell and the mean for that cell.
+   * 
+   * @internal
    */
   calculateSSE(): void {
     this.sse = 0;
@@ -553,10 +645,13 @@ export class TwoFactorNestedAnova {
     }
   }
 
-  /* Sum of squares for factor A
+  /**
+   * Sum of squares for factor A
    * Calculated by summing the squared differences between the means of each
    * level of Factor A and the grand mean, weighted by the number of observations
    * in each level.
+   * 
+   * @internal
    */
   calculateSSA(): void {
     this.ssa = 0;
@@ -569,7 +664,8 @@ export class TwoFactorNestedAnova {
     this.dfA = Object.keys(this.dictA).length - 1;
   }
 
-  /* Sum of squares for factor B within A
+  /**
+   * Sum of squares for factor B within A
    * sum (Mean of replicates - Mean of factor A)^2 multiply by number
    * of replicate means in each factor A
    *
@@ -580,6 +676,8 @@ export class TwoFactorNestedAnova {
    *
    * I do not know why it is the case but the process is necessary for
    * calculating the degrees of freedom if the data is unbalanced.
+   * 
+   * @internal
    */
   calculateSSB(): void {
     let ssb = 0;
@@ -603,6 +701,10 @@ export class TwoFactorNestedAnova {
     }
   }
 
+  /**
+   * Main method for calculating nested two-factor ANOVA
+   * @returns ANOVA
+   */
   calculate(): TwoFactorNestedAnovaTable {
     if (this.numFactorA * this.numFactorB * this.numReps !== this.values.length) {
       throw new Error(
@@ -828,7 +930,14 @@ export interface Outlier {
   gCrit: number | undefined;
 }
 
-// Function from Wikipedia https://en.wikipedia.org/wiki/Grubbs%27s_test
+/**
+ * Grubb's Test for a single outlier
+ * 
+ * Function from Wikipedia {@link https://en.wikipedia.org/wiki/Grubbs%27s_test}
+ * @param data 
+ * @param alpha 
+ * @returns Outlier object
+ */
 export function grubbsTest(data: number[], alpha = 0.01): Outlier {
   const outlier = { outlier: undefined, index: undefined, g: undefined, gCrit: undefined };
   const n = data.length;

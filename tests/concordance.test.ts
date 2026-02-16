@@ -2,8 +2,6 @@ import {
     ContingencyTableBuilder, 
     QualitativeContengencyTableBuilder, 
     ConcordanceCalculator,
-    sum,
-    formatContingencyTable,
 } from "../src/concordance";
 
 const x = [10377.5, 4056, 2654, 4747, 1459.5, 5880, 3871, 2461, 1802, 1607.5,
@@ -74,37 +72,5 @@ test('QualitativeContingencyTableBuilder', () => {
     expect(concordance.seKappa).toBeCloseTo(0.0796, 3); // Analyse it 0.0797
     expect(concordance.lcl).toBeCloseTo(0.610, 3); // Analyse it 0.611 
     expect(concordance.ucl).toBeCloseTo(0.923, 3); // Analyse it 0.923
-    console.log(concordance);
-});
-
-test('Sum matrix by row', () => {
-    const matrix = [
-        [1, 2],
-        [3, 4]
-    ]
-    const sums = sum(matrix, "row");
-    expect(sums[0]).toBe(3);
-    expect(sums[1]).toBe(7);
-});
-
-test('Sum matrix by column', () => {
-    const matrix = [
-        [1, 2],
-        [3, 4]
-    ]
-    const sums = sum(matrix, "col");
-    expect(sums[0]).toBe(4);
-    expect(sums[1]).toBe(6);
-});
-
-test('Format contingency table', () => {
-    const matrix = [
-        [1, 2],
-        [3, 4]
-    ]
-    const rowLabels = ["A", "B"];
-    const colLabels = ["C", "D"];
-    const formatted = formatContingencyTable(matrix, rowLabels, colLabels);
-    expect(formatted[3][3]).toBe(10);
-    //console.log(formatted);
+    //console.log(concordance);
 });

@@ -38,7 +38,7 @@ test("LS BootstrapConfidenceInterval", () => {
     const regression = new LeastSquaresRegression();
     const ci = new BootstrapConfidenceInterval(x, y, regression);
     const ciRes = ci.calculate();
-    console.log(ciRes);
+    //console.log(ciRes);
     expect(ciRes.slope).toBeCloseTo(0.7);
     expect(ciRes.intercept).toBeCloseTo(-0.1);
 });

@@ -1,10 +1,9 @@
-/*
+/**
  * Classes to build contingency tables and calculate Cohen's Kappa
  * statistic
  *
- * Author: Douglas Chesher
+ * @author Douglas Chesher
  *
- * Created: September 2025.
  */
 
 import { normal } from "jstat-esm";
@@ -12,7 +11,7 @@ import { normal } from "jstat-esm";
 const X_COL = 0; // column index for x data
 const Y_COL = 1; // column index for y data
 
-/*
+/**
  * Representation of a contingency tables
  * values is a two dimensional array with the summed values
  * xLabels are the row labels found in the left hand column of the table
@@ -26,7 +25,7 @@ interface ContingencyTable {
   table: (string | number)[][];
 }
 
-/*
+/**
  * Class to build the contingency table from data in two numeric arrays
  * and the stated thresholds. The arrays are assumed to represent two
  * columns of results from the measurement of each sample (rows) by two
@@ -37,10 +36,21 @@ class ContingencyTableBuilder {
   // Thresholds as [n rows][2 columns]
   private thresholds: number[][];
 
+  /**
+   * 
+   * @param thresholds diagnostic thresholds in an n by 2 array
+   */
   constructor(thresholds: number[][]) {
     this.thresholds = thresholds;
   }
 
+  /**
+   * Build the contingency table
+   * 
+   * @param x quantitative results for method 1.
+   * @param y quantitative results for method 2.
+   * @returns
+   */
   build(x: number[], y: number[]): ContingencyTable {
     let values: number[][] = this.initializeValues(this.thresholds.length + 1);
     // tabulate data
@@ -65,11 +75,16 @@ class ContingencyTableBuilder {
     };
   }
 
-  /*
+  /**
    * Build the label strings based on the thresholds
    * Less than lowest threshold: "< t1"
    * Between thresholds ">= t1 - < t2"
    * Greater than highest threshold ">= t2"
+   * 
+   * @param col Which column of the diagnostic thresholds array to use. Must be 0 or 1.
+   * @returns
+   * 
+   * @internal
    */
   getLabels(col: number): string[] {
     //console.log(this.thresholds);
@@ -87,11 +102,15 @@ class ContingencyTableBuilder {
     return labels;
   }
 
-  /*
+  /**
    * Compare value to the thresholds for the stated column. It assumes the thresholds
    * are in numeric order from smallest to largest.
    *
-   * Returns the index within the contingency table.
+   * @param col Which column of the diagnostic thresholds array to use. Must be 0 or 1.
+   * @param val Value to be evaluated against the diagnostic thresholds
+   * @returns The index within the contingency table.
+   * 
+   * @internal
    */
   getCategoryIndex(col: number, val: number): number {
     let index = 0;
@@ -118,8 +137,14 @@ class ContingencyTableBuilder {
     return index;
   }
 
-  /* Create [t]x[t] matrix and fill with zeros.
+  /** 
+   * Create [t]x[t] matrix and fill with zeros.
    * Where t is the number of thresholds + 1
+   * 
+   * @param size
+   * @returns
+   * 
+   * @internal
    */
   initializeValues(size: number): number[][] {
     const values: number[][] = new Array<number[]>(size);
@@ -130,7 +155,7 @@ class ContingencyTableBuilder {
   }
 } //ContingencyTableBuilder
 
-/*
+/**
  * Results of the concordance analysis including Cohen's Kappa and
  * the upper and lower confidence limits
  */
@@ -143,7 +168,14 @@ interface ConcordanceResults {
   ucl: number;
 }
 
-/* Sum matrix by row or col
+/** 
+ * Sum matrix by row or col
+ * 
+ * @param matrix m by n matrix
+ * @param by must be 'row' or 'col'
+ * @returns row or column totals as an array.
+ * 
+ * @internal
  */
 function sum(matrix: number[][], by: string): number[] {
   const sums: number[] = new Array(matrix.length).fill(0);
@@ -161,8 +193,13 @@ function sum(matrix: number[][], by: string): number[] {
   return sums;
 }
 
-/*
+/**
  * Create labeled and formatted contingency table for output
+ * 
+ * @param values the contingency table
+ * @param xLabels row labels
+ * @param yLabels column labels
+ * @returns labeled contingency table for writing to Excel
  */
 function formatContingencyTable(
   values: number[][],
@@ -208,7 +245,7 @@ function formatContingencyTable(
   return table;
 }
 
-/*
+/**
  * Calculate concordance and Cohen's Kappa. Default alpha for
  * calculating the confidence limits is 5% or 0.05
  */
@@ -216,11 +253,21 @@ class ConcordanceCalculator {
   private table: ContingencyTable;
   private alpha: number;
 
+  /**
+   * 
+   * @param table the contingency table
+   * @param alpha level of significance
+   */
   constructor(table: ContingencyTable, alpha = 0.05) {
     this.table = table;
     this.alpha = alpha;
   }
 
+  /**
+   * Main method for calculation
+   * 
+   * @returns Concordance and Cohen's Kappa
+   */
   calculate(): ConcordanceResults {
     // calculate the grand total. This should be equal to number of
     // rows in the original column data
@@ -325,8 +372,13 @@ class ConcordanceCalculator {
     };
   }
 
-  /*
+  /**
    * Format concordance results for output
+   * 
+   * @param results 
+   * @returns
+   * 
+   * @internal
    */
   formatResultsAsArray(results: ConcordanceResults): (string | number)[][] {
     let arr = [
@@ -341,7 +393,7 @@ class ConcordanceCalculator {
   }
 }
 
-/*
+/**
  * Class to build the contingency table from data in two arrays.
  * The arrays are assumed to represent two columns of results from the
  * qualitative measurement of each sample (rows) by two different
@@ -350,6 +402,14 @@ class ConcordanceCalculator {
  * not have any intrinsic order.
  */
 class QualitativeContengencyTableBuilder {
+
+  /**
+   * Builds the contingency table from the supplied data
+   * 
+   * @param x qualitative results for reference method
+   * @param y qualitative results for test method
+   * @returns Contingency Table.
+   */
   build(x: (string | number)[], y: (string | number)[]): ContingencyTable {
     const categories = this.getCategories(x, y);
     // initialize contingency table counts to zero
@@ -377,9 +437,15 @@ class QualitativeContengencyTableBuilder {
     };
   }
 
-  /*
+  /**
    * Get categories from the supplied data by creating a set
    * and return this as an array.
+   * 
+   * @param x data in long format
+   * @param y data in long format
+   * @returns array of unique labels
+   * 
+   * @internal
    */
   getCategories(x: (string | number)[], y: (string | number)[]): string[] {
     const categories = new Set<string>();
@@ -398,6 +464,4 @@ export {
   ContingencyTableBuilder,
   QualitativeContengencyTableBuilder,
   ConcordanceCalculator,
-  sum,
-  formatContingencyTable,
 };

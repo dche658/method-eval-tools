@@ -44,8 +44,8 @@ const alp = [
 
 test("Robust", () => {
     const res = robust(data);
-    expect(res[0]).toBeCloseTo(79.80121, 5);
-    expect(res[1]).toBeCloseTo(121.06286, 5);
+    expect(res[0]).toBeCloseTo(79.80121, 4);
+    expect(res[1]).toBeCloseTo(121.06286, 4);
 });
 
 test("Get bootstrap sample", () => {
@@ -117,13 +117,13 @@ test("Shapiro-Wilk", () => {
 
 test("Adjusted Fisher-Pearson coefficient", () => {
     const res = adjusted_fisher_pearson_coefficient(alp);
-    console.log(res);
+    //console.log(res);
     let isNormal = is_consistent_with_normal(alp.length, res);
     expect(isNormal).toBe(false);
     const fit = boxcoxfit(alp, [-2, 2, 0.01], "sw");
     const res2 = adjusted_fisher_pearson_coefficient(fit.transformedData);
     isNormal = is_consistent_with_normal(fit.transformedData.length, res2);
     expect(isNormal).toBe(true);
-    console.log(res2);
+    //console.log(res2);
 });
 

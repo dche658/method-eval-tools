@@ -1,4 +1,4 @@
-/**
+/** @module regession
  * Small library for performing regression analysis on data from method
  * comparison studies.
  *
@@ -13,7 +13,6 @@
  *
  * @author Douglas Chesher
  *
- * Created: August 2025.
  */
 
 import { normal, studentt, mean, stdev } from "jstat-esm";
@@ -119,7 +118,7 @@ interface RegressionModel {
   interceptUCL: number;
 }
 
-/* Base class for performing regression analysis */
+/* Interface for performing regression analysis */
 interface Regression {
   calculate(x: number[], y: number[]): RegressionModel;
 }
@@ -133,13 +132,20 @@ interface Regression {
 class DemingRegression implements Regression {
   private errorRatio: number;
 
+  /**
+   * 
+   * @param errorRatio default is 1
+   */
   constructor(errorRatio = DEFAULT_ERROR_RATIO) {
     this.errorRatio = errorRatio;
   }
 
-  /** Calculate regression
+  /** 
+   * 
    * @param x must be an array of numeric values
    * @param y must be an array of numeric values
+   * 
+   * @internal
    */
   calculateDeming(x: number[], y: number[]): RegressionModel {
     // Simple validation
@@ -178,22 +184,22 @@ class DemingRegression implements Regression {
     };
   }
 
+  /**
+   * Calculate Deming regression
+   * 
+   * @param x 
+   * @param y 
+   * @returns 
+   */
   calculate(
     x: number[],
     y: number[]
-  ): {
-    slope: number;
-    intercept: number;
-    slopeLCL: number;
-    slopeUCL: number;
-    interceptLCL: number;
-    interceptUCL: number;
-  } {
+  ): RegressionModel {
     return this.calculateDeming(x, y);
   }
 } //Deming
 
-/* Weighted Deming Regression
+/** Weighted Deming Regression
  *
  * Assumes constant CV across the measuring range of the method
  */
@@ -202,10 +208,14 @@ class WeightedDemingRegression implements Regression {
   private iterMax: number;
   private threshold: number;
 
-  /*
+  /**
    * errorRatio ratio between squared measurement errors of reference- and test method, necessary for Deming regression (Default is 1).
    * iterMax maximal number of iterations.
    * threshold threshold value.
+   * 
+   * @param errorRatio default is 1.0
+   * @param iterMax default is 30
+   * @param threshold default is 0.000001
    */
   constructor(
     errorRatio = DEFAULT_ERROR_RATIO,
@@ -217,9 +227,13 @@ class WeightedDemingRegression implements Regression {
     this.threshold = threshold;
   }
 
-  /*
-   * x measurement values of reference method as an Array.
-   * Y measurement values of test method as an Array.
+  /**
+   * 
+   * @param x results from reference method
+   * @param y results from test method
+   * @returns 
+   * 
+   * @internal
    */
   calculateWeightedDeming(x: number[], y: number[]): RegressionModel {
     if (x.length !== y.length || x.length === 0) {
@@ -322,6 +336,12 @@ class WeightedDemingRegression implements Regression {
     };
   } // #calculate
 
+  /**
+   * 
+   * @param x results from reference method
+   * @param y results from test method
+   * @returns 
+   */
   calculate(x: number[], y: number[]): RegressionModel {
     return this.calculateWeightedDeming(x, y);
   }
@@ -354,16 +374,23 @@ class PassingBablokRegression implements Regression {
   private alpha: number;
   private positiveCorrelated: boolean;
 
+  /**
+   * 
+   * @param alpha default is 0.05
+   * @param positiveCorrelated default is `true`
+   */
   constructor(alpha = DEFAULT_ALPHA, positiveCorrelated = true) {
     this.alpha = alpha;
     this.positiveCorrelated = positiveCorrelated;
   }
 
   /**
-   * @private
+   * 
    * @param x 
    * @param y 
    * @returns 
+   * 
+   * @internal
    */
   calculatePaBa(x: number[], y: number[]): RegressionModel {
     let slope = 0;
@@ -462,10 +489,13 @@ class PassingBablokRegression implements Regression {
   }
 
   /**
-   * @private
+   * Calculates the slopes in radians
+   * 
    * @param x 
    * @param y 
    * @returns 
+   * 
+   * @internal
    */
   calcAngleMatrix(x: number[], y: number[]): AngleMatrixModel {
     let nrows = x.length;
@@ -535,11 +565,12 @@ class PassingBablokRegression implements Regression {
    * gives exactly zero for very small relative differences.
    * Copied from mcr package for R by Sergej Potapov 2021
    * 
-   * @private
    * @param a 
    * @param b 
    * @param eps 
    * @returns 
+   * 
+   * @internal
    */
   calcDiff(a: number, b: number, eps = 0.000000000001): number {
     
@@ -551,6 +582,12 @@ class PassingBablokRegression implements Regression {
     }
   }
 
+  /**
+   * Calculates the Passing-Bablok regression
+   * @param x 
+   * @param y 
+   * @returns 
+   */
   calculate(x: number[], y: number[]): RegressionModel {
     return this.calculatePaBa(x, y);
   }
@@ -567,7 +604,14 @@ interface ConfidenceIntervalModel {
   interceptUCL: number;
 }
 
-/* Calculate a confidence interval using a jackknife procedure.
+/**
+ * Calculate a confidence interval using a leave one out jackknife procedure.
+ * 
+ * Regression analysis is performed on a subset of data where one x,y pair 
+ * is omitted. This is done repeatedly for each x,y pair in the data set
+ * resulting in n-1 estimates of the slope and intercept. These are then used
+ * to calculate the standard error of the estimates for the slope and intercept
+ * enabling the confidence intervals to be calculated.
  *
  */
 class JackknifeConfidenceInterval {
