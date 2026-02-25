@@ -23,6 +23,7 @@ interface QualitativeProps {
     setQualXRangeValue: React.Dispatch<React.SetStateAction<string>>;
     setQualYRangeValue: React.Dispatch<React.SetStateAction<string>>;
     setQualOutputRangeValue: React.Dispatch<React.SetStateAction<string>>;
+    uitext: {[key:string]: string};
 }
 
 const useStyles = makeStyles({
@@ -111,21 +112,24 @@ export default function Qualitative(props: QualitativeProps) {
                 <RangeInput label="X Range"
                     rangeValue={props.qualXRangeValue}
                     setRangeValue={props.setQualXRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., A2:A26" />
+                    validationMessage="Must be a valid Excel range. e.g., A2:A26"
+                    uitext={props.uitext} />
 
             </div>
             <div>
                 <RangeInput label="Y Range"
                     rangeValue={props.qualYRangeValue}
                     setRangeValue={props.setQualYRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., B2:B26" />
+                    validationMessage="Must be a valid Excel range. e.g., B2:B26"
+                    uitext={props.uitext} />
             </div>
 
             <div>
                 <RangeInput label="Output Range"
                     rangeValue={props.qualOutputRangeValue}
                     setRangeValue={props.setQualOutputRangeValue}
-                    validationMessage="Must be a valid Excel cell reference. e.g., E2 " />
+                    validationMessage="Must be a valid Excel cell reference. e.g., E2"
+                    uitext={props.uitext} />
             </div>
 
             <div className={styles.field}>

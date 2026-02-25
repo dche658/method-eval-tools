@@ -25,6 +25,7 @@ import RangeInput from "./RangeInput";
 // Properties for this component
 interface RefIntProps {
     notify: (intent: string, message: string) => void;
+    uitext: {[key:string]: string};
 }
 
 const useStyles = makeStyles({
@@ -141,7 +142,8 @@ export default function RefInt(props: RefIntProps) {
                 <RangeInput label="Input Range"
                     rangeValue={riInputRangeValue}
                     setRangeValue={setRiInputRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., A2:A26" />
+                    validationMessage="Must be a valid Excel range. e.g., A2:A26"
+                    uitext={props.uitext} />
 
             </div>
             <div className={styles.field}>
@@ -170,7 +172,8 @@ export default function RefInt(props: RefIntProps) {
                 <RangeInput label="Output Range"
                     rangeValue={riOutputRangeValue}
                     setRangeValue={setRiOutputRangeValue}
-                    validationMessage="Must be a valid Excel cell reference. e.g., E2 " />
+                    validationMessage="Must be a valid Excel cell reference. e.g., E2 "
+                    uitext={props.uitext} />
             </div>
 
             <div className={styles.field}>

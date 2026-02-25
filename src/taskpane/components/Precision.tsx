@@ -30,6 +30,7 @@ interface PrecisionProps {
     setFactorBRangeValue: React.Dispatch<React.SetStateAction<string>>;
     setResultsRangeValue: React.Dispatch<React.SetStateAction<string>>;
     setPrecOutRangeValue: React.Dispatch<React.SetStateAction<string>>;
+    uitext: {[key:string]: string};
 }
 
 
@@ -182,7 +183,7 @@ export default function Precision(props: PrecisionProps) {
                     // This should never happen but just in case
                     if (results.length !== aLevels.length) {
                         throw new Error(
-                            `Number of length of results ${results.length} does not match length of factor A ${aLevels.length}.`
+                            `Length of results ${results.length} does not match length of factor A ${aLevels.length}.`
                         );
                     }
 
@@ -369,41 +370,44 @@ export default function Precision(props: PrecisionProps) {
     return (
         <div className="container">
             <div>
-                Use this section to analyse the imprecision of an assay. The calculations are based
-                on those described by CLSI EP15 and EP05.
+                {props.uitext["inf_precision"]}
             </div>
             <div>
-                <RangeInput label="Days Range"
+                <RangeInput label={props.uitext["lbl_days_range"]}
                     rangeValue={props.factorARangeValue}
                     setRangeValue={props.setFactorARangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., A2:A26" />
+                    validationMessage={props.uitext["msg_days_range"]}
+                    uitext={props.uitext} />
             </div>
             <div>
-                <RangeInput label="Runs Range"
+                <RangeInput label={props.uitext["lbl_runs_range"]}
                     rangeValue={props.factorBRangeValue}
                     setRangeValue={props.setFactorBRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., B2:B26" />
+                    validationMessage={props.uitext["msg_runs_range"]}
+                    uitext={props.uitext} />
             </div>
 
             <div>
-                <RangeInput label="Results Range"
+                <RangeInput label={props.uitext["lbl_results_range"]}
                     rangeValue={props.resultsRangeValue}
                     setRangeValue={props.setResultsRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., C2:C26" />
+                    validationMessage={props.uitext["msg_results_range"]}
+                    uitext={props.uitext} />
             </div>
             <div className={styles.field}>
                 <Button appearance="primary" 
-                onClick={grubbsTestForOutliers}>Grubb's Test For Outliers</Button>
+                onClick={grubbsTestForOutliers}>{props.uitext["btn_grubb_test"]}</Button>
             </div>
             <div>
-                <RangeInput label="Output Range"
+                <RangeInput label={props.uitext["lbl_output_range"]}
                     rangeValue={props.precOutRangeValue}
                     setRangeValue={props.setPrecOutRangeValue}
-                    validationMessage="Must be a valid Excel cell reference. e.g., E2 " />
+                    validationMessage={props.uitext["msg_output_range"]}
+                    uitext={props.uitext} />
             </div>
             <div className={styles.field}>
                 <Button appearance="primary"
-                onClick={runANOVA}>Run</Button>
+                onClick={runANOVA}>{props.uitext["btn_run"]}</Button>
             </div>
         </div>
     );

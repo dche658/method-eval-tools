@@ -22,6 +22,7 @@ import RangeInput from "./RangeInput";
 // Properties for this component
 interface BoxCoxProps {
     notify: (intent: string, message: string) => void;
+    uitext: {[key:string]: string};
 }
 
 const useStyles = makeStyles({
@@ -179,14 +180,16 @@ export default function BoxCox(props: BoxCoxProps) {
                 <RangeInput label="Input Range"
                     rangeValue={bcInputRangeValue}
                     setRangeValue={setBcInputRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., A2:A26" />
+                    validationMessage="Must be a valid Excel range. e.g., A2:A26"
+                    uitext={props.uitext} />
 
             </div>
             <div>
                 <RangeInput label="Output Range"
                     rangeValue={bcOutputRangeValue}
                     setRangeValue={setBcOutputRangeValue}
-                    validationMessage="Must be a valid Excel cell reference. e.g., E2 " />
+                    validationMessage="Must be a valid Excel cell reference. e.g., E2 "
+                    uitext={props.uitext} />
             </div>
             <div className={styles.field}>
                 <label htmlFor="bc-method">Parameter Estimation Method</label>

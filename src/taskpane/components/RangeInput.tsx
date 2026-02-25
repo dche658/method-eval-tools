@@ -34,6 +34,7 @@ interface RangeInputProps {
     validationMessage?: string;
     tooltipContent?: string;
     allowNumbers?: boolean;
+    uitext: {[key:string]: string};
 }
 
 const useStyles = makeStyles({
@@ -102,7 +103,7 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
                 validationMessage={validationMessage}>
                 <div className={styles.root} >
                     {hasTooltip()}
-                    <Tooltip content="Copy selected range" relationship="label">
+                    <Tooltip content={props.uitext["tip_range_copy"]} relationship="label">
                         <Button icon={<AppsRegular />} onClick={selectRange} />
                     </Tooltip>
                 </div>

@@ -18,6 +18,7 @@ interface PrecisionLayoutProps {
     setFactorARangeValue: React.Dispatch<React.SetStateAction<string>>;
     setFactorBRangeValue: React.Dispatch<React.SetStateAction<string>>;
     setResultsRangeValue: React.Dispatch<React.SetStateAction<string>>;
+    uitext: {[key:string]: string};
 }
 
 const useStyles = makeStyles({
@@ -168,7 +169,8 @@ export default function PrecisionLayout(props: PrecisionLayoutProps) {
                 <RangeInput label="Layout Range"
                     rangeValue={layoutRangeValue}
                     setRangeValue={setLayoutRangeValue}
-                    validationMessage="Must be a valid Excel cell reference. e.g., A26" />
+                    validationMessage="Must be a valid Excel cell reference. e.g., A26"
+                    uitext={props.uitext} />
             </div>
             <div className={styles.field}>
                 <Button appearance="primary" onClick={setupPrecision}>Setup</Button>
