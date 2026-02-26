@@ -110,7 +110,7 @@ export default function PrecisionLayout(props: PrecisionLayoutProps) {
                 be used for both verification and validation studies.
             </div>
             <div className={styles.field}>
-                <Field label="Days">
+                <Field label={props.uitext["lbl_days"]}>
                     <Input
                         type="number"
                         value={numDays.toString()}
@@ -119,12 +119,12 @@ export default function PrecisionLayout(props: PrecisionLayoutProps) {
                         }}
                         min={2}
                         max={100}
-                        title="Number of days."
+                        title={props.uitext["lbl_days_desc"]}
                     />
                 </Field>
             </div>
             <div className={styles.field}>
-                <Field label="Runs">
+                <Field label={props.uitext["lbl_runs"]}>
                     <Input
                         type="number"
                         value={numRuns.toString()}
@@ -133,12 +133,12 @@ export default function PrecisionLayout(props: PrecisionLayoutProps) {
                         }}
                         min={1}
                         max={100}
-                        title="Number of runs per day."
+                        title={props.uitext["lbl_runs_desc"]}
                     />
                 </Field>
             </div>
             <div className={styles.field}>
-                <Field label="Replicates">
+                <Field label={props.uitext["lbl_reps"]}>
                     <Input
                         type="number"
                         value={numReps.toString()}
@@ -147,7 +147,7 @@ export default function PrecisionLayout(props: PrecisionLayoutProps) {
                         }}
                         min={2}
                         max={100}
-                        title="Number of replicates per run."
+                        title={props.uitext["lbl_reps_desc"]}
                     />
                 </Field>
             </div>
@@ -166,14 +166,14 @@ export default function PrecisionLayout(props: PrecisionLayoutProps) {
                 </Field>
             </div>
             <div>
-                <RangeInput label="Layout Range"
+                <RangeInput label={props.uitext["lbl_layout_range"]}
                     rangeValue={layoutRangeValue}
                     setRangeValue={setLayoutRangeValue}
-                    validationMessage="Must be a valid Excel cell reference. e.g., A26"
+                    validationMessage={props.uitext["msg_layout_range"]}
                     uitext={props.uitext} />
             </div>
             <div className={styles.field}>
-                <Button appearance="primary" onClick={setupPrecision}>Setup</Button>
+                <Button appearance="primary" onClick={setupPrecision}>{props.uitext["btn_run"]}</Button>
             </div>
         </div>
     );

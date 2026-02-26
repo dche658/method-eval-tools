@@ -109,31 +109,31 @@ export default function Qualitative(props: QualitativeProps) {
                 Assess concordance of qualitative data and calculate Cohen's Kappa.
             </div>
             <div>
-                <RangeInput label="X Range"
+                <RangeInput label={props.uitext["lbl_x_range"]}
                     rangeValue={props.qualXRangeValue}
                     setRangeValue={props.setQualXRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., A2:A26"
+                    validationMessage={props.uitext["msg_x_range"]}
                     uitext={props.uitext} />
 
             </div>
             <div>
-                <RangeInput label="Y Range"
+                <RangeInput label={props.uitext["lbl_y_range"]}
                     rangeValue={props.qualYRangeValue}
                     setRangeValue={props.setQualYRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., B2:B26"
+                    validationMessage={props.uitext["msg_y_range"]}
                     uitext={props.uitext} />
             </div>
 
             <div>
-                <RangeInput label="Output Range"
+                <RangeInput label={props.uitext["lbl_output_range"]}
                     rangeValue={props.qualOutputRangeValue}
                     setRangeValue={props.setQualOutputRangeValue}
-                    validationMessage="Must be a valid Excel cell reference. e.g., E2"
+                    validationMessage={props.uitext["msg_output_range"]}
                     uitext={props.uitext} />
             </div>
 
             <div className={styles.field}>
-                <Button appearance="primary" onClick={qualComparison}>Run</Button>
+                <Button appearance="primary" onClick={qualComparison}>{props.uitext["btn_run"]}</Button>
             </div>
         </div>
     );

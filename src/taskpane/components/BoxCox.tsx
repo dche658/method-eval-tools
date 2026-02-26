@@ -166,65 +166,58 @@ export default function BoxCox(props: BoxCoxProps) {
         <div className="container">
             <div>
                 <p>
-                    Estimate the optimal value for lambda by defining a search space
-                    of possible values. The default is from -2 to +2 in steps of 0.01.
-                    For each lambda in the search space a Box-Cox transformation of
-                    the supplied data is performed. The value of lambda associdated
-                    with the best fit is selected.
-                    Two methods for assessing the optimal lambda are
-                    available. The default method performs a Shapiro-Wilk test for
-                    normality, and the second calculates the log likelihood value.
+                    {props.uitext["inf_box_cox"]}
                 </p>
             </div>
             <div>
-                <RangeInput label="Input Range"
+                <RangeInput label={props.uitext["lbl_input_range"]}
                     rangeValue={bcInputRangeValue}
                     setRangeValue={setBcInputRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., A2:A26"
+                    validationMessage={props.uitext["msg_input_range"]}
                     uitext={props.uitext} />
 
             </div>
             <div>
-                <RangeInput label="Output Range"
+                <RangeInput label={props.uitext["lbl_output_range"]}
                     rangeValue={bcOutputRangeValue}
                     setRangeValue={setBcOutputRangeValue}
-                    validationMessage="Must be a valid Excel cell reference. e.g., E2 "
+                    validationMessage={props.uitext["msg_output_range"]}
                     uitext={props.uitext} />
             </div>
             <div className={styles.field}>
-                <label htmlFor="bc-method">Parameter Estimation Method</label>
+                <label htmlFor="bc-method">{props.uitext["lbl_bc_method"]}</label>
                 <Select value={bcMethodValue} id="bc-method"
                     className={styles.selection} onChange={selectBcMethod} >
-                    <option value="sw">Shaprio-Wilk Fit</option>
-                    <option value="mle">Maximum Likelihood Est</option>
+                    <option value="sw">{props.uitext["opt_sw"]}</option>
+                    <option value="mle">{props.uitext["opt_mle"]}</option>
                 </Select>
             </div>
 
             <div className={styles.box}>
-                <span>Lambda Search Space</span>
+                <span>{props.uitext["lbl_lambda_search"]}</span>
                 <div className={styles.grid1x3}>
 
                     <div className={styles.field}>
-                        <label htmlFor="lambda-start">Start:</label>
+                        <label htmlFor="lambda-start">{props.uitext["lbl_start"]}</label>
                         <Input type="number" value={lambdaStartValue} id="lambda-start"
                             className={styles.inputfield} onChange={handleLambdaStartChange} />
                     </div>
 
                     <div className={styles.field}>
-                        <label htmlFor="lambda-stop">Stop:</label>
+                        <label htmlFor="lambda-stop">{props.uitext["lbl_end"]}</label>
                         <Input type="number" value={lambdaStopValue} id="lambda-stop"
                             className={styles.inputfield} onChange={handleLambdaStopChange} />
                     </div>
 
                     <div className={styles.field}>
-                        <label htmlFor="lambda-step">Step:</label>
+                        <label htmlFor="lambda-step">{props.uitext["lbl_step"]}</label>
                         <Input type="number" value={lambdaStepValue} id="lambda-step"
                             className={styles.inputfield} onChange={handleLambdaStepChange} />
                     </div>
                 </div>
             </div>
             <div className={styles.field}>
-                <Button appearance="primary" onClick={boxCoxTransform}>Transform</Button>
+                <Button appearance="primary" onClick={boxCoxTransform}>{props.uitext["btn_run"]}</Button>
             </div>
         </div>
     );

@@ -127,57 +127,52 @@ export default function RefInt(props: RefIntProps) {
         <div className="container">
             <div>
                 <p>
-                    Derive reference intervals using the non-parametric or
-                    robust estimator (Horn's biweight quantile) methods.
+                    {props.uitext["inf_ref_int1"]}
                 </p>
                 <p>
-                    The robust algorithm should only be used if the population
-                    is symmetric. If this algorithm is selected the add-in will
-                    check for skewness by calculating the adjusted Fisher-Pearson 
-                    coefficient and display a warning if significant skewness is 
-                    detected.
+                    {props.uitext["inf_ref_int2"]}
                 </p>
             </div>
             <div>
-                <RangeInput label="Input Range"
+                <RangeInput label={props.uitext["lbl_input_range"]}
                     rangeValue={riInputRangeValue}
                     setRangeValue={setRiInputRangeValue}
-                    validationMessage="Must be a valid Excel range. e.g., A2:A26"
+                    validationMessage={props.uitext["msg_input_range"]}
                     uitext={props.uitext} />
 
             </div>
             <div className={styles.field}>
-                <label htmlFor="ri-method">Parameter Estimation Method</label>
+                <label htmlFor="ri-method">{props.uitext["lbl_ri_method"]}</label>
                 <Select value={riMethodValue} id="ri-method"
                     className={styles.selection} onChange={selectRiMethod} >
-                    <option value="robust">Robust</option>
-                    <option value="np">Non-parametric</option>
+                    <option value="robust">{props.uitext["opt_robust"]}</option>
+                    <option value="np">{props.uitext["opt_np"]}</option>
                 </Select>
             </div>
             <div className={styles.field}>
-                <label htmlFor="alpha">Reference Limit Alpha</label>
-                <Tooltip content="Default value is 0.05 for 95% confidence interval." relationship="label">
+                <label htmlFor="alpha">{props.uitext["lbl_ri_alpha"]}</label>
+                <Tooltip content={props.uitext["tip_ri_alpha"]} relationship="label">
                     <Input type="number" value={alphaValue} id="alpha"
                         className={styles.inputfield} onChange={handleAlphaChange} />
                 </Tooltip>
             </div>
             <div className={styles.field}>
-                <label htmlFor="conf-alpha">Confidence Limits Alpha</label>
-                <Tooltip content="Default value is 0.10 for 90% confidence interval." relationship="label">
+                <label htmlFor="conf-alpha">{props.uitext["lbl_ci_alpha"]}</label>
+                <Tooltip content={props.uitext["tip_ci_alpha"]} relationship="label">
                     <Input type="number" value={confAlphaValue} id="conf-alpha"
                         className={styles.inputfield} onChange={handleConfAlphaChange} />
                 </Tooltip>
             </div>
             <div>
-                <RangeInput label="Output Range"
+                <RangeInput label={props.uitext["lbl_output_range"]}
                     rangeValue={riOutputRangeValue}
                     setRangeValue={setRiOutputRangeValue}
-                    validationMessage="Must be a valid Excel cell reference. e.g., E2 "
+                    validationMessage={props.uitext["msg_output_range"]}
                     uitext={props.uitext} />
             </div>
 
             <div className={styles.field}>
-                <Button appearance="primary" onClick={calcReferenceInterval}>Calculate</Button>
+                <Button appearance="primary" onClick={calcReferenceInterval}>{props.uitext["btn_run"]}</Button>
             </div>
         </div>
     );

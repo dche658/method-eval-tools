@@ -694,7 +694,7 @@ export default function ComparisonPane(props: ComparisonProps) {
 
 
     return (
-        <Accordion>
+        <Accordion defaultOpenItems="2">
             <AccordionItem value="1">
                 <AccordionHeader>{props.uitext["h_performance_specs"]}</AccordionHeader>
                 <AccordionPanel>
