@@ -4,8 +4,8 @@
  * @author Douglas Chesher
  */
 
-import { studentt, normal } from "jstat-esm";
-import jStat from "jstat-esm";
+import { studentt, normal, median, sum, max, percentile, mean, stdev } from "jstat-esm";
+//import jStat from "jstat-esm"; Import individual functions to reduce size
 
 import * as shapiro_wilk from "./shapiro-wilk.js";
 
@@ -18,12 +18,12 @@ const ROBUST = "robust";
  * @param median
  * @returns
  */
-function median_absolute_deviation(data: number[], median: number): number {
+function median_absolute_deviation(data: number[], data_median: number): number {
   let dev = [data.length];
   for (let i = 0; i < data.length; i++) {
-    dev[i] = Math.abs(data[i] - median);
+    dev[i] = Math.abs(data[i] - data_median);
   }
-  return jStat.median(dev);
+  return median(dev);
 }
 
 /**
@@ -61,15 +61,15 @@ function median_absolute_deviation(data: number[], median: number): number {
 function robust(data: number[], alpha: number = 0.05): number[] {
   const n = data.length;
   data.sort((a, b) => a - b);
-  const median = jStat.median(data);
+  const data_median = median(data);
 
   //Biweight location estimator initially set to the median
-  let tbi = median;
+  let tbi = data_median;
   let tbi_new = 10000;
 
   //Tuning constant
   const c = 3.7;
-  let mad = median_absolute_deviation(data, median);
+  let mad = median_absolute_deviation(data, data_median);
   mad = mad / 0.6744898; //constant calculated in R as qnorm(3/4, 0, 1) - Horn rounded to 0.6745
   let ui = [n];
   let wi = [n];
@@ -83,7 +83,7 @@ function robust(data: number[], alpha: number = 0.05): number[] {
       wi[i] = Math.pow(1 - Math.pow(ui[i], 2), 2);
       bi[i] = wi[i] * data[i];
     }
-    tbi_new = jStat.sum(bi) / jStat.sum(wi);
+    tbi_new = sum(bi) / sum(wi);
     diff = Math.abs(tbi_new - tbi);
     tbi = tbi_new;
     //console.log(tbi);
@@ -92,12 +92,12 @@ function robust(data: number[], alpha: number = 0.05): number[] {
   //console.log(`tbi = ${tbi}`);
   const _c2 = c2(alpha);
   for (let i = 0; i < n; i++) {
-    ui[i] = (data[i] - median) / (_c2 * mad);
+    ui[i] = (data[i] - data_median) / (_c2 * mad);
   }
   const sbi205_6 = sbi(ui, mad, _c2);
   //console.log(`sbi205.6 = ${sbi205_6}`);
   for (let i = 0; i < n; i++) {
-    ui[i] = (data[i] - median) / (3.7 * mad);
+    ui[i] = (data[i] - data_median) / (3.7 * mad);
   }
   const sbi3_7 = sbi(ui, mad, 3.7);
   //console.log(`sbi3.7 = ${sbi3_7}`);
@@ -130,10 +130,10 @@ function sbi(ui: number[], mad: number, c: number): number {
       bi.push((1 - Math.pow(ui[i], 2)) * (1 - 5 * Math.pow(ui[i], 2)));
     }
   }
-  let sum_a = jStat.sum(ai);
-  let sum_b = jStat.sum(bi);
+  let sum_a = sum(ai);
+  let sum_b = sum(bi);
   //console.log(`sum_a = ${sum_a}, sum_b = ${sum_b}`);
-  let d = jStat.max([1, sum_b - 1]);
+  let d = max([1, sum_b - 1]);
   let sbi = c * mad * Math.sqrt((ui.length * sum_a) / (sum_b * d));
   return sbi;
 }
@@ -155,9 +155,9 @@ function st(ui: number[], mad: number, c: number): number {
     }
   }
 
-  let sum_a = jStat.sum(ai);
-  let sum_b = jStat.sum(bi);
-  let d = jStat.max([1, sum_b - 1]);
+  let sum_a = sum(ai);
+  let sum_b = sum(bi);
+  let d = max([1, sum_b - 1]);
   let st = c * mad * Math.sqrt(sum_a / (sum_b * d));
   //console.log(`c = ${c}, mad = ${mad}, sum_a = ${sum_a}, sum_b = ${sum_b}, d = ${d}, st = ${st}`);
   return st;
@@ -204,12 +204,12 @@ function bootstrap_confidence_interval(
   lowerLimit.sort((a, b) => a - b);
   upperLimit.sort((a, b) => a - b);
   const lower_limit_ci: number[] = [
-    jStat.percentile(lowerLimit, confAlpha / 2),
-    jStat.percentile(lowerLimit, 1 - confAlpha / 2),
+    percentile(lowerLimit, confAlpha / 2),
+    percentile(lowerLimit, 1 - confAlpha / 2),
   ];
   const upper_limit_ci: number[] = [
-    jStat.percentile(upperLimit, confAlpha / 2),
-    jStat.percentile(upperLimit, 1 - confAlpha / 2),
+    percentile(upperLimit, confAlpha / 2),
+    percentile(upperLimit, 1 - confAlpha / 2),
   ];
   return [lower_limit_ci, upper_limit_ci];
 }
@@ -407,10 +407,10 @@ function boxCoxLogLikelihood(data: number[], lambda: number): number {
   const transformed = data.map((x) => boxCox(x, lambda));
 
   // Mean
-  const mean = transformed.reduce((sum, v) => sum + v, 0) / n;
+  const data_mean = transformed.reduce((sum, v) => sum + v, 0) / n;
 
   // Variance
-  const variance = transformed.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / n;
+  const variance = transformed.reduce((sum, v) => sum + Math.pow(v - data_mean, 2), 0) / n;
 
   // Jacobian term
   const logJacobian = (lambda - 1) * data.reduce((sum, x) => sum + Math.log(x), 0);
@@ -568,11 +568,11 @@ function boxcoxfit(x: number[], lambda = [-2, 2, 0.01], method = "sw"): BoxCoxTr
  */
 function adjusted_fisher_pearson_coefficient(data: number[]): number {
   const n = data.length;
-  const mean = jStat.mean(data);
-  const s = jStat.stdev(data);
+  const data_mean = mean(data);
+  const s = stdev(data);
   let sumDevX = 0;
   for (let i = 0; i < n; i++) {
-    sumDevX += Math.pow(data[i] - mean, 3) / n;
+    sumDevX += Math.pow(data[i] - data_mean, 3) / n;
   }
   const g1 = ((Math.sqrt(n * (n - 1)) / (n - 2)) * sumDevX) / Math.pow(s, 3);
   return g1;

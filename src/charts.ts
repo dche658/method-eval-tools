@@ -1,11 +1,10 @@
-/*
+/**
  * ExcelBlandAltmanChart and ExcelRegressionChart classes for creating
  * charts in Excel using Office.js
  * Requires jStat library for statistical functions
  *
- * Author: Douglas Chesher
+ * @author Douglas Chesher
  *
- * Created: September 2025.
  */
 
 import { mean, stdev } from "jstat-esm";
