@@ -5,6 +5,7 @@ const CopyWebpackPlugin = require("copy-webpack-plugin");
 const CustomFunctionsMetadataPlugin = require("custom-functions-metadata-plugin");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const webpack = require("webpack");
+// const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const urlDev = "https://localhost:3000/";
 const urlProd = "https://metools.chesher.id.au/"; // CHANGE THIS TO YOUR PRODUCTION DEPLOYMENT LOCATION
@@ -99,6 +100,7 @@ module.exports = async (env, options) => {
       new webpack.ProvidePlugin({
         Promise: ["es6-promise", "Promise"],
       }),
+      // new BundleAnalyzerPlugin(),
     ],
     devServer: {
       hot: true,

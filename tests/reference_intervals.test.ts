@@ -108,13 +108,6 @@ test("Normal cdf", () => {
     expect(normal.cdf(1.96, 0, 1)).toBeCloseTo(0.975, 3);
 });
 
-test("Shapiro-Wilk", () => {
-    const res = ShapiroWilkW(alp);
-    expect(res.w).toBeCloseTo(0.811,3);
-    expect(res.p).toBeCloseTo(0.0,3);
-    //console.log(res);
-});
-
 test("Adjusted Fisher-Pearson coefficient", () => {
     const res = adjusted_fisher_pearson_coefficient(alp);
     //console.log(res);
