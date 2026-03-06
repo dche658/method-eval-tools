@@ -233,12 +233,12 @@ class ExcelBlandAltmanChart {
       // Range to hold the chart data
       let chartData = currentWorksheet.getRange(this.chartDataRange);
       chartData.load(["address", "rowCount", "columnCount"]);
-      await context.sync();
 
       // Resize the chart data range to fit the Bland-Altman model data
       // The chart data will have four columns: mean X, mean Y, means and differences
       // The number of rows will be the number of means in the Bland-Altman model
       // We will resize the range to fit the data
+      await context.sync();
       chartData = chartData.getResizedRange(
         model.means.length - chartData.rowCount + 1,
         2 - chartData.columnCount

@@ -1,10 +1,10 @@
 import { mkdir, cp, copyFile } from "node:fs";
 
 try {
-  mkdir("./dist/help/images", { recursive: true }, (err) => {
-    if (err) console.log(err);
-  });
-  mkdir("./dist/help/styles", { recursive: true }, (err) => {
+  // mkdir("./dist/help/images", { recursive: true }, (err) => {
+  //   if (err) console.log(err);
+  // });
+  mkdir("./dist/help", { recursive: false }, (err) => {
     if (err) console.log(err);
   });
   console.log("created help directory");

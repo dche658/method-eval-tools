@@ -1,20 +1,25 @@
 /**
-* Main component for the add-in. 
-* 
-* @author Douglas Chesher
-*
-*/
+ * Main component for the add-in.
+ *
+ * @author Douglas Chesher
+ *
+ */
 import * as React from "react";
 import BoxCox from "./BoxCox";
 import RefInt from "./RefInt";
 import ComparisonPane from "./ComparisonPane";
 
 import {
-  makeStyles, useId,
-  Accordion, AccordionItem, AccordionHeader, AccordionPanel,
+  makeStyles,
+  useId,
+  Accordion,
+  AccordionItem,
+  AccordionHeader,
+  AccordionPanel,
   Link,
   Card,
-  Tab, TabList,
+  Tab,
+  TabList,
   Toaster,
   useToastController,
   ToastTitle,
@@ -23,11 +28,7 @@ import {
   ToastBody,
 } from "@fluentui/react-components";
 
-import type {
-  SelectTabData,
-  SelectTabEvent,
-  TabValue,
-} from "@fluentui/react-components";
+import type { SelectTabData, SelectTabEvent, TabValue } from "@fluentui/react-components";
 
 interface AppProps {
   title: string;
@@ -65,15 +66,12 @@ const useStyles = makeStyles({
   },
   label: {
     fontWeight: "bold",
-  }
+  },
 });
 
-
-
 /* Main application entry
-*/
+ */
 const App: React.FC<AppProps> = (props: AppProps) => {
-
   const [selectedTabValue, setSelectedTabValue] = React.useState<TabValue>("evaluation");
 
   const toasterId = useId("toaster");
@@ -89,7 +87,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   };
 
   /* Display messages
-  */
+   */
   const notify = (intent: string, message: string) => {
     switch (intent) {
       case "error":
@@ -101,7 +99,9 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                   <Link>Dismiss</Link>
                 </ToastTrigger>
               }
-            >Error</ToastTitle>
+            >
+              Error
+            </ToastTitle>
             <ToastBody>{message}</ToastBody>
           </Toast>,
           { intent: "error" }
@@ -116,7 +116,9 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                   <Link>Dismiss</Link>
                 </ToastTrigger>
               }
-            >Warning</ToastTitle>
+            >
+              Warning
+            </ToastTitle>
             <ToastBody>{message}</ToastBody>
           </Toast>,
           { intent: "warning" }
@@ -131,14 +133,15 @@ const App: React.FC<AppProps> = (props: AppProps) => {
                   <Link>Dismiss</Link>
                 </ToastTrigger>
               }
-            >Info</ToastTitle>
+            >
+              Info
+            </ToastTitle>
             <ToastBody>{message}</ToastBody>
           </Toast>,
           { intent: "info" }
         );
     }
-  }
-
+  };
 
   const Evaluation = React.memo(() => {
     return (
@@ -157,7 +160,6 @@ const App: React.FC<AppProps> = (props: AppProps) => {
             <AccordionPanel>
               <Card>
                 <RefInt notify={notify} uitext={props.uitext} />
-
               </Card>
             </AccordionPanel>
           </AccordionItem>
@@ -177,19 +179,17 @@ const App: React.FC<AppProps> = (props: AppProps) => {
   const Help = React.memo(() => {
     return (
       <div role="tabpanel" aria-labelledby="Help">
-
         <Accordion defaultOpenItems="1">
           <AccordionItem value="1">
             <AccordionHeader>{props.uitext["h_about"]}</AccordionHeader>
             <AccordionPanel>
               <Card>
-                <p>
-                  {props.uitext["inf_about"]}
-                </p>
+                <p>{props.uitext["inf_about"]}</p>
                 <p>
                   <a href="https://metools.chesher.id.au/help/index.html" target="help">
                     <span className={styles.label}>{props.uitext["lbl_ifu"]}</span>
-                  </a>.
+                  </a>
+                  .
                 </p>
               </Card>
             </AccordionPanel>
@@ -199,14 +199,13 @@ const App: React.FC<AppProps> = (props: AppProps) => {
             <AccordionPanel>
               <Card>
                 <p>
-                  {props.uitext["inf_src"]} <a
-                    href="https://github.com/dche658/method-eval-tools">
-                    https://github.com/dche658/method-eval-tools </a
-                  >.
+                  {props.uitext["inf_src"]}{" "}
+                  <a href="https://github.com/dche658/method-eval-tools">
+                    https://github.com/dche658/method-eval-tools{" "}
+                  </a>
+                  .
                 </p>
-                <p>
-                  {props.uitext["inf_disclaimer"]}
-                </p>
+                <p>{props.uitext["inf_disclaimer"]}</p>
               </Card>
             </AccordionPanel>
           </AccordionItem>
@@ -234,10 +233,8 @@ const App: React.FC<AppProps> = (props: AppProps) => {
         {selectedTabValue === "utilities" && <Utilities />}
         {selectedTabValue === "help" && <Help />}
       </div>
-
     </div>
   );
-
 };
 
 export default App;

@@ -115,11 +115,11 @@ function robust(data: number[], alpha: number = 0.05): number[] {
 }
 
 /** Biweight estimator of the spread
- * 
+ *
  * @param ui standardized deviation
  * @param mad median absolute deviation
  * @param c tuning constant
- * @returns 
+ * @returns
  */
 function sbi(ui: number[], mad: number, c: number): number {
   let ai = [];
@@ -139,11 +139,11 @@ function sbi(ui: number[], mad: number, c: number): number {
 }
 
 /** Biweight estimator of the variation in T_bu
- * 
+ *
  * @param ui standardized deviations
  * @param mad median absolute deviation
  * @param c tuning constant
- * @returns 
+ * @returns
  */
 function st(ui: number[], mad: number, c: number): number {
   let ai = [];
@@ -379,7 +379,7 @@ const range = (start: number, stop: number, step: number): number[] => {
 
 /**
  * Box-Cox transformation.
- * 
+ *
  * @param x - positive data point
  * @param lambda - transformation parameter
  * @returns transformed value

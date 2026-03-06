@@ -25,7 +25,7 @@
     "validate": "office-addin-manifest validate manifest.xml",
     "watch": "webpack --mode development --watch",
     "test": "jest",
-    "copy": "node ./etc/copy-files.js"
+    "copy": "node ./etc/copy-files.mjs"
   },
   "dependencies": {
     "@fluentui/react-components": "^9.55.1",

@@ -2,7 +2,7 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./components/App";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
-import {UIStrings} from "../uistrings";
+import { UIStrings } from "../uistrings";
 
 /* global document, Office, module, require, HTMLElement */
 
@@ -26,7 +26,7 @@ Office.onReady(() => {
   // Use the UIStrings object from the UIStrings.js file
   // to get the JSON object with the correct localized strings.
   UIText = UIStrings.getLocaleStrings(myLanguage);
-  
+
   root?.render(
     <FluentProvider theme={webLightTheme}>
       <App title={title} uitext={UIText} />

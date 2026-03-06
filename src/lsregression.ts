@@ -1,6 +1,6 @@
 /**
  * Simple Least Squares Regression
- * 
+ *
  * Included for completeness but not currently included in the add-in
  */
 import { Regression, ConfidenceIntervalModel } from "./regression";

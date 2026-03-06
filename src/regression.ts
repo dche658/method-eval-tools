@@ -133,18 +133,18 @@ class DemingRegression implements Regression {
   private errorRatio: number;
 
   /**
-   * 
+   *
    * @param errorRatio default is 1
    */
   constructor(errorRatio = DEFAULT_ERROR_RATIO) {
     this.errorRatio = errorRatio;
   }
 
-  /** 
-   * 
+  /**
+   *
    * @param x must be an array of numeric values
    * @param y must be an array of numeric values
-   * 
+   *
    * @internal
    */
   calculateDeming(x: number[], y: number[]): RegressionModel {
@@ -186,15 +186,12 @@ class DemingRegression implements Regression {
 
   /**
    * Calculate Deming regression
-   * 
-   * @param x 
-   * @param y 
-   * @returns 
+   *
+   * @param x
+   * @param y
+   * @returns
    */
-  calculate(
-    x: number[],
-    y: number[]
-  ): RegressionModel {
+  calculate(x: number[], y: number[]): RegressionModel {
     return this.calculateDeming(x, y);
   }
 } //Deming
@@ -212,7 +209,7 @@ class WeightedDemingRegression implements Regression {
    * errorRatio ratio between squared measurement errors of reference- and test method, necessary for Deming regression (Default is 1).
    * iterMax maximal number of iterations.
    * threshold threshold value.
-   * 
+   *
    * @param errorRatio default is 1.0
    * @param iterMax default is 30
    * @param threshold default is 0.000001
@@ -228,11 +225,11 @@ class WeightedDemingRegression implements Regression {
   }
 
   /**
-   * 
+   *
    * @param x results from reference method
    * @param y results from test method
-   * @returns 
-   * 
+   * @returns
+   *
    * @internal
    */
   calculateWeightedDeming(x: number[], y: number[]): RegressionModel {
@@ -337,10 +334,10 @@ class WeightedDemingRegression implements Regression {
   } // #calculate
 
   /**
-   * 
+   *
    * @param x results from reference method
    * @param y results from test method
-   * @returns 
+   * @returns
    */
   calculate(x: number[], y: number[]): RegressionModel {
     return this.calculateWeightedDeming(x, y);
@@ -363,19 +360,18 @@ interface AngleMatrixModel {
  * Initially based on mcr package for R by Sergej Potapov 2021
  * but only implemented for positively correlated data and to always
  * calculate the non-parametric confidence intervals using the method of Passing and Bablock
- * 
+ *
  * Passing H, Bablock W. A new biometrical procedure for testing the equality of measurements
  * from two different analytical methods. Applications of linear regression procedures for
  * method comparison studies in clinical chemistry, part I.
  * J Clin Chem Clin Biochem. 1983;21:709-720.
  */
 class PassingBablokRegression implements Regression {
-  
   private alpha: number;
   private positiveCorrelated: boolean;
 
   /**
-   * 
+   *
    * @param alpha default is 0.05
    * @param positiveCorrelated default is `true`
    */
@@ -385,11 +381,11 @@ class PassingBablokRegression implements Regression {
   }
 
   /**
-   * 
-   * @param x 
-   * @param y 
-   * @returns 
-   * 
+   *
+   * @param x
+   * @param y
+   * @returns
+   *
    * @internal
    */
   calculatePaBa(x: number[], y: number[]): RegressionModel {
@@ -490,11 +486,11 @@ class PassingBablokRegression implements Regression {
 
   /**
    * Calculates the slopes in radians
-   * 
-   * @param x 
-   * @param y 
-   * @returns 
-   * 
+   *
+   * @param x
+   * @param y
+   * @returns
+   *
    * @internal
    */
   calcAngleMatrix(x: number[], y: number[]): AngleMatrixModel {
@@ -564,16 +560,15 @@ class PassingBablokRegression implements Regression {
    * Calculate difference between two numeric values that
    * gives exactly zero for very small relative differences.
    * Copied from mcr package for R by Sergej Potapov 2021
-   * 
-   * @param a 
-   * @param b 
-   * @param eps 
-   * @returns 
-   * 
+   *
+   * @param a
+   * @param b
+   * @param eps
+   * @returns
+   *
    * @internal
    */
   calcDiff(a: number, b: number, eps = 0.000000000001): number {
-    
     let delta = a - b;
     if (Math.abs(delta) < eps * ((Math.abs(a) + Math.abs(b)) / 2)) {
       return 0;
@@ -584,9 +579,9 @@ class PassingBablokRegression implements Regression {
 
   /**
    * Calculates the Passing-Bablok regression
-   * @param x 
-   * @param y 
-   * @returns 
+   * @param x
+   * @param y
+   * @returns
    */
   calculate(x: number[], y: number[]): RegressionModel {
     return this.calculatePaBa(x, y);
@@ -606,8 +601,8 @@ interface ConfidenceIntervalModel {
 
 /**
  * Calculate a confidence interval using a leave one out jackknife procedure.
- * 
- * Regression analysis is performed on a subset of data where one x,y pair 
+ *
+ * Regression analysis is performed on a subset of data where one x,y pair
  * is omitted. This is done repeatedly for each x,y pair in the data set
  * resulting in n-1 estimates of the slope and intercept. These are then used
  * to calculate the standard error of the estimates for the slope and intercept
@@ -676,7 +671,7 @@ class JackknifeConfidenceInterval {
 
   /**
    * Calculate the standard error using the procedure of Linnet
-   * 
+   *
    * @param b_jack array containing coefficient calculated for each jackknife sample
    * @param b_global array containing the coefficient calculated from all the data
    * @returns standard error for the coefficient.

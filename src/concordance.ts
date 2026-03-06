@@ -37,7 +37,7 @@ class ContingencyTableBuilder {
   private thresholds: number[][];
 
   /**
-   * 
+   *
    * @param thresholds diagnostic thresholds in an n by 2 array
    */
   constructor(thresholds: number[][]) {
@@ -46,7 +46,7 @@ class ContingencyTableBuilder {
 
   /**
    * Build the contingency table
-   * 
+   *
    * @param x quantitative results for method 1.
    * @param y quantitative results for method 2.
    * @returns
@@ -80,10 +80,10 @@ class ContingencyTableBuilder {
    * Less than lowest threshold: "< t1"
    * Between thresholds ">= t1 - < t2"
    * Greater than highest threshold ">= t2"
-   * 
+   *
    * @param col Which column of the diagnostic thresholds array to use. Must be 0 or 1.
    * @returns
-   * 
+   *
    * @internal
    */
   getLabels(col: number): string[] {
@@ -109,7 +109,7 @@ class ContingencyTableBuilder {
    * @param col Which column of the diagnostic thresholds array to use. Must be 0 or 1.
    * @param val Value to be evaluated against the diagnostic thresholds
    * @returns The index within the contingency table.
-   * 
+   *
    * @internal
    */
   getCategoryIndex(col: number, val: number): number {
@@ -137,13 +137,13 @@ class ContingencyTableBuilder {
     return index;
   }
 
-  /** 
+  /**
    * Create [t]x[t] matrix and fill with zeros.
    * Where t is the number of thresholds + 1
-   * 
+   *
    * @param size
    * @returns
-   * 
+   *
    * @internal
    */
   initializeValues(size: number): number[][] {
@@ -168,13 +168,13 @@ interface ConcordanceResults {
   ucl: number;
 }
 
-/** 
+/**
  * Sum matrix by row or col
- * 
+ *
  * @param matrix m by n matrix
  * @param by must be 'row' or 'col'
  * @returns row or column totals as an array.
- * 
+ *
  * @internal
  */
 function sum(matrix: number[][], by: string): number[] {
@@ -195,7 +195,7 @@ function sum(matrix: number[][], by: string): number[] {
 
 /**
  * Create labeled and formatted contingency table for output
- * 
+ *
  * @param values the contingency table
  * @param xLabels row labels
  * @param yLabels column labels
@@ -254,7 +254,7 @@ class ConcordanceCalculator {
   private alpha: number;
 
   /**
-   * 
+   *
    * @param table the contingency table
    * @param alpha level of significance
    */
@@ -265,7 +265,7 @@ class ConcordanceCalculator {
 
   /**
    * Main method for calculation
-   * 
+   *
    * @returns Concordance and Cohen's Kappa
    */
   calculate(): ConcordanceResults {
@@ -374,10 +374,10 @@ class ConcordanceCalculator {
 
   /**
    * Format concordance results for output
-   * 
-   * @param results 
+   *
+   * @param results
    * @returns
-   * 
+   *
    * @internal
    */
   formatResultsAsArray(results: ConcordanceResults): (string | number)[][] {
@@ -402,10 +402,9 @@ class ConcordanceCalculator {
  * not have any intrinsic order.
  */
 class QualitativeContengencyTableBuilder {
-
   /**
    * Builds the contingency table from the supplied data
-   * 
+   *
    * @param x qualitative results for reference method
    * @param y qualitative results for test method
    * @returns Contingency Table.
@@ -440,11 +439,11 @@ class QualitativeContengencyTableBuilder {
   /**
    * Get categories from the supplied data by creating a set
    * and return this as an array.
-   * 
+   *
    * @param x data in long format
    * @param y data in long format
    * @returns array of unique labels
-   * 
+   *
    * @internal
    */
   getCategories(x: (string | number)[], y: (string | number)[]): string[] {
@@ -460,8 +459,4 @@ class QualitativeContengencyTableBuilder {
 }
 
 // Module exports
-export {
-  ContingencyTableBuilder,
-  QualitativeContengencyTableBuilder,
-  ConcordanceCalculator,
-};
+export { ContingencyTableBuilder, QualitativeContengencyTableBuilder, ConcordanceCalculator };

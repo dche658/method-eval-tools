@@ -27,9 +27,9 @@ export class OneFactorAnova {
   private values: number[];
 
   /**
-   * 
-   * @param factorA 
-   * @param values 
+   *
+   * @param factorA
+   * @param values
    */
   constructor(factorA: (string | number)[], values: number[]) {
     this.dict = {};
@@ -149,10 +149,10 @@ export class OneFactorVarianceAnalysis {
   private isCalculated: boolean;
 
   /**
-   * 
-   * @param factorA 
-   * @param values 
-   * @param numLevels 
+   *
+   * @param factorA
+   * @param values
+   * @param numLevels
    * @param alpha default is 0.05
    */
   constructor(factorA: (string | number)[], values: number[], numLevels: number, alpha = 0.05) {
@@ -216,9 +216,9 @@ export class OneFactorVarianceAnalysis {
   }
 
   /** Get upper verification limit for repeatability
-   * 
+   *
    * @param cvClaim Claimed repeatability CV
-   * 
+   *
    */
   getUVLRepeatability(cvClaim: number): number {
     if (this.isCalculated === false) {
@@ -228,7 +228,7 @@ export class OneFactorVarianceAnalysis {
   }
 
   /** Get upper verification limit for within lab imprecision
-   * 
+   *
    * @param cvClaim Claimed within laboratory imprecision CV
    */
   getUVLWL(cvClaim: number): number {
@@ -257,10 +257,10 @@ export class TwoFactorAnova {
   private grandMean: number;
 
   /**
-   * 
-   * @param factorA 
-   * @param factorB 
-   * @param values 
+   *
+   * @param factorA
+   * @param factorB
+   * @param values
    */
   constructor(factorA: (string | number)[], factorB: (string | number)[], values: number[]) {
     this.factorA = factorA;
@@ -304,11 +304,11 @@ export class TwoFactorAnova {
     this.grandMean = mean(values);
   }
 
-  /** 
+  /**
    * Total Sum of Squares (SST).
    * Measures the total variability in the data. Calculated by summing the squared
    * differences between each data point and the grand mean.
-   * 
+   *
    * @internal
    */
   calculateSST(): number {
@@ -319,12 +319,12 @@ export class TwoFactorAnova {
     return sst;
   }
 
-  /** 
+  /**
    * Sum of squares for factor B.
    * Measures the variability due to Factor B. Calculated by summing the squared
    * differences between the means of each level of Factor B and the grand mean,
    * weighted by the number of observations in each level.
-   * 
+   *
    * @internal
    */
   calculateSSB(): number {
@@ -341,7 +341,7 @@ export class TwoFactorAnova {
    * Calculated by summing the squared differences between the means of each
    * level of Factor A and the grand mean, weighted by the number of observations
    * in each level.
-   * 
+   *
    * @internal
    */
   calculateSSA(): number {
@@ -355,9 +355,9 @@ export class TwoFactorAnova {
     return ssa;
   }
 
-  /** 
+  /**
    * Sum of squares of the interaction between factor A and factor B
-   * 
+   *
    * @internal
    */
   calculateSSAB(sst: number, ssa: number, ssb: number, sse: number): number {
@@ -368,7 +368,7 @@ export class TwoFactorAnova {
    * Sum of squares for the error components
    * For each cell corresponding to factorA and factorB, calculate the sum of the squared difference
    * between each value in the cell and the mean for that cell.
-   * 
+   *
    * @internal
    */
   calculateSSE(): number {
@@ -386,9 +386,9 @@ export class TwoFactorAnova {
   }
 
   /**
-   * 
+   *
    * @returns degrees of freedom total
-   * 
+   *
    * @internal
    */
   calculateDfT(): number {
@@ -396,9 +396,9 @@ export class TwoFactorAnova {
   }
 
   /**
-   * 
+   *
    * @returns degrees of freedom factor A
-   * 
+   *
    * @internal
    */
   calculateDfA(): number {
@@ -406,9 +406,9 @@ export class TwoFactorAnova {
   }
 
   /**
-   * 
+   *
    * @returns degrees of freedom factor B
-   * 
+   *
    * @internal
    */
   calculateDfB(): number {
@@ -416,9 +416,9 @@ export class TwoFactorAnova {
   }
 
   /**
-   * 
+   *
    * @returns degrees of freedom for factor A and factor B interaction
-   * 
+   *
    * @internal
    */
   calculateDfAB(): number {
@@ -426,9 +426,9 @@ export class TwoFactorAnova {
   }
 
   /**
-   * 
+   *
    * @returns degrees of freedom for error
-   * 
+   *
    * @internal
    */
   calculateDfE(): number {
@@ -530,7 +530,7 @@ interface TwoFactorNestedAnovaTable {
   nB: number;
   nE: number;
 }
-/** 
+/**
  * Class to perform two factor anova
  * For the CLSI EP protocol of
  * n replicates per run x r runs per day x d days
@@ -555,10 +555,10 @@ export class TwoFactorNestedAnova {
   private dfE: number;
 
   /**
-   * 
-   * @param factorA 
-   * @param factorB 
-   * @param values 
+   *
+   * @param factorA
+   * @param factorB
+   * @param values
    */
   constructor(factorA: (string | number)[], factorB: (string | number)[], values: number[]) {
     this.factorA = factorA;
@@ -612,7 +612,7 @@ export class TwoFactorNestedAnova {
 
   /** Calculate the Total Sum of Squares (SST) and the degrees of
    * freedom dfT
-   * 
+   *
    * @internal
    */
   calculateSST(): void {
@@ -623,11 +623,11 @@ export class TwoFactorNestedAnova {
     this.dfT = this.values.length - 1;
   }
 
-  /** 
+  /**
    * Sum of squares for the error components
    * For each cell corresponding to factorA and factorB, calculate the sum of the squared difference
    * between each value in the cell and the mean for that cell.
-   * 
+   *
    * @internal
    */
   calculateSSE(): void {
@@ -650,7 +650,7 @@ export class TwoFactorNestedAnova {
    * Calculated by summing the squared differences between the means of each
    * level of Factor A and the grand mean, weighted by the number of observations
    * in each level.
-   * 
+   *
    * @internal
    */
   calculateSSA(): void {
@@ -676,7 +676,7 @@ export class TwoFactorNestedAnova {
    *
    * I do not know why it is the case but the process is necessary for
    * calculating the degrees of freedom if the data is unbalanced.
-   * 
+   *
    * @internal
    */
   calculateSSB(): void {
@@ -932,10 +932,10 @@ export interface Outlier {
 
 /**
  * Grubb's Test for a single outlier
- * 
+ *
  * Function from Wikipedia {@link https://en.wikipedia.org/wiki/Grubbs%27s_test}
- * @param data 
- * @param alpha 
+ * @param data
+ * @param alpha
  * @returns Outlier object
  */
 export function grubbsTest(data: number[], alpha = 0.01): Outlier {
