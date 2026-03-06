@@ -1,9 +1,9 @@
 {
-  "name": "office-addin-taskpane-react",
+  "name": "excel-addin-metools",
   "version": "0.0.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/OfficeDev/Office-Addin-TaskPane-React.git"
+    "url": "https://github.com/dche658/method-eval-tools.git"
   },
   "license": "MIT",
   "config": {
@@ -24,7 +24,8 @@
     "stop": "office-addin-debugging stop manifest.xml",
     "validate": "office-addin-manifest validate manifest.xml",
     "watch": "webpack --mode development --watch",
-    "test": "jest"
+    "test": "jest",
+    "copy": "node ./etc/copy-files.js"
   },
   "dependencies": {
     "@fluentui/react-components": "^9.55.1",
