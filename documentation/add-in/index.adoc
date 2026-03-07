@@ -1,4 +1,4 @@
-= ME Tools: Method Evaluation Tools Excel Add-in
+= AACB Method Evaluation Tools Excel Add-in
 :imagesdir: ./images
 :stylesdir: ./styles
 :toc: left
@@ -6,7 +6,7 @@
 :stem:
 :stylesheet: custom.css
 
-Purpose: The ME Tools add-in provides specialized statistical procedures for the
+Purpose: The MEtools add-in provides specialized statistical procedures for the
 verification and validation of clinical laboratory methods. It focuses on
 essential calculations such as linear regression and variance component analysis
 that are not natively available in standard Excel functions.
