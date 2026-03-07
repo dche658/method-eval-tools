@@ -77,8 +77,6 @@ There are many ways for you to contribute.
 * Create [documentation](https://github.com/dche658/method-eval-tools/tree/main/documentation)
 * [Contributing code](https://docs.github.com/en/get-started/using-github/github-flow)
 
-You can contribute as following:
-
 ## Copyright
 
 Copyright (c) 2025 Doug Chesher. All rights reserved.
