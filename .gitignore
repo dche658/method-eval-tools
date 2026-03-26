@@ -1,5 +1,6 @@
 # Build output
-dist/
+# Commented out to use GitHub pages from this directory
+# dist/
 
 # Node modules folder
 node_modules/
