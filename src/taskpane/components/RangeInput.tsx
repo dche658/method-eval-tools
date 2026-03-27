@@ -16,7 +16,8 @@
 import * as React from "react";
 import { useState } from "react";
 import { Button, Field, Input, Tooltip, makeStyles } from "@fluentui/react-components";
-import { AppsRegular } from "@fluentui/react-icons";
+//import { AppsRegular } from "@fluentui/react-icons";
+import { TableLinkRegular } from "@fluentui/react-icons";
 
 // ^(?:([a-zA-Z\\d\\x5F\\x2D]*\\x21)? Begin optionally with number, letter, hypen, or underscore followed by exclamation mark.
 // (\\$?[A-Z]{1,3}\\$?[1-9]{1}\\d{0,6}) Optionally match dollar sign followed by 1-3 letters followed optionally by dollar sign followed by one or more digits greater than 1
@@ -104,7 +105,7 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
         <div className={styles.root}>
           {hasTooltip()}
           <Tooltip content={props.uitext["tip_range_copy"]} relationship="label">
-            <Button icon={<AppsRegular />} onClick={selectRange} />
+            <Button icon={<TableLinkRegular />} onClick={selectRange} />
           </Tooltip>
         </div>
       </Field>
