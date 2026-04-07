@@ -7,7 +7,7 @@
 import { studentt, normal, median, sum, max, percentile, mean, stdev } from "jstat-esm";
 //import jStat from "jstat-esm"; Import individual functions to reduce size
 
-import * as shapiro_wilk from "./shapiro-wilk.js";
+import * as shapiro_wilk from "./shapiro-wilk";
 
 const NP = "np"; //non parametric
 const ROBUST = "robust";
@@ -448,7 +448,7 @@ function estimateBoxCoxLambda(
     throw new Error("Box-Cox requires strictly positive data.");
   }
 
-  let bestLambda = null;
+  let bestLambda = minLambda;
   let bestLL = -Infinity;
 
   for (let lambda = minLambda; lambda <= maxLambda; lambda += step) {
@@ -468,7 +468,7 @@ function estimateBoxCoxLambda(
 interface BoxCoxTransform {
   lambda: number;
   transformedData: number[];
-  shapiroWilkValue: { w: number; p: number };
+  shapiroWilkValue: shapiro_wilk.ShapiroWilkResult;
   maximumLikelihoodValue: number;
 }
 
@@ -489,7 +489,7 @@ function boxcoxsw(x: number[], lambda = [-2, 2, 0.01]): BoxCoxTransform {
   const n = lambda_arr.length;
   const store2: number[][] = [];
   const store3: number[] = [];
-  const store4: { w: number; p: number }[] = [];
+  const store4: shapiro_wilk.ShapiroWilkResult[] = [];
   for (let i = 0; i < n; i++) {
     //for each lambda
     let t: number[] = [];
@@ -504,7 +504,11 @@ function boxcoxsw(x: number[], lambda = [-2, 2, 0.01]): BoxCoxTransform {
     //clone t so values are not sorted in ShapiroWilkW
     const t2 = [...t];
     const sw = shapiro_wilk.ShapiroWilkW(t2);
-    store3.push(sw.w);
+    if (sw.w != undefined) {
+      store3.push(sw.w);
+    } else {
+      store3.push(0);
+    }
     store4.push(sw);
   }
   let k = store3.indexOf(Math.max(...store3));

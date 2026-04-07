@@ -39,10 +39,10 @@ export function boxcox(x: number, lambda: number): number {
  *
  * @customfunction SHAPIROWILKW
  * @param {number[][]} x array of values
- * @returns {number[][]} Shapiro-Wilk w and associated p value.
+ * @returns {any[][]} Shapiro-Wilk w and associated p value.
  */
-export function shapirowilkw(x: number[][]): number[][] {
-  const arr = [];
+export function shapirowilkw(x: number[][]): any[][] {
+  const arr: number[] = [];
   x.forEach((row) => {
     row.forEach((value) => {
       arr.push(value);
@@ -50,4 +50,41 @@ export function shapirowilkw(x: number[][]): number[][] {
   });
   const sw = ShapiroWilkW(arr);
   return [[sw.w], [sw.p]];
+}
+
+/**
+ * Dixon-Reed test for outliers
+ * 
+ * Reed AH, Henry RJ, Mason WB. Influence of statistical method 
+ * used on the resulting estimate of normal range. Clinical Chemistry
+ * 1971;17:275-284.
+ * 
+ * @customfunction DIXONREED
+ * @param {number[][]} x array of values
+ * @returns {any[][]} Array containing ratio and outlier
+ * 
+ */
+export function dixonreed(x: number[][]): any[][] {
+  const arr: number[] = [];
+  const outliers: any[] = [];
+  const ratios: number[] = [];
+  x.forEach((row) => {
+    row.forEach((value) => {
+      arr.push(value);
+    });
+  });
+  arr.sort((a,b) => a - b);
+  let r = 0;
+  const n = arr.length - 1;
+  if (arr.length > 2) {
+    //Check for low outliers
+    r = (arr[1] - arr[0]) / (arr[n] - arr[0]);
+    ratios.push(r);
+    outliers.push(r > 1/3 ? arr[n]: undefined);
+    //Check for high outliers
+    r = (arr[n] - arr[n-1]) / (arr[n] - arr[0]);
+    ratios.push(r);
+    outliers.push(r > 1/3 ? arr[n]: undefined);
+  }
+  return [["Low", "High"],[ratios[0],ratios[1]],[outliers[0], outliers[1]]];
 }
