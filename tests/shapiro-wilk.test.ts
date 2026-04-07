@@ -1,4 +1,4 @@
-import {ShapiroWilkW, normalQuantile} from "../src/shapiro-wilk.js";
+import {ShapiroWilkW, ShapiroWilkResult} from "../src/shapiro-wilk";
 import { normal } from "jstat-esm";
 
 const alp = [
@@ -20,7 +20,7 @@ const alp = [
 // });
 
 test("Shapiro-Wilk", () => {
-    const res = ShapiroWilkW(alp);
+    const res: ShapiroWilkResult = ShapiroWilkW(alp);
     expect(res.w).toBeCloseTo(0.811,3);
     expect(res.p).toBeCloseTo(0.0,3);
     //console.log(res);
