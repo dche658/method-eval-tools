@@ -1077,3 +1077,16 @@ where stem:[\bar{Y}] and s are the mean and sample standard deviation respective
 This is the two-sided test, for which the hypothesis of no outliers is rejected at significance level α if
 
 stem:[G > \frac{N - 1}{\sqrt{N}}\sqrt{\frac{(t_{\alpha/(2N),N-2})^{2}}{N - 2 + (t_{\alpha/(2N),N-2})^{2}}]
+
+==== Box-Cox Log-Likelihood Function
+
+This is just some background information. The algorithm used in the add-in is a 
+simplification that works for univariate data.
+
+https://www.css.cornell.edu/faculty/dgr2/_static/files/R_html/Transformations.html (Accessed 20/4/2026)
+
+stem:[\log L = - \frac{n}{2}\log(2\pi) - n\log\sigma - \frac{1}{2\sigma^{2}}\sum_{i=1}^{n}(Y_{i}^{(\lambda)}-(\beta_{0}+X_{i}))^{2} + (\lambda - 1)sum_{i=1}^{n}\log Y_{i}]
+
+This can also be written:
+
+stem:[\log L \prop - \frac{n}{2}\log\[sum_{i=1}^{n}(\frac{Y_{i}^{(\lambda)}-(\beta_{0}+X_{i})}{\dot{Y}^{\lambda}})^{2}\]]
