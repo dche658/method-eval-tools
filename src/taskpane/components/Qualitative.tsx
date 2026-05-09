@@ -99,7 +99,9 @@ export default function Qualitative(props: QualitativeProps) {
           await context.sync();
         }
       } catch (err) {
-        props.notify("error", err.message);
+        if (err instanceof Error) {
+          props.notify("error", err.message);
+        }
       } // try
     });
   };

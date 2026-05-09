@@ -77,7 +77,9 @@ export default function PrecisionLayout(props: PrecisionLayoutProps) {
         props.setFactorBRangeValue(runsRange.address);
         props.setResultsRangeValue(valuesRange.address);
       } catch (err) {
-        props.notify("error", err.message);
+        if (err instanceof Error) {
+          props.notify("error", err.message);
+        }
       } // try
     });
   }; //setupPrecision

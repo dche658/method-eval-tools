@@ -1,3 +1,4 @@
+import {test, expect} from "@jest/globals"
 import {ShapiroWilkW, ShapiroWilkResult} from "../src/shapiro-wilk";
 import { normal } from "jstat-esm";
 

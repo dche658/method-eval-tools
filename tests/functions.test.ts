@@ -1,5 +1,5 @@
 import { dixonreed } from "../src/functions/functions";
-import {test, expect} from "@jest/globals"
+import {test, expect} from "@jest/globals";
 
 const data1 = [[0], [2], [3], [4]];
 const data2 = [[0], [2], [3], [7]];

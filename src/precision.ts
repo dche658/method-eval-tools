@@ -939,7 +939,12 @@ export interface Outlier {
  * @returns Outlier object
  */
 export function grubbsTest(data: number[], alpha = 0.01): Outlier {
-  const outlier = { outlier: undefined, index: undefined, g: undefined, gCrit: undefined };
+  const outlier: {
+    outlier: number | undefined,
+    index: number | undefined,
+    g: number | undefined,
+    gCrit: number | undefined
+  } = { outlier: undefined, index: undefined, g: undefined, gCrit: undefined };
   const n = data.length;
   const mean = data.reduce((a, b) => a + b, 0) / n;
   const t = studentt.inv(1 - alpha / (2 * n), n - 2);

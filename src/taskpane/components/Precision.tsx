@@ -107,7 +107,7 @@ export default function Precision(props: PrecisionProps) {
         for (let i = 0; i < outlierList.length; i++) {
           msg +=
             "Row: " +
-            (outlierList[i].out.index + 1) +
+            ((outlierList[i].out.index ?? 0) + 1) +
             ", Col: " +
             (outlierList[i].col + 1) +
             ", Value: " +
@@ -155,8 +155,8 @@ export default function Precision(props: PrecisionProps) {
           let aLevels: (number | string)[] = [];
           let bLevels: (number | string)[] = [];
           let results: number[] = [];
-          let aDict = {};
-          let bDict = {};
+          let aDict: { [key: string | number]: number } = {};
+          let bDict: { [key: string | number]: number } = {};
           for (let j = 0; j < rRange.rowCount; j++) {
             if (typeof rRange.values[j][i] == "number") {
               results.push(rRange.values[j][i]);
@@ -232,7 +232,9 @@ export default function Precision(props: PrecisionProps) {
         oRange.values = rangeValues;
         await context.sync();
       } catch (err) {
-        props.notify("error", err.message);
+        if (err instanceof Error) {
+          props.notify("error", err.message);
+        }
       } // try
     });
   }; // runPrecisionAnalysis

@@ -159,7 +159,9 @@ export default function BoxCox(props: BoxCoxProps) {
           await context.sync();
         }
       } catch (err) {
-        props.notify("error", err.message);
+        if (err instanceof Error) {
+          props.notify("error", err.message);
+        }
       } // try
     });
   };

@@ -4,6 +4,7 @@ import App from "./components/App";
 import { FluentProvider, webLightTheme } from "@fluentui/react-components";
 import { UIStrings } from "../uistrings";
 
+
 /* global document, Office, module, require, HTMLElement */
 
 const title = "Method Evaluation Tools Add-in";
