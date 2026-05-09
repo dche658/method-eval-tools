@@ -315,7 +315,9 @@ export default function ComparisonPane(props: ComparisonProps) {
         setQualOutputRangeValue("C176");
         props.notify("success", "Ranges have been successfully updated");
       } catch (error) {
-        props.notify("error", error.message);
+        if (error instanceof Error) {
+          props.notify("error", error.message);
+        }
       }
     }
   }; // setDefaultValues
@@ -405,7 +407,9 @@ export default function ComparisonPane(props: ComparisonProps) {
         }
         props.notify("success", "Ranges have been successfully updated");
       } catch (error) {
-        props.notify("error", error.message);
+        if (error instanceof Error) {
+          props.notify("error", error.message);
+        }
       }
     });
   }; // loadWorkbookDefaults
@@ -667,7 +671,9 @@ export default function ComparisonPane(props: ComparisonProps) {
         await context.sync();
       } catch (error) {
         console.log(error);
-        props.notify("error", error.message);
+        if (error instanceof Error) {
+          props.notify("error", error.message);
+        }
       }
     });
   };

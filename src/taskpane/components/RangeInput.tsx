@@ -61,12 +61,16 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
       range.load("address");
       await context.sync();
       //console.log(`Selected range address: ${range.address}`);
-      props.setRangeValue(range.address);
+      if (props.setRangeValue) {
+        props.setRangeValue(range.address);
+      }
     });
   };
 
   const handleTextChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (props.setRangeValue) {
     props.setRangeValue(event.target.value);
+    }
     if (event.target.validity.patternMismatch) {
       setValidationMessage(props.validationMessage || "Invalid format.");
     } else {

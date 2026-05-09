@@ -1,6 +1,7 @@
 /* npm install -D typescript jest ts-jest @types/jest @types/node
  */
 import { TwoFactorNestedAnova, TwoFactorVarianceAnalysis, TwoFactorVariance, grubbsTest, Outlier } from '../src/precision';
+import {test, expect} from "@jest/globals";
 
 const days = ["Day 1", "Day 1", "Day 1", "Day 1", "Day 2", "Day 2", "Day 2", "Day 2",
     "Day 3", "Day 3", "Day 3", "Day 3", "Day 4", "Day 4", "Day 4", "Day 4",

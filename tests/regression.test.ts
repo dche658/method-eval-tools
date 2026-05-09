@@ -1,3 +1,4 @@
+import {test, expect} from "@jest/globals";
 import {
     JackknifeConfidenceInterval,
     BootstrapConfidenceInterval,
@@ -5,7 +6,7 @@ import {
     DemingRegression,
     WeightedDemingRegression,
     DEFAULT_ERROR_RATIO
-} from "../src/regression"
+} from "../src/regression";
 
 const x = [10377.5, 4056, 2654, 4747, 1459.5, 5880, 3871, 2461, 1802, 1607.5,
     4329, 7911.5, 1798.5, 6504, 9506.5, 4781, 2122, 17859, 7064, 963.5,
