@@ -7,7 +7,7 @@
  */
 import * as React from "react";
 
-import { makeStyles, Button, Field, Input } from "@fluentui/react-components";
+import { makeStyles, Button, Field, Input, tokens } from "@fluentui/react-components";
 import RangeInput from "./RangeInput";
 
 interface PrecisionLayoutProps {
@@ -29,9 +29,9 @@ const useStyles = makeStyles({
   },
   field: {
     width: "150px",
-    marginLeft: "4px",
-    marginBottom: "4px",
-    marginTop: "4px",
+    marginLeft: tokens.spacingHorizontalXS,
+    marginBottom: tokens.spacingVerticalXS,
+    marginTop: tokens.spacingVerticalXS,
   },
 });
 

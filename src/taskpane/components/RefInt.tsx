@@ -5,7 +5,7 @@
 
 import * as React from "react";
 
-import { makeStyles, Button, Input, Select, Tooltip } from "@fluentui/react-components";
+import { makeStyles, Button, Input, Select, Tooltip, tokens } from "@fluentui/react-components";
 
 import {
   ref_limit,
@@ -29,18 +29,18 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   field: {
-    marginLeft: "4px",
-    marginBottom: "4px",
-    marginTop: "4px",
+    marginLeft: tokens.spacingHorizontalXS,
+    marginBottom: tokens.spacingVerticalXS,
+    marginTop: tokens.spacingVerticalXS,
   },
   selection: {
     maxWidth: "220px",
   },
   inputfield: {
     width: "70px",
-    marginLeft: "4px",
-    marginRight: "4px",
-    marginTop: "4px",
+    marginLeft: tokens.spacingHorizontalXS,
+    marginRight: tokens.spacingHorizontalXS,
+    marginTop: tokens.spacingVerticalXS,
   },
 });
 

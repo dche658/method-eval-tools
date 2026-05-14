@@ -43,7 +43,7 @@ const useStyles = makeStyles({
   },
   gridcontainer: {
     display: "grid",
-    gridTemplateColumns: "120px 120px",
+    gridTemplateColumns: "110px 110px",
     backgroundColor: tokens.colorNeutralCardBackground,
     borderRight: "1px solid " + tokens.colorPaletteAnchorBorderActive,
     borderBottom: "1px solid " + tokens.colorPaletteAnchorBorderActive,

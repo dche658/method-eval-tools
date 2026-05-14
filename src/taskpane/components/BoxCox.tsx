@@ -5,7 +5,7 @@
 
 import * as React from "react";
 
-import { makeStyles, Button, Input, Select } from "@fluentui/react-components";
+import { makeStyles, Button, Input, Select, tokens } from "@fluentui/react-components";
 
 import { boxcoxfit, BoxCoxTransform } from "../../reference_intervals";
 
@@ -24,26 +24,26 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   field: {
-    marginLeft: "4px",
-    marginBottom: "4px",
-    marginTop: "4px",
+    marginLeft: tokens.spacingHorizontalXS,
+    marginBottom: tokens.spacingVerticalXS,
+    marginTop: tokens.spacingVerticalXS,
   },
   selection: {
     maxWidth: "220px",
   },
   inputfield: {
     width: "70px",
-    marginRight: "4px",
-    marginTop: "4px",
+    marginRight: tokens.spacingHorizontalXS,
+    marginTop: tokens.spacingVerticalXS,
   },
   grid1x3: {
     display: "grid",
     gridTemplateColumns: " 1fr 1fr 1fr",
     gridTemplateRows: "1fr",
-    gridGap: "4px",
+    gridGap: tokens.spacingHorizontalXS,
   },
   box: {
-    padding: "4px",
+    padding: tokens.spacingHorizontalXS,
   },
 });
 

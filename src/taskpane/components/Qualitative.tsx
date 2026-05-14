@@ -7,7 +7,7 @@
  */
 import * as React from "react";
 
-import { makeStyles, Button } from "@fluentui/react-components";
+import { makeStyles, Button, tokens } from "@fluentui/react-components";
 import RangeInput from "./RangeInput";
 
 import { QualitativeContengencyTableBuilder, ConcordanceCalculator } from "../../concordance";
@@ -30,9 +30,9 @@ const useStyles = makeStyles({
     alignItems: "center",
   },
   field: {
-    marginLeft: "4px",
-    marginBottom: "4px",
-    marginTop: "4px",
+    marginLeft: tokens.spacingHorizontalXS,
+    marginBottom: tokens.spacingVerticalXS,
+    marginTop: tokens.spacingVerticalXS,
   },
 });
 

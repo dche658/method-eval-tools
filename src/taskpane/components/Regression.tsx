@@ -20,7 +20,7 @@ import {
   Checkbox,
   Field,
   Input,
-  Card,
+  tokens,
 } from "@fluentui/react-components";
 
 import RangeInput from "./RangeInput";
@@ -107,13 +107,13 @@ const useStyles = makeStyles({
     justifyContent: "center",
   },
   field: {
-    marginLeft: "4px",
-    marginBottom: "4px",
-    marginTop: "4px",
+    marginLeft: tokens.spacingHorizontalXS,
+    marginBottom: tokens.spacingVerticalXS,
+    marginTop: tokens.spacingVerticalXS,
   },
   mvwhidden: {
-    marginLeft: "4px",
-    marginBottom: "4px",
+    marginLeft: tokens.spacingHorizontalXS,
+    marginBottom: tokens.spacingVerticalXS,
     display: "none",
   },
   panels: {
@@ -132,7 +132,7 @@ const useStyles = makeStyles({
   specificationsPanel: {   
     display: "flex",
     flexDirection: "column",
-    marginBottom: "10px",
+    marginBottom: tokens.spacingVerticalM,
   },
 });
 
