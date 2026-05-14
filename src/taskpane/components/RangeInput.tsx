@@ -15,7 +15,7 @@
  */
 import * as React from "react";
 import { useState } from "react";
-import { Button, Field, Input, Tooltip, makeStyles } from "@fluentui/react-components";
+import { Button, Field, Input, Tooltip, makeStyles, tokens } from "@fluentui/react-components";
 //import { AppsRegular } from "@fluentui/react-icons";
 import { TableLinkRegular } from "@fluentui/react-icons";
 
@@ -42,12 +42,27 @@ interface RangeInputProps {
 const useStyles = makeStyles({
   root: {
     display: "flex",
-    alignItems: "center",
-    columnGap: "4px",
+    width: "100%",
+    boxSizing: "border-box",
+    gap: tokens.spacingHorizontalXS
+    // alignItems: "center",
+    // columnGap: "4px",
+    //gap: "4px",
   },
   field: {
-    marginLeft: "4px",
+    display: "flex",
+    width: "100%",
+    
+    //marginLeft: "4px",
   },
+  inputRow: {
+    flexGrow: "1",
+    width: "100%",
+    minWidth: "0",
+  },
+  btn: {
+    flexShrink: "0",
+  }
 });
 
 const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
@@ -85,7 +100,7 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
         <Tooltip content={props.tooltipContent} relationship="label">
           <Input
             value={props.rangeValue}
-            className="mb-3"
+            className={styles.inputRow}
             pattern={PATTERN}
             onChange={handleTextChange}
           />
@@ -95,7 +110,7 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
       return (
         <Input
           value={props.rangeValue}
-          className="mb-3"
+          className={styles.inputRow}
           pattern={PATTERN}
           onChange={handleTextChange}
         />
@@ -109,7 +124,7 @@ const RangeInput: React.FC<RangeInputProps> = (props: RangeInputProps) => {
         <div className={styles.root}>
           {hasTooltip()}
           <Tooltip content={props.uitext["tip_range_copy"]} relationship="label">
-            <Button icon={<TableLinkRegular />} onClick={selectRange} />
+            <Button icon={<TableLinkRegular />} onClick={selectRange} className={styles.btn} />
           </Tooltip>
         </div>
       </Field>
