@@ -26,6 +26,7 @@ import {
   Toast,
   ToastTrigger,
   ToastBody,
+  tokens
 } from "@fluentui/react-components";
 
 import type { SelectTabData, SelectTabEvent, TabValue } from "@fluentui/react-components";
@@ -39,30 +40,12 @@ const useStyles = makeStyles({
   root: {
     minHeight: "100vh",
   },
-  container: {
-    diplay: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-  },
-  field: {
-    marginLeft: "4px",
-    marginBottom: "4px",
-    marginTop: "4px",
-  },
-  mvwhidden: {
-    marginLeft: "4px",
-    marginBottom: "4px",
-    display: "none",
-  },
   panels: {
     padding: "0 10px",
     "& th": {
       textAlign: "left",
       padding: "0 30px 0 0",
     },
-  },
-  selection: {
-    maxWidth: "220px",
   },
   label: {
     fontWeight: "bold",

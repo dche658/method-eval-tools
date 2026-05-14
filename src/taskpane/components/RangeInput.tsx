@@ -45,15 +45,10 @@ const useStyles = makeStyles({
     width: "100%",
     boxSizing: "border-box",
     gap: tokens.spacingHorizontalXS
-    // alignItems: "center",
-    // columnGap: "4px",
-    //gap: "4px",
   },
   field: {
     display: "flex",
     width: "100%",
-    
-    //marginLeft: "4px",
   },
   inputRow: {
     flexGrow: "1",

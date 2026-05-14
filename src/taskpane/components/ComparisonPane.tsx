@@ -25,6 +25,7 @@ import {
   Input,
   Card,
   Tooltip,
+  tokens
 } from "@fluentui/react-components";
 
 const PrecisionLayout = React.lazy(() => import("./PrecisionLayout"));
@@ -48,24 +49,9 @@ const useStyles = makeStyles({
     justifyContent: "center",
   },
   field: {
-    marginLeft: "4px",
-    marginBottom: "4px",
-    marginTop: "4px",
-  },
-  mvwhidden: {
-    marginLeft: "4px",
-    marginBottom: "4px",
-    display: "none",
-  },
-  panels: {
-    padding: "0 10px",
-    "& th": {
-      textAlign: "left",
-      padding: "0 30px 0 0",
-    },
-  },
-  selection: {
-    maxWidth: "220px",
+    marginLeft: tokens.spacingHorizontalXS,
+    marginBottom: tokens.spacingVerticalXS,
+    marginTop: tokens.spacingVerticalXS,
   },
   label: {
     fontWeight: "bold",
