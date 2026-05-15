@@ -30,7 +30,7 @@ jobs:
       run: npm run build
 
     - name: Upload Build Artifacts
-      uses: actions/upload-artifact@v4 # Valid configuration for modern runners
+      uses: actions/upload-artifact@v7
       with:
         name: excel-addin-production-assets
         path: dist/
