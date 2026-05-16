@@ -1,10 +1,19 @@
 name: Build Excel Javascript Add-in
 
 on:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
+    inputs:
+      build-type:
+        description: 'Select the type of build to run'
+        required: false
+        default: 'production'
+        options:
+          - production
+          - development
+  # push:
+  #   branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
 
 jobs:
   build:
