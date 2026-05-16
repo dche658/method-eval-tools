@@ -35,7 +35,7 @@ jobs:
         name: excel-addin-production-assets
         path: dist/
 
-    - name: Commit and Push dist folder
+    - name: Commit and Push the dist folder
       run: |
         git config --global user.name "github-actions[bot]"
         git config --global user.email "github-actions[bot]@users.noreply.github.com"
