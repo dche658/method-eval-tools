@@ -15,7 +15,10 @@ Note that this project **does not** adhere to [Semantic Versioning](https://semv
 
 ### Fixed
 
-## [1.0.0] - dd/mmm/yyyy
+## [0.1.0] - 2026-06-10
 
-Initial release: This is a placeholder at present and will be updated with the
-release date in due course
+### Added
+
+Initial release of version 1 of the add-in. The add-in manifest file requires a minimum of version 1.0.
+It is intended that the package release and manifest will be brought in line when the add-in is 
+submitted to the Microsoft marketplace.

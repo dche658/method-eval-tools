@@ -7,6 +7,7 @@ on:
         description: 'Select the type of build to run'
         required: false
         default: 'production'
+        type: choice
         options:
           - production
           - development

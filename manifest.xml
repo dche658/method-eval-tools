@@ -2,7 +2,7 @@
 <OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
   <Id>2fd3ebf4-8c70-447c-9ebe-40fa41f89128</Id>
   <Version>1.0.0</Version>
-  <ProviderName>Douglas Chesher</ProviderName>
+  <ProviderName>Australasian Association for Clinical Biochemistry and Laboratory Medicine</ProviderName>
   <DefaultLocale>en-AU</DefaultLocale>
   <DisplayName DefaultValue="AACB Method Evaluation Tools"/>
   <Description DefaultValue="Tools for clinical laboratory method evaluation"/>
