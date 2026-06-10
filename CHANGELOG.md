@@ -22,3 +22,5 @@ Note that this project **does not** adhere to [Semantic Versioning](https://semv
 Initial release of version 1 of the add-in. The add-in manifest file requires a minimum of version 1.0.
 It is intended that the package release and manifest will be brought in line when the add-in is 
 submitted to the Microsoft marketplace.
+
+[0.1.0]: https://github.com/dche658/method-eval-tools/releases/tag/0.1.0
