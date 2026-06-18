@@ -15,6 +15,13 @@ Note that this project **does not** adhere to [Semantic Versioning](https://semv
 
 ### Fixed
 
+## [0.2.0] - 2026-06-18
+
+### Changed
+
+Update manifest domain to metools.aacb.asn.au.
+Release 1.0.0
+
 ## [0.1.0] - 2026-06-10
 
 ### Added

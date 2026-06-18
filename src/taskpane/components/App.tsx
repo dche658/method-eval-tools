@@ -169,7 +169,7 @@ const App: React.FC<AppProps> = (props: AppProps) => {
               <Card>
                 <p>{props.uitext["inf_about"]}</p>
                 <p>
-                  <a href="https://metools.chesher.id.au/help/index.html" target="help">
+                  <a href="help/index.html" target="help">
                     <span className={styles.label}>{props.uitext["lbl_ifu"]}</span>
                   </a>
                   .
