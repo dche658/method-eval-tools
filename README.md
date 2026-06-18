@@ -10,7 +10,7 @@ accompanying
 [method verification workbook](https://metools.aacb.asn.au/assets/mvw.xlsx).
 
 Documents: \
-[http://metools.aacb.asn.au/help/]()
+[https://metools.aacb.asn.au/help/]()
 
 ## Getting Started
 
