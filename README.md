@@ -7,10 +7,10 @@ that are not natively available in standard Excel functions.
 
 This tools has been designed for laboratory professionals to be used with the
 accompanying 
-[method verification workbook](https://metools.chesher.id.au/assets/mvw.xlsx).
+[method verification workbook](https://metools.aacb.asn.au/assets/mvw.xlsx).
 
 Documents: \
-[http://metools.chesher.id.au/help/]()
+[http://metools.aacb.asn.au/help/]()
 
 ## Getting Started
 
