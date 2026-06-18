@@ -81,5 +81,16 @@
   "browserslist": [
     "last 2 versions",
     "ie 11"
-  ]
+  ],
+  "allowScripts": {
+    "@azure/msal-node-extensions@1.5.32": true,
+    "@azure/msal-node-runtime@0.20.5": true,
+    "protobufjs@8.0.1": true,
+    "protobufjs@7.5.8": true,
+    "core-js@3.49.0": true,
+    "core-js-pure@3.49.0": true,
+    "keytar@7.9.0": true,
+    "unrs-resolver@1.12.2": true,
+    "@microsoft/m365agentstoolkit-cli@1.1.11": true
+  }
 }

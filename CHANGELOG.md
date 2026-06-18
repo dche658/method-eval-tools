@@ -31,3 +31,4 @@ It is intended that the package release and manifest will be brought in line whe
 submitted to the Microsoft marketplace.
 
 [0.1.0]: https://github.com/dche658/method-eval-tools/releases/tag/0.1.0
+[0.2.0]: https://github.com/dche658/method-eval-tools/releases/tag/0.2.0
