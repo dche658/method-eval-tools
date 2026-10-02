@@ -2,7 +2,7 @@ import {
     LeastSquaresRegression,
     LeastSquaresConfidenceInterval
 } from "../src/lsregression";
-import { expect, test } from '@jest/globals';
+import { expect, test } from 'vitest';
 import { BootstrapConfidenceInterval } from "../src/regression";
 
 //Mendenhall WM, Sincich TL. 2016. Statistics for Engineering

@@ -1,6 +1,6 @@
 import jStat from 'jstat-esm';
 import { normal } from 'jstat-esm';
-import { test, expect } from '@jest/globals';
+import { test, expect } from 'vitest';
 import { ShapiroWilkW } from '../src/shapiro-wilk';
 import {
     robust,
