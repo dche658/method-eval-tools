@@ -1,0 +1,81 @@
+= AACB Method Evaluation Tools Excel Add-in Loading Instructions
+:imagesdir: ./images
+:stylesdir: ./styles
+:toc: left
+:toclevels: 3
+:stem:
+:stylesheet: custom.css
+
+There are several ways to load the AACB Method Evaluation Tools Excel Add-in into Microsoft Excel. The following sections describe the different methods available.
+
+## Microsoft Marketplace Add-in Store
+
+AACB Method Evaluation Tools Excel Add-in is NOT currently available in the Microsoft Marketplace Add-in Store. 
+
+Once the Add-in is available, you can install it directly from the store by following these steps:
+
+1. Open Microsoft Excel.
+2. Go to the "Home" tab in the ribbon.
+3. Click on "Add-ins" or "Office Add-ins".
+4. Search for "AACB Method Evaluation Tools".
+5. Click on the add-in and then click "Add".
+
+## Integrated apps portal in the Microsoft 365 admin center
+
+The link:https://learn.microsoft.com/en-us/microsoft-365/admin/manage/test-and-deploy-microsoft-365-apps?view=o365-worldwide[Microsoft 365 admin center] makes it easy for an administrator to deploy Office Add-ins to users and groups in their organization. Add-ins deployed via the admin center are available to users in their Office applications right away, with no client configuration required.
+
+Deployment of the AACB Method Evaluation Tools Excel Add-in to users in their organization must be undertaken by an administrator.
+
+## Sideloading the Add-in
+
+For testing and development purposes, you can sideload the AACB Method Evaluation Tools Excel Add-in into Microsoft Excel. Sideloading allows you to load the add-in directly from a local file without going through the Microsoft Marketplace or admin center.
+
+First, download the manifest file for the AACB Method Evaluation Tools Excel Add-in. The manifest file is an XML file that contains information about the add-in, such as its name, version, and the location of its resources. The manifest can be downloaded from link:https://metools.aacb.asn.au/manifest.xml[https://metools.aacb.asn.au/manifest.xml, opts=download, window=_blank].
+
+If you have a folder on a network share or a local folder that you want to use for sideloading, you can place the manifest file in that folder. For example, you might create a folder called "MetoolsManifest" on your C: drive and place the manifest file there.
+
+If you are using a network share, make sure that the folder is accessible to all users who need to load the add-in.
+
+If you are using a local folder, you will need to create a loopback network share to that folder. This can be done by following these steps:
+
+1. From Windows Explorer, right-click on the folder where you placed the manifest file and select "Properties".
+
+image:manifest-directory-properties.png[]
+
+2. In the Properties dialog, go to the "Sharing" tab and click on "Share". 
+
+image:manifest-enable-sharing.png[]
+
+3. You will be prompted to , "choose people to share with", with a default as the owner. Click on "Share". 
+
+image:manifest-share-networkaccess.png[]
+
+4. You will see a message that the folder is now shared. Click on "Done".
+5. In the properties dialog, take note of the network path to the folder. It will look something like \\YourComputerName\MetoolsManifest. You will need this path in the next step. 
+
+image:manifest-share-properties.png[]
+
+6. Open Microsoft Excel and go to the "File" menu, then select "Options". This can usually be found at the bottom of the left-hand menu.
+
+7. In the Excel Options dialog, select "Trust Center" from the left-hand menu, then click on the "Trust Center Settings" button.
+
+image:manifest-trust-center.png[]
+
+8. In the Trust Center dialog, select "Trusted Add-in Catalogs" from the left-hand menu.
+9. In the "Catalog URL" field, enter the network path to the folder where you placed the manifest file (e.g., \\YourComputerName\MetoolsManifest). Click "Add Catalog" and then check the box that says "Show in Menu".
+
+image:manifest-add-catalog.png[]
+
+9. Click "OK" to close the Trust Center dialog, and then click "OK" again to close the Excel Options dialog.
+
+10. Shutdown and restart Microsoft Excel to apply the changes.
+
+11. After restarting Excel, go to the "Home" tab in the ribbon and click on "Add-ins". 
+
+image:addin-menu.png[]
+
+12. Then click on "More Add-ins" to open the Office Add-ins dialog. You should see a new section called "Shared Folder" in the left-hand menu.
+
+13. Click on "Shared Folder" and you should see the AACB Method Evaluation Tools Excel Add-in listed. Click on the add-in and then click "Add" to load it into Excel.
+
+image:addin-shared-folder.png[]
