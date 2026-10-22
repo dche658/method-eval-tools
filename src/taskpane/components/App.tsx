@@ -8,6 +8,7 @@ import * as React from "react";
 import BoxCox from "./BoxCox";
 import RefInt from "./RefInt";
 import ComparisonPane from "./ComparisonPane";
+import RefLim from "./RefLim";
 
 import {
   makeStyles,
@@ -151,6 +152,14 @@ const App: React.FC<AppProps> = (props: AppProps) => {
             <AccordionPanel>
               <Card>
                 <BoxCox notify={notify} uitext={props.uitext} />
+              </Card>
+            </AccordionPanel>
+          </AccordionItem>
+          <AccordionItem value="3">
+            <AccordionHeader>{props.uitext["h_ri_reflim"]}</AccordionHeader>
+            <AccordionPanel>
+              <Card>
+                <RefLim notify={notify} uitext={props.uitext} />
               </Card>
             </AccordionPanel>
           </AccordionItem>
