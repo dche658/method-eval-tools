@@ -1,7 +1,13 @@
 /** @module reflim
  * 
- * Javascript implimentation of reflimR package for R.
+ * Typescript implimentation of reflimR package for R.
+ * 
+ * Hoffmann G, Klawitter S, Trulson I, Adler J, Holdenrieder S, Klawonn F. A Novel Tool 
+ * for the Rapid and Transparent Verification of Reference Intervals in Clinical 
+ * Laboratories. Journal of clinical medicine. 2024;13(15). 
+ * https://cran.r-project.org/web/packages/reflimR/index.html
  *
+ * @author Doug Chesher
  */
 
 import { arange, seq, quantiles, min, max, normal, median, quartiles } from 'jstat-esm';
