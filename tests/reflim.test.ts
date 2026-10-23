@@ -3,7 +3,7 @@ import {
     bowley, log, lognorm,
     iboxplot, interpretation,
     adjust_digits, permissible_uncertainty,
-    range, reflim, round, seq,
+    reflim, round,
     truncated_qqplot
 } from "../src/reflim";
 
@@ -124,23 +124,6 @@ test("iBoxPlot", () => {
     expect(ibp["truncation.points"].lower).toEqual(35.0);
     expect(ibp["truncation.points"].upper).toEqual(86.0);
     //console.log(ibp)
-});
-
-test("seq", () => {
-    const arr = seq(1, 10, 0.1);
-    expect(arr.length).toEqual(91);
-    expect(arr[0]).toEqual(1);
-    expect(arr[90]).toEqual(10);
-    expect(arr[1]).toEqual(1.1);
-    expect(arr[89]).toEqual(9.9);
-    //console.log(arr)
-});
-
-test("range", () => {
-    const arr = range(1,10,90);
-    expect(arr.length).toEqual(90);
-    expect(arr[0]).toEqual(1);
-    expect(arr[89]).toEqual(10);
 });
 
 test("truncated_qqplot", () => {

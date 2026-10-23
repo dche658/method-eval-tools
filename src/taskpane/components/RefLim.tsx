@@ -7,11 +7,9 @@ import RangeInput from "./RangeInput";
 import {
     lognorm,
     reflim,
-    QQPlotResult,
-    ConfIntResult,
     RefLimResult,
-    InterpResult
 } from "../../reflim";
+import { addRefLimCharts, getHistogramData, getXYData } from "../../ref_lim_charts";
 
 interface RefLimProps {
     notify: (intent: string, message: string) => void;
@@ -177,6 +175,21 @@ export default function RefLim(props: RefLimProps) {
                 const reportRange = resultRange.getResizedRange(deltaRows, deltaCols);
                 reportRange.values = rpt;
                 await context.sync();
+
+                if (plot_it) {
+                    const histogramData = getHistogramData(data, res, true);
+                    const xyData = getXYData(res, histogramData.from, histogramData.to);
+            
+                    //Create chart
+                    await addRefLimCharts(
+                        chartRangeValue,
+                        histogramData.breaks,
+                        histogramData.hist,
+                        xyData.x,
+                        xyData.y,
+                        res
+                    );
+                }
 
             } catch (error) {
                 console.log(error);

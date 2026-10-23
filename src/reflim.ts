@@ -4,7 +4,7 @@
  *
  */
 
-import { quantiles, min, max, normal, median, quartiles } from 'jstat-esm';
+import { arange, seq, quantiles, min, max, normal, median, quartiles } from 'jstat-esm';
 
 import { LeastSquaresRegression } from './lsregression';
 
@@ -122,44 +122,6 @@ function round(x: number, digits: number) {
     return Math.round(x * Math.pow(10, digits)) / Math.pow(10, digits);
 }
 
-/**
- * Generate a sequence of values spanning from and to with the specified steps.
- * @param from 
- * @param to 
- * @param step 
- * @returns 
- */
-function seq(from: number, to: number, step: number): number[] {
-    if (from < to && step <= 0) {
-        throw new Error(`Cannot create sequence from ${from} to ${to} with step ${step}.`);
-    }
-    if (from > to && step >= 0) {
-        throw new Error(`Cannot create sequence from ${from} to ${to} with step ${step}.`);
-    }
-    let n = Math.floor((to - from) / step);
-    let vals: number[] = []
-    for (let i = 0; i <= n; i++) {
-        vals.push(from + (i * step));
-    }
-    return vals;
-}
-
-/**
- * Generate a sequence of n equally spaced values inclusive of from and to. 
- * @param from 
- * @param to 
- * @param n 
- * @returns 
- */
-function range(from: number, to: number, n: number): number[] {
-    const step = (to - from) / (n - 1);
-    const vals: number[] = [];
-    for (let i = 0; i < n; i++) {
-        vals.push(from + (i * step));
-    }
-    return vals;
-}
-
 function iboxplot(x: number[], lognormal: boolean | null = null, perc_trunc = 2.5, apply_rounding = true) {
     let xx = x;
     const digits = adjust_digits(median(x)).digits;
@@ -252,8 +214,8 @@ function truncated_qqplot(x_trunc: number[], lognormal: boolean | null = null, p
     if (lognormal) {
         x_trunc = x_trunc.map(x => Math.log(x));
     }
-    let p1 = range(perc_trunc / 100, 1 - perc_trunc / 100, n_quantiles);
-    let p2 = range(0, 1, n_quantiles);
+    let p1: number[] = seq(perc_trunc / 100, 1 - perc_trunc / 100, n_quantiles);
+    let p2: number[] = seq(0, 1, n_quantiles);
     //console.log(p1,p2);
     let x_ax: number[] = p1.map(x => normal.inv(x, 0, 1));
     let y_ax: number[] = quantiles(x_trunc, p2, 1, 1); 
@@ -263,7 +225,7 @@ function truncated_qqplot(x_trunc: number[], lognormal: boolean | null = null, p
     //console.log(x_ax, y_ax);
     let central_part_from = Math.floor(0.05 * n_quantiles);
     let central_part_to = Math.ceil(0.95 * n_quantiles);
-    let central_part = seq(central_part_from, central_part_to, 1);
+    let central_part: number[] = arange(central_part_from, central_part_to+1, 1);
     //console.log(central_part);
     let y: number[] = central_part.map(i => y_ax[i-1]);
     let x: number[] = central_part.map(i => x_ax[i-1]);
@@ -301,11 +263,12 @@ function truncated_qqplot(x_trunc: number[], lognormal: boolean | null = null, p
     // console.log(x_ax);
     // console.log(y_ax);
     if (plot_it) {
-        const ll = result.lower_lim;
-        const ul = result.upper_lim;
+        const ll = lognormal ? Math.log(result.lower_lim) : result.lower_lim;
+        const ul = lognormal ? Math.log(result.upper_lim) : result.upper_lim;
         const diff = ul - ll;
+        const sig = adjust_digits(ll).digits;
         result.chart_data.xlim = [-3, 3];
-        result.chart_data.ylim = [ll - 0.2 * diff, ul + 0.2 * diff];
+        result.chart_data.ylim = [round(ll - 0.2 * diff, sig), round(ul + 0.2 * diff, sig)];
     }
     return result;
 }
@@ -621,8 +584,8 @@ function reflim(x: number[], lognormal: boolean | null = null, targets: number[]
         result.dev_lim = ip.dev_lim;
         result.interpretation = ip;
     }
-    result.stats.mean = res_qq.mean;
-    result.stats.sd = res_qq.sd;
+    result.stats.mean = round(res_qq.mean, 3);
+    result.stats.sd = round(res_qq.sd,3);
     result.stats.n_total = n;
     result.stats.n_trunc = n_trunc;
     result.lognormal = lognormal;
@@ -639,16 +602,16 @@ export {
     bowley,
     iboxplot,
     interpretation,
+    iqr,
     log,
     lognorm,
     permissible_uncertainty,
-    range,
     reflim,
     round,
-    seq,
     truncated_qqplot,
     QQPlotResult,
     ConfIntResult,
     RefLimResult,
-    InterpResult
+    InterpResult,
+    Limits
 }
