@@ -131,8 +131,8 @@
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="Get started with the method evaluation tools."/>
         <bt:String id="CommandsGroup.Label" DefaultValue="ME Tools"/>
-        <bt:String id="TaskpaneButton.Label" DefaultValue="Basic Tools"/>
-        <bt:String id="RefIntTaskpaneButton.Label" DefaultValue="Utilities"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Evaluation"/>
+        <bt:String id="RefIntTaskpaneButton.Label" DefaultValue="RI Utilities"/>
         <bt:String id="Functions.Namespace" DefaultValue="METOOLS"/>
       </bt:ShortStrings>
       <bt:LongStrings>

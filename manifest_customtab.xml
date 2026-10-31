@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<OfficeApp xmlns="http://schemas.microsoft.com/office/appforoffice/1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bt="http://schemas.microsoft.com/office/officeappbasictypes/1.0" xmlns:ov="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="TaskPaneApp">
+  <Id>2fd3ebf4-8c70-447c-9ebe-40fa41f89128</Id>
+  <Version>1.0.0</Version>
+  <ProviderName>Australasian Association for Clinical Biochemistry and Laboratory Medicine</ProviderName>
+  <DefaultLocale>en-AU</DefaultLocale>
+  <DisplayName DefaultValue="AACB Method Evaluation Tools"/>
+  <Description DefaultValue="Tools for clinical laboratory method evaluation"/>
+  <IconUrl DefaultValue="https://metools.aacb.asn.au/assets/icon-32.png"/>
+  <HighResolutionIconUrl DefaultValue="https://metools.aacb.asn.au/assets/icon-64.png"/>
+  <SupportUrl DefaultValue="https://metools.aacb.asn.au/help"/>
+  <AppDomains>
+    <AppDomain>https://localhost:3000</AppDomain>
+    <!-- <AppDomain>https://metools.aacb.asn.au</AppDomain> -->
+  </AppDomains>
+  <Hosts>
+    <Host Name="Workbook"/>
+  </Hosts>
+  <Requirements>
+    <Sets DefaultMinVersion="1.1">
+      <Set Name="SharedRuntime" MinVersion="1.1"/>
+    </Sets>
+  </Requirements>
+  <DefaultSettings>
+    <SourceLocation DefaultValue="https://localhost:3000/taskpane.html"/>
+    <!-- <SourceLocation DefaultValue="https://metools.aacb.asn.au/taskpane.html"/> -->
+  </DefaultSettings>
+  <Permissions>ReadWriteDocument</Permissions>
+  <VersionOverrides xmlns="http://schemas.microsoft.com/office/taskpaneappversionoverrides" xsi:type="VersionOverridesV1_0">
+    <Hosts>
+      <Host xsi:type="Workbook">
+        <Runtimes>
+          <Runtime resid="Taskpane.Url" lifetime="long"/>
+        </Runtimes>
+        <AllFormFactors>
+          <ExtensionPoint xsi:type="CustomFunctions">
+            <Script>
+              <SourceLocation resid="Functions.Script.Url"/>
+            </Script>
+            <Page>
+              <SourceLocation resid="Taskpane.Url"/>
+            </Page>
+            <Metadata>
+              <SourceLocation resid="Functions.Metadata.Url"/>
+            </Metadata>
+            <Namespace resid="Functions.Namespace"/>
+          </ExtensionPoint>
+        </AllFormFactors>
+        <DesktopFormFactor>
+          <GetStarted>
+            <Title resid="GetStarted.Title"/>
+            <Description resid="GetStarted.Description"/>
+            <LearnMoreUrl resid="GetStarted.LearnMoreUrl"/>
+          </GetStarted>
+          <FunctionFile resid="Taskpane.Url"/>
+          <ExtensionPoint xsi:type="PrimaryCommandSurface">
+            <CustomTab id="TabMETools">
+              <Group id="CommandsGroup">
+                <Label resid="CommandsGroup.Label"/>
+                <Icon>
+                  <bt:Image size="16" resid="Icon.16x16"/>
+                  <bt:Image size="32" resid="Icon.32x32"/>
+                  <bt:Image size="80" resid="Icon.80x80"/>
+                </Icon>
+                <Control xsi:type="Button" id="TaskpaneButton">
+                  <Label resid="TaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="TaskpaneButton.Label"/>
+                    <Description resid="TaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="Icon.16x16"/>
+                    <bt:Image size="32" resid="Icon.32x32"/>
+                    <bt:Image size="80" resid="Icon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>ButtonId1</TaskpaneId>
+                    <SourceLocation resid="Taskpane.Url"/>
+                  </Action>
+                </Control>
+                <Control xsi:type="Button" id="RefIntTaskpaneButton">
+                  <Label resid="RefIntTaskpaneButton.Label"/>
+                  <Supertip>
+                    <Title resid="RefIntTaskpaneButton.Label"/>
+                    <Description resid="RefIntTaskpaneButton.Tooltip"/>
+                  </Supertip>
+                  <Icon>
+                    <bt:Image size="16" resid="RIIcon.16x16"/>
+                    <bt:Image size="32" resid="RIIcon.32x32"/>
+                    <bt:Image size="80" resid="RIIcon.80x80"/>
+                  </Icon>
+                  <Action xsi:type="ShowTaskpane">
+                    <TaskpaneId>RefIntTaskpane</TaskpaneId>
+                    <SourceLocation resid="RefInt.Url"/>
+                  </Action>
+                </Control>
+              </Group>
+              <Label resid="CustomTab.Label"/>
+            </CustomTab>
+          </ExtensionPoint>
+        </DesktopFormFactor>
+      </Host>
+    </Hosts>
+    <Resources>
+      <bt:Images>
+        <bt:Image id="Icon.16x16" DefaultValue="https://localhost:3000/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://localhost:3000/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://localhost:3000/assets/icon-80.png"/>
+        <bt:Image id="RIIcon.16x16" DefaultValue="https://localhost:3000/assets/ri-icon-16.png"/>
+        <bt:Image id="RIIcon.32x32" DefaultValue="https://localhost:3000/assets/ri-icon-32.png"/>
+        <bt:Image id="RIIcon.80x80" DefaultValue="https://localhost:3000/assets/ri-icon-80.png"/>
+
+        <!-- <bt:Image id="Icon.16x16" DefaultValue="https://metools.aacb.asn.au/assets/icon-16.png"/>
+        <bt:Image id="Icon.32x32" DefaultValue="https://metools.aacb.asn.au/assets/icon-32.png"/>
+        <bt:Image id="Icon.80x80" DefaultValue="https://metools.aacb.asn.au/assets/icon-80.png"/>
+        <bt:Image id="RIIcon.16x16" DefaultValue="https://metools.aacb.asn.au/assets/ri-icon-16.png"/>
+        <bt:Image id="RIIcon.32x32" DefaultValue="https://metools.aacb.asn.au/assets/ri-icon-32.png"/>
+        <bt:Image id="RIIcon.80x80" DefaultValue="https://metools.aacb.asn.au/assets/ri-icon-80.png"/> -->
+      </bt:Images>
+      <bt:Urls>
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://localhost:3000/help"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/taskpane.html"/>
+        <bt:Url id="RefInt.Url" DefaultValue="https://localhost:3000/refint.html"/>
+        <bt:Url id="Functions.Script.Url" DefaultValue="https://localhost:3000/functions.js"/>
+        <bt:Url id="Functions.Metadata.Url" DefaultValue="https://localhost:3000/functions.json"/>
+        <!-- <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://metools.aacb.asn.au/help"/>
+        <bt:Url id="Taskpane.Url" DefaultValue="https://metools.aacb.asn.au/taskpane.html"/>
+        <bt:Url id="RefInt.Url" DefaultValue="https://metools.aacb.asn.au/refint.html"/>
+        <bt:Url id="Functions.Script.Url" DefaultValue="https://metools.aacb.asn.au/functions.js"/>
+        <bt:Url id="Functions.Metadata.Url" DefaultValue="https://metools.aacb.asn.au/functions.json"/> -->
+      </bt:Urls>
+      <bt:ShortStrings>
+        <bt:String id="GetStarted.Title" DefaultValue="Get started with the method evaluation tools."/>
+        <bt:String id="CustomTab.Label" DefaultValue="ME Tools"/>
+        <bt:String id="CommandsGroup.Label" DefaultValue="ME Tools"/>
+        <bt:String id="TaskpaneButton.Label" DefaultValue="Basic Tools"/>
+        <bt:String id="RefIntTaskpaneButton.Label" DefaultValue="Utilities"/>
+        <bt:String id="Functions.Namespace" DefaultValue="METOOLS"/>
+      </bt:ShortStrings>
+      <bt:LongStrings>
+        <bt:String id="GetStarted.Description" DefaultValue="METools loaded successfully. Go to the ME Tools tab and click the 'Basic Tools' button to get started."/>
+        <bt:String id="TaskpaneButton.Tooltip" DefaultValue="Method Evaluations Tools Taskpane"/>
+        <bt:String id="RefIntTaskpaneButton.Tooltip" DefaultValue="Method Evaluation Utilities Taskpane"/>
+      </bt:LongStrings>
+    </Resources>
+  </VersionOverrides>
+</OfficeApp>
