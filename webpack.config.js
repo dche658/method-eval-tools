@@ -26,6 +26,10 @@ module.exports = async (env, options) => {
         import: ["./src/taskpane/index.tsx", "./src/taskpane/taskpane.html"],
         dependOn: "react",
       },
+      refint: {
+        import: ["./src/refint/index.tsx", "./src/refint/refint.html"],
+        dependOn: "react",
+      },
       commands: "./src/commands/commands.ts",
       functions: "./src/functions/functions.ts",
     },
@@ -72,6 +76,11 @@ module.exports = async (env, options) => {
         filename: "taskpane.html",
         template: "./src/taskpane/taskpane.html",
         chunks: ["polyfill", "taskpane", "functions", "react"],
+      }),
+      new HtmlWebpackPlugin({
+        filename: "refint.html",
+        template: "./src/refint/refint.html",
+        chunks: ["polyfill", "refint", "functions", "react"],
       }),
       new HtmlWebpackPlugin({
         filename: "commands.html",

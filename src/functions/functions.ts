@@ -54,15 +54,15 @@ export function shapirowilkw(x: number[][]): any[][] {
 
 /**
  * Dixon-Reed test for outliers
- * 
- * Reed AH, Henry RJ, Mason WB. Influence of statistical method 
+ *
+ * Reed AH, Henry RJ, Mason WB. Influence of statistical method
  * used on the resulting estimate of normal range. Clinical Chemistry
  * 1971;17:275-284.
- * 
+ *
  * @customfunction DIXONREED
  * @param {number[][]} x array of values
  * @returns {any[][]} Array containing ratio and outlier
- * 
+ *
  */
 export function dixonreed(x: number[][]): any[][] {
   const arr: number[] = [];
@@ -73,18 +73,22 @@ export function dixonreed(x: number[][]): any[][] {
       arr.push(value);
     });
   });
-  arr.sort((a,b) => a - b);
+  arr.sort((a, b) => a - b);
   let r = 0;
   const n = arr.length - 1;
   if (arr.length > 2) {
     //Check for low outliers
     r = (arr[1] - arr[0]) / (arr[n] - arr[0]);
     ratios.push(r);
-    outliers.push(r > 1/3 ? arr[n]: undefined);
+    outliers.push(r > 1 / 3 ? arr[n] : undefined);
     //Check for high outliers
-    r = (arr[n] - arr[n-1]) / (arr[n] - arr[0]);
+    r = (arr[n] - arr[n - 1]) / (arr[n] - arr[0]);
     ratios.push(r);
-    outliers.push(r > 1/3 ? arr[n]: undefined);
+    outliers.push(r > 1 / 3 ? arr[n] : undefined);
   }
-  return [["Low", "High"],[ratios[0],ratios[1]],[outliers[0], outliers[1]]];
+  return [
+    ["Low", "High"],
+    [ratios[0], ratios[1]],
+    [outliers[0], outliers[1]],
+  ];
 }

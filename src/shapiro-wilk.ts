@@ -162,14 +162,14 @@ import { normal } from "jstat-esm";
  *  http://www.r-project.org/Licenses/
  */
 
-function sign(x:number): number {
+function sign(x: number): number {
   if (x == 0) return 0;
   return x > 0 ? 1 : -1;
 }
 
 export interface ShapiroWilkResult {
-  w:number | undefined,
-  p: number | undefined
+  w: number | undefined;
+  p: number | undefined;
 }
 /**
  * Shapiro-Wilk W
@@ -177,7 +177,7 @@ export interface ShapiroWilkResult {
  * @returns
  */
 export function ShapiroWilkW(x: number[]): ShapiroWilkResult {
-  function poly(cc:number[], nord:number, x:number) {
+  function poly(cc: number[], nord: number, x: number) {
     /* Algorithm AS 181.2	Appl. Statist.	(1982) Vol. 31, No. 2
         Calculates the algebraic polynomial of order nord-1 with array of coefficients cc.
         Zero order coefficient is cc(1) = cc[0] */
@@ -196,7 +196,7 @@ export function ShapiroWilkW(x: number[]): ShapiroWilkResult {
     return a - b;
   });
   var n = x.length;
-  if (n < 3) return {w: undefined, p: undefined};
+  if (n < 3) return { w: undefined, p: undefined };
   var nn2 = Math.floor(n / 2);
   var a = new Array(Math.floor(nn2) + 1); /* 1-based */
 
@@ -260,7 +260,7 @@ export function ShapiroWilkW(x: number[]): ShapiroWilkResult {
   range = x[n - 1] - x[0];
   if (range < small) {
     console.log("range is too small!");
-    return {w: undefined, p: undefined};
+    return { w: undefined, p: undefined };
   }
 
   /*	Check for correct sort order on range - scaled X */
@@ -272,7 +272,7 @@ export function ShapiroWilkW(x: number[]): ShapiroWilkResult {
     xi = x[i] / range;
     if (xx - xi > small) {
       console.log("xx - xi is too big.", xx - xi);
-      return {w: undefined, p: undefined};
+      return { w: undefined, p: undefined };
     }
     sx += xi;
     i++;
@@ -281,7 +281,7 @@ export function ShapiroWilkW(x: number[]): ShapiroWilkResult {
   }
   if (n > 5000) {
     console.log("n is too big!");
-    return {w: undefined, p: undefined};
+    return { w: undefined, p: undefined };
   }
 
   /*	Calculate W statistic as squared correlation
@@ -314,7 +314,7 @@ export function ShapiroWilkW(x: number[]): ShapiroWilkResult {
     var stqr = 1.0471975511966; /* = asin(sqrt(3/4)) */
     pw = pi6 * (Math.asin(Math.sqrt(w)) - stqr);
     if (pw < 0) pw = 0;
-    return {w:w, p:pw};
+    return { w: w, p: pw };
   }
   y = Math.log(w1);
   xx = Math.log(an);
@@ -322,7 +322,7 @@ export function ShapiroWilkW(x: number[]): ShapiroWilkResult {
     gamma = poly(g, 2, an);
     if (y >= gamma) {
       pw = 1e-99; /* an "obvious" value, was 'small' which was 1e-19f */
-      return {w:w, p:pw};
+      return { w: w, p: pw };
     }
     y = -Math.log(gamma - y);
     m = poly(c3, 4, an);
@@ -339,5 +339,5 @@ export function ShapiroWilkW(x: number[]): ShapiroWilkResult {
   pw = 1 - normal.cdf(y, m, s);
   //console.log(`pw=${pw}`)
 
-  return {w: w, p: pw};
+  return { w: w, p: pw };
 }

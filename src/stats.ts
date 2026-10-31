@@ -13,7 +13,7 @@ interface DensityResult {
 
 /**
  * Computes Kernel Density Estimation (KDE) equivalent to R's stats::density(x)
- * 
+ *
  * @param data - Array of numeric observations.
  * @param n - Number of equally spaced points at which the density is estimated (Default: 512).
  * @returns Object containing the grid points (x), density coordinates (y), and bandwidth (bw).
@@ -61,13 +61,13 @@ export function density(data: number[], n: number = 512): DensityResult {
   // 5. Evaluate the density at each grid point
   for (let i = 0; i < n; i++) {
     const x: number = from + i * step;
-    
+
     // Average the kernel results for all observations relative to the current grid point
     let sum = 0;
     for (let j = 0; j < len; j++) {
       sum += gaussianKernel((x - data[j]) / bw);
     }
-    
+
     xGrid.push(x);
     // Divide by (sample size * bandwidth) to ensure total area under curve equals 1
     yDensity.push(sum / (len * bw));

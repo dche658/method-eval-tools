@@ -5,10 +5,7 @@
  *
  */
 import * as React from "react";
-import BoxCox from "./BoxCox";
-import RefInt from "./RefInt";
 import ComparisonPane from "./ComparisonPane";
-import RefLim from "./RefLim";
 
 import {
   makeStyles,
@@ -135,39 +132,6 @@ const App: React.FC<AppProps> = (props: AppProps) => {
     );
   });
 
-  const Utilities = React.memo(() => {
-    return (
-      <div role="tabpanel" aria-labelledby="Utilities">
-        <Accordion defaultOpenItems="1">
-          <AccordionItem value="1">
-            <AccordionHeader>{props.uitext["h_ref_int"]}</AccordionHeader>
-            <AccordionPanel>
-              <Card>
-                <RefInt notify={notify} uitext={props.uitext} />
-              </Card>
-            </AccordionPanel>
-          </AccordionItem>
-          <AccordionItem value="2">
-            <AccordionHeader>{props.uitext["h_box_cox"]}</AccordionHeader>
-            <AccordionPanel>
-              <Card>
-                <BoxCox notify={notify} uitext={props.uitext} />
-              </Card>
-            </AccordionPanel>
-          </AccordionItem>
-          <AccordionItem value="3">
-            <AccordionHeader>{props.uitext["h_ri_reflim"]}</AccordionHeader>
-            <AccordionPanel>
-              <Card>
-                <RefLim notify={notify} uitext={props.uitext} />
-              </Card>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-      </div>
-    );
-  });
-
   const Help = React.memo(() => {
     return (
       <div role="tabpanel" aria-labelledby="Help">
@@ -213,16 +177,12 @@ const App: React.FC<AppProps> = (props: AppProps) => {
         <Tab id="Evaluation" value="evaluation">
           {props.uitext["tab_evaluation"]}
         </Tab>
-        <Tab id="Utilities" value="utilities">
-          {props.uitext["tab_utilities"]}
-        </Tab>
         <Tab id="Help" value="help">
           {props.uitext["tab_help"]}
         </Tab>
       </TabList>
       <div className={styles.panels}>
         {selectedTabValue === "evaluation" && <Evaluation />}
-        {selectedTabValue === "utilities" && <Utilities />}
         {selectedTabValue === "help" && <Help />}
       </div>
     </div>

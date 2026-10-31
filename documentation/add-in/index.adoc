@@ -34,9 +34,10 @@ image::addin-install.png[]
 Once the add-in is loaded, a new *"ME Tools"* group will appear in the Home tab
 of the Excel ribbon. 
 
-* *Launch Taskpane:* Click the "Basic Tools" button to toggle the taskpane. 
+* *Launch Basic Tools:* Click the "Basic Tools" button to toggle the taskpane.
+* *Launch Utilities:* Click the "Utilities" button to open the utilities taskpane.
 
-* *Navigation:* Use the taskpane menu to select specific analytical modules
+* *Navigation:* Use the Basic Tools taskpane tabs to switch between evaluation and help.
 
 .Taskpane
 image::excel-with-taskpane.png[]
@@ -231,8 +232,9 @@ image::analyse-precision-cells.png[]
 
 === Additional Utilities
 
-The clinical laboratory method evaluation Excel add-in comes with a couple of 
-utilities that are provided in the hope that they will be helpful for users.
+The utilities taskpane provides reference interval estimation, Box-Cox
+transformation, and Hoffmann RefLim tools. Click the "Utilities" button in the
+ME Tools ribbon group to open it.
 
 However, there are risks and limitations associated with their use that
 users need to be aware of in order to avoid misuse or misinterpretation. 
