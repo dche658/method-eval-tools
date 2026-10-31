@@ -1,3 +1,5 @@
+/* global console */
+
 /** @module regession
  * Small library for performing regression analysis on data from method
  * comparison studies.

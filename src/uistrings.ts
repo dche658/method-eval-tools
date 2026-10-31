@@ -116,7 +116,8 @@ export class UIStrings {
     lbl_ci_alpha: "Confidence Limits Alpha",
     tip_ci_alpha: "Default value is 0.10 for 90% confidence interval.",
     // Reference Limits
-    inf_reflim: "Determine or verify reference intervals using the technique of Hoffmann et. al. 2024.",
+    inf_reflim:
+      "Determine or verify reference intervals using the technique of Hoffmann et. al. 2024.",
     lbl_data_range: "Data Range",
     msg_ridata_range: "Must be a valid Excel range containing numeric values. e.g., A2:A26",
     lbl_tar_low_range: "Target Lower Limit",
@@ -147,7 +148,7 @@ export class UIStrings {
     lbl_ri_lambda: "Lambda for UM",
     tip_ri_tar: "Target value or cell reference to the target value",
     tip_ri_resrange: "Top left cell for the results",
-    tip_ri_chtrange: "Top left cell for the charts. Leave blank if charts not required."
+    tip_ri_chtrange: "Top left cell for the charts. Leave blank if charts not required.",
   };
   // implement at a later date if decide to support multiple languages
   // private static JA = {
