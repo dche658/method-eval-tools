@@ -212,8 +212,6 @@ interface QQPlotResult {
   };
 }
 
-/* global console */
-
 function truncated_qqplot(
   x_trunc: number[],
   lognormal: boolean | null = null,

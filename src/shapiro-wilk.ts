@@ -1,5 +1,3 @@
-/* global console */
-
 /** File downloaded from
  * https://github.com/rniwa/js-shapiro-wilk
  * 25/1/2026
