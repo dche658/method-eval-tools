@@ -80,7 +80,7 @@ export function dixonreed(x: number[][]): any[][] {
     //Check for low outliers
     r = (arr[1] - arr[0]) / (arr[n] - arr[0]);
     ratios.push(r);
-    outliers.push(r > 1 / 3 ? arr[n] : undefined);
+    outliers.push(r > 1 / 3 ? arr[0] : undefined);
     //Check for high outliers
     r = (arr[n] - arr[n - 1]) / (arr[n] - arr[0]);
     ratios.push(r);
