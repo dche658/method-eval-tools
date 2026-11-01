@@ -102,7 +102,7 @@ const useStyles = makeStyles({
     minHeight: "100vh",
   },
   container: {
-    diplay: "flex",
+    display: "flex",
     flexDirection: "column",
     justifyContent: "center",
   },
@@ -153,7 +153,9 @@ interface InputData {
  * Read data from the excel range and copy to an array. If there is more than one column
  * then calculate the mean.
  */
-function processRangeData(range: Excel.Range): InputData {
+export function processRangeData(
+  range: Pick<Excel.Range, "rowCount" | "columnCount" | "values">
+): InputData {
   let means: number[] = [];
   let size = 0;
 
@@ -178,6 +180,12 @@ function processRangeData(range: Excel.Range): InputData {
   if (range.columnCount === 2) {
     // Process two columns
     for (let i = 0; i < range.rowCount; i++) {
+      for (let j = 0; j < range.columnCount; j++) {
+        const value = range.values[i][j];
+        if (typeof value === "number" && !Number.isFinite(value)) {
+          throw new RangeError(`Range contains a non-finite number at row ${i + 1}, column ${j + 1}.`);
+        }
+      }
       //console.log(i, typeof range.values[i][0], typeof range.values[i][1]);
       if (typeof range.values[i][0] === "number" && typeof range.values[i][1] === "number") {
         x1.push(range.values[i][0]);
@@ -192,19 +200,29 @@ function processRangeData(range: Excel.Range): InputData {
         size++;
       }
     }
-    // Calculate standard deviation and coefficient of variation of the replicates.
-    sd = Math.sqrt(devsq.reduce((a, b) => a + b, 0) / (size - 1));
-    mean = means.reduce((a, b) => a + b, 0) / size;
-    cv = sd / mean;
   } else if (range.columnCount === 1) {
     // Process single column
     for (let i = 0; i < range.rowCount; i++) {
+      const value = range.values[i][0];
+      if (typeof value === "number" && !Number.isFinite(value)) {
+        throw new RangeError(`Range contains a non-finite number at row ${i + 1}, column 1.`);
+      }
       if (typeof range.values[i][0] === "number") {
         x1.push(range.values[i][0]);
         means.push(range.values[i][0]);
         size++;
       }
     }
+  }
+  if (size < 2) {
+    throw new RangeError("At least two numeric observations are required.");
+  }
+  if (range.columnCount === 2) {
+    // Calculate standard deviation and coefficient of variation of the replicates.
+    sd = Math.sqrt(devsq.reduce((a, b) => a + b, 0) / (size - 1));
+    mean = means.reduce((a, b) => a + b, 0) / size;
+    cv = sd / mean;
+  } else {
     mean = means.reduce((a, b) => a + b, 0) / size;
   }
   return { means: means, x1: x1, x2: x2, devsq: devsq, sd: sd, cv: cv, size: size, mean: mean };
