@@ -151,7 +151,7 @@ test("reflim", () => {
     const res = reflim(alp, true, [30,110])
     expect(res.limits.lower_lim).toBeCloseTo(32.8);
     expect(res.limits.upper_lim).toBeCloseTo(92.2);
-    console.log(res);
+    //console.log(res);
 });
 
 test("Miscellaneous", () => {
