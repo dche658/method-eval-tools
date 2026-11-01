@@ -42,7 +42,6 @@ export default function Qualitative(props: QualitativeProps) {
   // Run the qualitative data comparison
   const qualComparison = async () => {
     await Excel.run(async (context) => {
-      //console.log("Running qualitative data comparison...");
       try {
         const currentWorksheet = context.workbook.worksheets.getActiveWorksheet();
 
@@ -56,37 +55,26 @@ export default function Qualitative(props: QualitativeProps) {
         if (xRange.rowCount !== yRange.rowCount) {
           throw new Error("X and Y ranges must have the same number of rows");
         }
-        if (xRange.columnCount !== 1 || yRange.columnCount !== 1) {
-          throw new Error("X and Y ranges must each contain exactly one column");
-        }
-
-        const x: string[] = [];
-        const y: string[] = [];
+        let x: string[] = [];
+        let y: string[] = [];
         for (let i = 0; i < xRange.rowCount; i++) {
-          const xValue = xRange.values[i][0];
-          const yValue = yRange.values[i][0];
-          const xIsBlank = xValue === null || xValue === "";
-          const yIsBlank = yValue === null || yValue === "";
-          //console.log(`x = ${xValue}; y = ${yValue}`);
-
-          if (xIsBlank && yIsBlank) {
-            continue;
+          if (xRange.values[i][0] !== null && xRange.values[i][0] !== "") {
+            if (typeof xRange.values[i][0] === "string") {
+              x.push(xRange.values[i][0]);
+            } else if (typeof xRange.values[i][0] === "number") {
+              x.push(xRange.values[i][0].toString());
+            }
           }
-          if (xIsBlank || yIsBlank) {
-            throw new Error(`Both X and Y values must be present in row ${i + 1}`);
+          if (yRange.values[i][0] !== null && yRange.values[i][0] !== "") {
+            if (typeof yRange.values[i][0] === "string") {
+              y.push(yRange.values[i][0]);
+            } else if (typeof yRange.values[i][0] === "number") {
+              y.push(yRange.values[i][0].toString());
+            }
           }
-          if (
-            (typeof xValue !== "string" && typeof xValue !== "number") ||
-            (typeof yValue !== "string" && typeof yValue !== "number")
-          ) {
-            throw new Error(`X and Y values in row ${i + 1} must be text or numbers`);
-          }
-
-          x.push(xValue.toString());
-          y.push(yValue.toString());
         }
-        if (x.length === 0) {
-          throw new Error("X and Y ranges must contain at least one paired value");
+        if (x.length !== y.length) {
+          throw new Error("X and Y ranges must have the same number of rows");
         }
         const contingencyBuilder = new QualitativeContengencyTableBuilder();
         const contingencyTable = contingencyBuilder.build(x, y);
