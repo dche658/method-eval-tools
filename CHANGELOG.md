@@ -15,6 +15,13 @@ Note that this project **does not** adhere to [Semantic Versioning](https://semv
 
 ### Fixed
 
+## [0.3.0] - 2026-11-02
+
+### Added
+
+Added a new utility to the add-in that allows users to verify or determine reference 
+intervals using a javascript implementation of the Hoffmann G. 2024 method.
+
 ## [0.2.0] - 2026-06-18
 
 ### Changed
@@ -32,3 +39,4 @@ submitted to the Microsoft marketplace.
 
 [0.1.0]: https://github.com/dche658/method-eval-tools/releases/tag/0.1.0
 [0.2.0]: https://github.com/dche658/method-eval-tools/releases/tag/0.2.0
+[0.3.0]: https://github.com/dche658/method-eval-tools/releases/tag/0.3.0
