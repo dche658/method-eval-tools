@@ -93,5 +93,25 @@ The addresses for a support URL, a privacy policy URL, and an end user license a
 
 - Application Support URL: https://metools.aacb.asn.au/help/
 - AACB Support URL: https://aacb.asn.au/AACB/AACB/Contact-Us.aspx
-- Privacy Policy URL: ?? Note, no user information is collected by this add-in.
-- End User License Agreement (EULA) URL: 
+- Privacy Policy URL: https://metools.aacb.asn.au/help/privacy_policy.html (Draft only. Needs review prior to submission)
+- End User License Agreement (EULA) URL: https://metools.aacb.asn.au/help/#_license
+
+### Step 7: Prepare your store listing with your team
+
+You need to provide the correct metadata indicating how you want your app to be listed in the store, including:
+
+**Your app name:**
+
+AACB Method Evaluation Tools
+
+**A short description of your app and its value.**
+
+Excel add-in to assist with validation or verification of clinical laboratory methods.
+
+**A long description of your app with HTML formatting.**
+
+This Excel add-in is targetted at clinical laboratory professionals, including scientists and pathologists. It delivers specialized statistical procedures used for verifying and validating clinical pathology methods. It provides essential calculations missing from native Excel functions, including Weighted Deming regression, Passing-Bablok regression, and variance component analysis. Additionally, the add-in features dedicated utilities to help users derive or verify clinical laboratory test reference intervals. The add-in has been developed by the Australsian Association for Clinical Biochemistry and Laboratory Medicine (AACB). A <a href="https://metools.chesher.id.au/assets/mvw.xlsx">method verification template</a> that makes optimal use of the add-in is available for download from the Add-in website.
+
+**Marketplace Icon**
+
+metools-icon-256.png (Sent separately)

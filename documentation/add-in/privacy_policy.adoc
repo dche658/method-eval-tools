@@ -1,0 +1,21 @@
+= Privacy Policy
+
+The AACB Method Evaluation Tools Excel Add-in has been developed by the Australasian Association for Clinical Biochemistry and Laboratory Medicine.
+
+We take privacy seriously. This add-in does not collect any information about you or your use of the add-in.
+
+The add-in does not:
+
+* collect personal information
+* collect usage data or analytics
+* store user data
+* upload workbook content to a server
+* track your activity
+* use cookies, advertising, or tracking tools
+* retain any data after the add-in is closed
+
+The add-in operates on the workbook content that is open in Excel on your device. Calculations are performed locally in Excel. No user data is held by the add-in or by the developers.
+
+Your data remains in your Excel workbook and is not transmitted anywhere by this add-in.
+
+If you have any questions about this privacy policy, please contact the Australasian Association for Clinical Biochemistry and Laboratory Medicine through their standard channels.
