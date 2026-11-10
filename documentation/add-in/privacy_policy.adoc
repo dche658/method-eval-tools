@@ -1,4 +1,7 @@
 = Privacy Policy
+:imagesdir: ./images
+:stylesdir: ./styles
+:stylesheet: custom.css
 
 The AACB Method Evaluation Tools Excel Add-in has been developed by the Australasian Association for Clinical Biochemistry and Laboratory Medicine.
 
