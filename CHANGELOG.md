@@ -15,6 +15,10 @@ Note that this project **does not** adhere to [Semantic Versioning](https://semv
 
 ### Fixed
 
+## [1.0.0] - 2026-11-12
+
+Publishing the first version of the add-in.
+
 ## [0.3.0] - 2026-11-02
 
 ### Added
@@ -33,10 +37,8 @@ Release 1.0.0
 
 ### Added
 
-Initial release of version 1 of the add-in. The add-in manifest file requires a minimum of version 1.0.
-It is intended that the package release and manifest will be brought in line when the add-in is 
-submitted to the Microsoft marketplace.
 
 [0.1.0]: https://github.com/dche658/method-eval-tools/releases/tag/0.1.0
 [0.2.0]: https://github.com/dche658/method-eval-tools/releases/tag/0.2.0
 [0.3.0]: https://github.com/dche658/method-eval-tools/releases/tag/0.3.0
+[1.0.0]: https://github.com/dche658/method-eval-tools/releases/tag/1.0.0

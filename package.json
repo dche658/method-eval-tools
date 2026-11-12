@@ -1,6 +1,6 @@
 {
   "name": "excel-addin-metools",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/dche658/method-eval-tools.git"
@@ -87,9 +87,9 @@
     "protobufjs@7.5.8": true,
     "keytar@7.9.0": true,
     "unrs-resolver@1.12.2": true,
-    "@microsoft/m365agentstoolkit-cli@1.1.17": true,
     "@parcel/watcher@2.6.0": true,
-    "core-js@3.50.0": true,
-    "core-js-pure@3.50.0": true
+    "@microsoft/m365agentstoolkit-cli@1.1.19": true,
+    "core-js@3.51.0": true,
+    "core-js-pure@3.51.0": true
   }
 }

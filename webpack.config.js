@@ -8,7 +8,7 @@ const webpack = require("webpack");
 // const { BundleAnalyzerPlugin } = require("webpack-bundle-analyzer");
 
 const urlDev = "https://localhost:3000/";
-const urlProd = "https://metools.chesher.id.au/"; // CHANGE THIS TO YOUR PRODUCTION DEPLOYMENT LOCATION
+const urlProd = "https://metools.aacb.asn.au/"; // CHANGE THIS TO YOUR PRODUCTION DEPLOYMENT LOCATION
 
 async function getHttpsOptions() {
   const httpsOptions = await devCerts.getHttpsServerOptions();
