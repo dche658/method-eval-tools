@@ -15,3 +15,5 @@ node_modules/
 run-test-doc.cmd
 
 documentation/**/*.html
+
+.continue/
